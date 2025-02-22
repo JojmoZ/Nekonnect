@@ -1,7 +1,7 @@
 import { Actor, HttpAgent } from '@dfinity/agent';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { idlFactory, canisterId } from '../declarations/backend';
+import { idlFactory, canisterId } from '../declarations/user';
 interface LoginPageProps {
   username: any;
   setUsername: (username: any) => void;

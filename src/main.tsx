@@ -2,7 +2,7 @@ import { ActorProvider, AgentProvider } from '@ic-reactor/react';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
-import { canisterId, idlFactory } from './declarations/backend';
+import { canisterId, idlFactory } from './declarations/user';
 import './index.scss';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
