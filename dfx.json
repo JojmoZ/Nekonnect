@@ -8,6 +8,7 @@
       }
     },
     "frontend": {
+      "main": "src/frontend/index.html",
       "dependencies": ["backend"],
       "type": "assets",
       "source": ["dist/"]
