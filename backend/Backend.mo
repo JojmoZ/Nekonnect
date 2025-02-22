@@ -5,29 +5,17 @@ import Iter "mo:base/Iter";
 import Debug "mo:base/Debug";
 
 actor Backend {
-  // Counter feature
-  stable var counter = 0;
-
-  public query func get() : async Nat {
-    counter;
-  };
-
-  public func inc() : async () {
-    counter += 1;
-  };
-
-  public func add(n : Nat) : async () {
-    counter += n;
-  };
-
   // User registry feature
   type User = {
     username: Text;
     password: Text;
   };
 
-  // Use `List<User>` to make it stable
+  // Stable storage for registered users
   stable var users: List.List<User> = List.nil<User>();
+
+  // Track logged-in users (mapping Principal -> Username)
+  stable var loggedInUsers: List.List<(Principal, Text)> = List.nil<(Principal, Text)>();
 
   // Function to register a new user
   public shared ({ caller }) func register(username: Text, password: Text) : async Text {
@@ -36,13 +24,37 @@ actor Backend {
     };
 
     let newUser: User = { username = username; password = password };
-    users := List.push<User>(newUser, users);  // Correctly append to List<User>
+    users := List.push<User>(newUser, users);
 
     return "User registered successfully!";
   };
 
-  // Function to retrieve user info (for testing)
-  public query func getUser(username: Text) : async ?User {
-    return List.find<User>(users, func(user: User) : Bool { user.username == username });
+  // Function to login a user
+  public shared ({ caller }) func login(username: Text, password: Text) : async Text {
+    switch (List.find<User>(users, func(user: User) : Bool { user.username == username and user.password == password })) {
+      case (?user) {
+        if (List.find<(Principal, Text)>(loggedInUsers, func(entry: (Principal, Text)) : Bool { entry.0 == caller }) == null) {
+          loggedInUsers := List.push((caller, username), loggedInUsers);
+        };
+        return "Login successful!";
+      };
+      case null {
+        return "Invalid username or password.";
+      };
+    };
+  };
+
+  // Function to get the logged-in user's username
+  public shared ({ caller }) func getLoggedInUser() : async ?Text {
+    switch (List.find<(Principal, Text)>(loggedInUsers, func(entry: (Principal, Text)) : Bool { entry.0 == caller })) {
+      case (?entry) { ?entry.1 };  // Return username
+      case null { null };          // No user found
+    };
+  };
+
+  // Function to logout a user
+  public shared ({ caller }) func logout() : async Text {
+    loggedInUsers := List.filter<(Principal, Text)>(loggedInUsers, func(entry: (Principal, Text)) : Bool { entry.0 != caller });
+    return "Logged out successfully!";
   };
 };

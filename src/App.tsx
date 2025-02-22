@@ -1,9 +1,3 @@
-import { useQueryCall, useUpdateCall } from '@ic-reactor/react';
-import './App.css';
-import motokoLogo from './assets/motoko_moving.png';
-import motokoShadowLogo from './assets/motoko_shadow.png';
-import reactLogo from './assets/react.svg';
-import viteLogo from './assets/vite.svg';
 import { useState, useEffect } from 'react';
 import {
   BrowserRouter as Router,
@@ -11,25 +5,42 @@ import {
   Route,
   Navigate,
 } from 'react-router-dom';
+import { Actor, HttpAgent } from '@dfinity/agent';
+import { idlFactory, canisterId } from './declarations/backend';
+
 import RegisterPage from './pages/RegisterPage';
 import TempPage from './pages/TempPage';
 import LoginPage from './pages/LoginPage';
 import AuthRedirect from './utils/AuthRedirect';
 import ProtectedRoute from './utils/ProtectedRoute';
+
 function App() {
-  const [username, setUsername] = useState<string>(
-    localStorage.getItem('username') || '',
-  );
+  const [username, setUsername] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (username) {
-      localStorage.setItem('username', username);
-    } else {
-      localStorage.removeItem('username');
-    }
-  }, [username]);
+    const fetchUser = async () => {
+      const agent = new HttpAgent({ host: 'http://127.0.0.1:4943' });
+      await agent.fetchRootKey(); // Fetch root key for local dev
+
+      const backend = Actor.createActor(idlFactory, { agent, canisterId });
+
+      try {
+        const user: any | null = await backend.getLoggedInUser();
+        setUsername(user);
+      } catch (err) {
+        console.error('Error fetching logged-in user:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUser();
+  }, []);
 
   const isAuthenticated = Boolean(username);
+
+  if (loading) return <p>Loading...</p>; // Prevent rendering while fetching user
 
   return (
     <Router>
@@ -40,7 +51,6 @@ function App() {
             <Navigate to={isAuthenticated ? '/temp' : '/login'} replace />
           }
         />
-
         <Route element={<AuthRedirect isAuthenticated={isAuthenticated} />}>
           <Route
             path="/login"
@@ -48,7 +58,6 @@ function App() {
           />
           <Route path="/register" element={<RegisterPage />} />
         </Route>
-
         <Route element={<ProtectedRoute isAuthenticated={isAuthenticated} />}>
           <Route
             path="/temp"
