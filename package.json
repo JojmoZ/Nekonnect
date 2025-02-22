@@ -19,6 +19,7 @@
   "dependencies": {
     "@dfinity/agent": "^2.3.0",
     "@dfinity/candid": "^2.3.0",
+    "@dfinity/principal": "^2.3.0",
     "@ic-reactor/react": "^1.14.6",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
