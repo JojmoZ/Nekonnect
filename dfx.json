@@ -14,9 +14,16 @@
         "node_compatibility": true
       }
     },
+    "chat": {
+      "type": "motoko",
+      "main": "backend/chat/main.mo",
+      "declarations": {
+        "node_compatibility": true
+      }
+    },
     "frontend": {
       "main": "src/index.html",
-      "dependencies": ["user"],
+      "dependencies": ["user","transaction","chat"],
       "type": "assets",
       "source": ["dist/"]
     }
@@ -24,6 +31,11 @@
   "defaults": {
     "build": {
       "packtool": "mops sources"
+    }
+  },
+  "networks": {
+    "local": {
+      "bind": "127.0.0.1:4943"
     }
   },
   "output_env_file": ".env",

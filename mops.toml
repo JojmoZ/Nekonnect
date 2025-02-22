@@ -1,4 +1,3 @@
-# Motoko dependencies (https://mops.one/)
-
 [dependencies]
-base = "0.7.4"
+base = "0.11.3"
+ic-websocket-cdk = "0.4.1"

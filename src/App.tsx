@@ -13,6 +13,7 @@ import TempPage from './pages/TempPage';
 import LoginPage from './pages/LoginPage';
 import AuthRedirect from './utils/AuthRedirect';
 import ProtectedRoute from './utils/ProtectedRoute';
+import { ChatPage } from './pages/(private)/chat';
 
 function App() {
   const [username, setUsername] = useState<string | null>(null);
@@ -57,11 +58,13 @@ function App() {
             element={<LoginPage setUsername={setUsername} />}
           />
           <Route path="/register" element={<RegisterPage />} />
+          <Route path="/chat" element={<ChatPage />} />
         </Route>
         <Route element={<ProtectedRoute isAuthenticated={isAuthenticated} />}>
           <Route
             path="/temp"
-            element={<TempPage username={username} setUsername={setUsername} />}
+            // element={<TempPage username={username} setUsername={setUsername} />}
+            element={<ChatPage/>}
           />
         </Route>
       </Routes>

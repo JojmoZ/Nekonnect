@@ -5,4 +5,5 @@ export enum RouteEnum {
     REGISTER = "/register",
     FORGOT_PASSWORD = "/forgot-password",
     RESET_PASSWORD = "/reset-password",
+    CHAT = "/chat"
 }

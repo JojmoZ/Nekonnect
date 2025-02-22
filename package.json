@@ -12,7 +12,7 @@
     "test": "run-s test:user test:frontend",
     "test:frontend": "vitest run",
     "test:user": "mo-test",
-    "format": "prettier --write \"src/**/*.{json,js,jsx,ts,tsx,css,scss}\" \"user/**/*.mo\"",
+    "format": "prettier --write \"src/**/*.{json,js,jsx,ts,tsx,css,scss}\" \"backend/**/*.mo\"",
     "sources": "mops sources",
     "postinstall": "mops install"
   },
@@ -22,6 +22,7 @@
     "@dfinity/candid": "^2.3.0",
     "@dfinity/principal": "^2.3.0",
     "@ic-reactor/react": "^1.14.6",
+    "ic-websocket-js": "^0.4.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router": "^7.2.0",
