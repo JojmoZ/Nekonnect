@@ -1,6 +1,6 @@
 import List "mo:base/List";
 import Types "types";
-actor class UserActor() {
+actor class UserMain() {
 
   // Stable storage for registered users
   stable var users: List.List<Types.User> = List.nil<Types.User>();
