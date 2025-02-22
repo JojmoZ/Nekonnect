@@ -6,7 +6,7 @@ import {
   Navigate,
 } from 'react-router-dom';
 import { Actor, HttpAgent } from '@dfinity/agent';
-import { idlFactory, canisterId } from './declarations/backend';
+import { idlFactory, canisterId } from './declarations/user';
 
 import RegisterPage from './pages/RegisterPage';
 import TempPage from './pages/TempPage';
