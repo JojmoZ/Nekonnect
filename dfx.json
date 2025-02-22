@@ -1,15 +1,15 @@
 {
   "canisters": {
-    "backend": {
+    "user": {
       "type": "motoko",
-      "main": "backend/Backend.mo",
+      "main": "backend/user/main.mo",
       "declarations": {
         "node_compatibility": true
       }
     },
     "frontend": {
       "main": "src/frontend/index.html",
-      "dependencies": ["backend"],
+      "dependencies": ["user"],
       "type": "assets",
       "source": ["dist/"]
     }

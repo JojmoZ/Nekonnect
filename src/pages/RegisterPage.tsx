@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Actor, HttpAgent } from '@dfinity/agent';
 import { AuthClient } from '@dfinity/auth-client';
-import { idlFactory } from '../declarations/backend';
+import { idlFactory } from '../declarations/user';
 
 const RegisterPage = () => {
   const [username, setUsername] = useState<string>('');
@@ -26,7 +26,7 @@ const RegisterPage = () => {
       // Create backend actor
       const backend = Actor.createActor(idlFactory, {
         agent,
-        canisterId: 'bkyz2-fmaaa-aaaaa-qaaaq-cai', // Your backend canister ID
+        canisterId: 'br5f7-7uaaa-aaaaa-qaaca-cai', // Your backend canister ID
       });
 
       // Call the register function in the backend
