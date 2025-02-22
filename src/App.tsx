@@ -51,7 +51,7 @@ function App() {
         </p>
       </div>
       <p className="read-the-docs">
-        Click on the Vite, React, and Motoko logos to learn more
+        Click on the Vite, React, and Motoko logos to learn moresss
       </p>
     </div>
   );
