@@ -10,6 +10,9 @@ dotenv.config();
 
 export default defineConfig({
   root: 'src',
+  define : {
+    __VALUE__ : `"${process.env.VALUE}"`
+  },
   build: {
     outDir: '../dist',
     emptyOutDir: true,

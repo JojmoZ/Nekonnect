@@ -20,7 +20,8 @@ export const ChatPage = () => {
     const sendMessage = () => {
         try {
             const msg : Message  = {
-                message : "Ping"
+                message : "Ping",
+                username : "Wowowo"
             }
             webSocket.send(msg);
         } catch (e) {

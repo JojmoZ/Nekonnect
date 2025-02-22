@@ -21,27 +21,33 @@ actor {
 
     func on_open(args : IcWebSocketCdk.OnOpenCallbackArgs) : async () {
         let message : Types.Message = {
-        message = "Ping";
+        message = "Connected to WebSocket";
+        username = "System"
         };
         await send_message(args.client_principal, message);
     };
 
     func on_message(args : IcWebSocketCdk.OnMessageCallbackArgs) : async () {
         let app_msg : ?Types.Message = from_candid(args.message);
+        
         let new_msg: Types.Message = switch (app_msg) {
-        case (?msg) { 
-            { message = Text.concat(msg.message, " ping") };
-        };
-        case (null) {
-            Debug.print("Could not deserialize message");
-            return;
-        };
+            case (?msg) { 
+                { 
+                    message = Text.concat(msg.username, msg.message);
+                    username = msg.username;
+                };
+            };
+            case (null) {
+                Debug.print("Could not deserialize message");
+                return;
+            };
         };
 
         Debug.print("Received message: " # debug_show (new_msg));
 
         await send_message(args.client_principal, new_msg);
     };
+
 
     func on_close(args : IcWebSocketCdk.OnCloseCallbackArgs) : async () {
         Debug.print("Client " # debug_show (args.client_principal) # " disconnected");
