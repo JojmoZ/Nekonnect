@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "setup": "npm i && dfx canister create user && dfx generate user && dfx deploy",
+    "setup": "npm i && dfx canister create --all && dfx generate && dfx deploy",
     "start": "run-p frontend user",
     "frontend": "vite --port 3000",
     "user": "mo-dev --generate --deploy -y",
