@@ -7,8 +7,8 @@ import {
 } from 'react-router-dom';
 import { Actor, HttpAgent } from '@dfinity/agent';
 import { idlFactory, canisterId } from './declarations/user';
-import { GeistSans } from 'geist/font/sans'
-import { GeistMono } from 'geist/font/mono'
+import { GeistSans } from 'geist/font/sans';
+import { GeistMono } from 'geist/font/mono';
 
 import RegisterPage from './pages/RegisterPage';
 import TempPage from './pages/TempPage';
@@ -65,8 +65,8 @@ function App() {
         <Route element={<ProtectedRoute isAuthenticated={isAuthenticated} />}>
           <Route
             path="/temp"
-            // element={<TempPage username={username} setUsername={setUsername} />}
-            element={<ChatPage/>}
+            element={<TempPage username={username} setUsername={setUsername} />}
+            // element={<ChatPage />}
           />
         </Route>
       </Routes>
