@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "setup": "npm i && dfx canister create --all && dfx generate && dfx deploy",
+    "setup": "npm i && dfx canister create --all && dfx generate && dfx deps pull && dfx deps init rdmx6-jaaaa-aaaaa-aaadq-cai --argument null && dfx deps deploy && dfx deploy ",
     "start": "run-p frontend user",
     "frontend": "vite --port 3000",
     "user": "mo-dev --generate --deploy -y",
@@ -39,6 +39,7 @@
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.4",
     "cross-fetch": "^4.0.0",
+    "crypto-browserify": "^3.12.1",
     "dotenv": "^16.4.5",
     "ic-mops": "^1.1.1",
     "jsdom": "^22.1.0",

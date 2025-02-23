@@ -78,7 +78,7 @@ actor RoomUsersManager {
     };
 
 
-    public func getUserInRoom(room_id: Text, user_id: Principal) : async ?Types.RoomUser {
+    public func getByRoomIdAndUserId(room_id: Text, user_id: Principal) : async ?Types.RoomUser {
         switch (roomUsers.get(room_id)) {
             case (null) { 
                 null;
@@ -86,6 +86,17 @@ actor RoomUsersManager {
             case (?existingSet) {
                 let matchingUser = Iter.filter<Types.RoomUser>(Array.vals(TrieSet.toArray<Types.RoomUser>(existingSet)), func(user : Types.RoomUser) : Bool { user.user_id == user_id });
                 matchingUser.next();
+            };
+        };
+    };
+
+    public func getAllUsersByRoomId(room_id: Text) : async [Types.RoomUser] {
+        switch (roomUsers.get(room_id)) {
+            case (null) { 
+                [];
+            };
+            case (?existingSet) {
+                TrieSet.toArray<Types.RoomUser>(existingSet);
             };
         };
     };
