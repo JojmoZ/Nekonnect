@@ -1,6 +1,12 @@
+import { idlFactory , canisterId } from "@/declarations/user";
 import { webSocket } from "@/utils/config/web-socket"
-
-export const ChatPage = () => {
+import { Actor, HttpAgent } from "@dfinity/agent";
+import { useNavigate } from "react-router";
+interface LoginPageProps {
+  setUsername: (username: any) => void;
+}
+export const ChatPage: React.FC<LoginPageProps> = ({setUsername}) => {
+    const navigate = useNavigate();
     webSocket.onopen = () => {
         console.log("Connected to WebSocket");
     };
@@ -16,7 +22,20 @@ export const ChatPage = () => {
     webSocket.onerror = (error) => {
         console.log("WebSocket error:", error);
     };
-
+    const handleLogout = async () => {
+        try {
+          const agent = new HttpAgent({ host: 'http://127.0.0.1:4943' });
+          await agent.fetchRootKey();
+    
+          const backend = Actor.createActor(idlFactory, { agent, canisterId });
+    
+          await backend.logout();
+          setUsername(null); // Clear user in frontend state
+          navigate('/login');
+        } catch (err) {
+          console.error('Logout Error:', err);
+        }
+      };
     const sendMessage = () => {
         try {
             const msg : Message  = {
@@ -30,9 +49,11 @@ export const ChatPage = () => {
     };
 
     return (
-        <div>
-            <h1>Chat Page</h1>
-            <button onClick={sendMessage}></button>
-        </div>
+      <div>
+        <h1>Chat Page</h1>
+        <button onClick={sendMessage}></button>
+
+        <button onClick={handleLogout}>Logout</button>
+      </div>
     );
 }
