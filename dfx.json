@@ -21,6 +21,13 @@
         "node_compatibility": true
       }
     },
+    "room": {
+      "type": "motoko",
+      "main": "backend/room/main.mo",
+      "declarations": {
+        "node_compatibility": true
+      }
+    },
     "frontend": {
       "main": "src/index.html",
       "dependencies": ["user","transaction","chat"],

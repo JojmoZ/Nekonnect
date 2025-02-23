@@ -1,4 +1,10 @@
+import { RoomService } from "@/services/room.service";
 import { webSocket } from "@/utils/config/web-socket"
+import { roomDto, roomSchema } from "@/utils/model/dto/create-room.dto";
+import { useEffect } from "react";
+import { createTracing } from "trace_events";
+
+let roomService = new RoomService();
 
 export const ChatPage = () => {
     webSocket.onopen = () => {
@@ -21,7 +27,8 @@ export const ChatPage = () => {
         try {
             const msg : Message  = {
                 message : "Ping",
-                username : "Wowowo"
+                username : "Wowowo",
+                room_id : ""
             }
             webSocket.send(msg);
         } catch (e) {
@@ -29,10 +36,25 @@ export const ChatPage = () => {
         }
     };
 
+    const createRoom = () => {
+        const chatRoom : roomDto = roomSchema.parse({
+            room_name : "GUIGI"
+        })
+        roomService.createRoom(chatRoom)
+    }
+
+    useEffect(() => {
+        const response = roomService.getRooms().then(res => console.log(res))
+        // console.log(response.data)
+    },[])
+
+
+    
+
     return (
         <div>
             <h1>Chat Page</h1>
-            <button onClick={sendMessage}></button>
+            <button onClick={createRoom}>Create Room</button>
         </div>
     );
 }

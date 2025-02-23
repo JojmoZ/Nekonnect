@@ -3,28 +3,54 @@ import IcWebSocketCdkState "mo:ic-websocket-cdk/State";
 import IcWebSocketCdkTypes "mo:ic-websocket-cdk/Types";
 import Text "mo:base/Text";
 import Debug "mo:base/Debug";
+import HashMap "mo:base/HashMap";
+import Array "mo:base/Array";
 import Types "types";
 
-actor {
+actor class ChatMain() {
+    let room_state = HashMap.HashMap<Text, [Principal]>(10,Text.equal,Text.hash);
 
     let params = IcWebSocketCdkTypes.WsInitParams(null, null);
     let ws_state = IcWebSocketCdkState.IcWebSocketState(params);
 
-    func send_message(principal : IcWebSocketCdk.ClientPrincipal, msg : Types.Message): async () {
-        switch (await IcWebSocketCdk.send(ws_state, principal, to_candid(msg))) {
-            case (#Err(err)) {
-                Debug.print("Could not send message:" # debug_show (#Err(err)));
+    public shared ({ caller }) func join_room(room_id: Text) : async () {
+        let current_users = room_state.get(room_id);
+        switch (current_users) {
+            case (?users) {
+                room_state.put(room_id, Array.append(users, [caller]));
             };
-            case (_) {};
+            case (null) {
+                room_state.put(room_id, [caller]);
+            };
+        };
+        Debug.print("User " # debug_show(caller) # " joined room " # room_id);
+    };
+
+    func send_message(principal : IcWebSocketCdk.ClientPrincipal, msg : Types.Message): async () {
+        let participants = room_state.get(msg.room_id);
+        switch (participants) {
+            case(?users) {
+                for (user in users.vals()) {
+                    switch (await IcWebSocketCdk.send(ws_state, principal, to_candid(msg))) {
+                        case (#Err(err)) {
+                            Debug.print("Could not send message:" # debug_show (#Err(err)));
+                        };
+                        case (_) {};
+                    }
+                };
+            };
+            case(null) {
+                Debug.print("Room not found: " # msg.room_id);
+            }
         }
     };
 
     func on_open(args : IcWebSocketCdk.OnOpenCallbackArgs) : async () {
-        let message : Types.Message = {
-        message = "Connected to WebSocket";
-        username = "System"
-        };
-        await send_message(args.client_principal, message);
+        // let message : Types.Message = {
+        // message = "Connected to WebSocket";
+        // username = "System"
+        // };
+        // await send_message(args.client_principal, message);
     };
 
     func on_message(args : IcWebSocketCdk.OnMessageCallbackArgs) : async () {
@@ -35,6 +61,7 @@ actor {
                 { 
                     message = Text.concat(msg.username, msg.message);
                     username = msg.username;
+                    room_id = msg.room_id
                 };
             };
             case (null) {
