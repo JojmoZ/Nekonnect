@@ -36,3 +36,6 @@ temp_ic
 .env.development
 .env.test
 .env.production
+
+# Virtual environment
+venv

@@ -8,6 +8,8 @@ import {
 import { Actor, HttpAgent } from '@dfinity/agent';
 import { AuthClient } from '@dfinity/auth-client';
 import { idlFactory, canisterId } from './declarations/user';
+import { GeistSans } from 'geist/font/sans';
+import { GeistMono } from 'geist/font/mono';
 
 import RegisterPage from './pages/RegisterPage';
 import TempPage from './pages/TempPage';
@@ -76,6 +78,8 @@ function App() {
           <Route
             path="/temp"
             element={<ChatPage setUsername={setUsername} />}
+            // element={<TempPage username={username} setUsername={setUsername} />}
+            // element={<ChatPage />}
           />
         </Route>
       </Routes>
