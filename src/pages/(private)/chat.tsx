@@ -1,3 +1,6 @@
+import { idlFactory , canisterId } from "@/declarations/user";
+import { Actor, HttpAgent } from "@dfinity/agent";
+import { useNavigate } from "react-router";
 import { Message } from "@/declarations/message/message.did";
 import { RoomUserService } from "@/services/room-users.service";
 import { RoomService } from "@/services/room.service";
@@ -13,8 +16,14 @@ let roomService = new RoomService();
 let userService = new UserService();
 let roomUserService = new RoomUserService();
 
-export const ChatPage = () => {
 
+interface LoginPageProps {
+  setUsername: (username: any) => void;
+}
+  
+ export const ChatPage: React.FC<LoginPageProps> = ({setUsername}) => {
+    const navigate = useNavigate();
+   
     webSocket.onopen = () => {
         console.log("Connected to WebSocket");
     };
@@ -30,6 +39,21 @@ export const ChatPage = () => {
     webSocket.onerror = (error) => {
         console.log("WebSocket error:", error);
     };
+
+    const handleLogout = async () => {
+        try {
+          const agent = new HttpAgent({ host: 'http://127.0.0.1:4943' });
+          await agent.fetchRootKey();
+    
+          const backend = Actor.createActor(idlFactory, { agent, canisterId });
+    
+          await backend.logout();
+          setUsername(null); // Clear user in frontend state
+          navigate('/login');
+        } catch (err) {
+          console.error('Logout Error:', err);
+        }
+      };
 
     const sendMessage = async () => {
         const principal = await userService.getCallerPrincipal(1);
@@ -74,11 +98,19 @@ export const ChatPage = () => {
     
 
     return (
+      <div>
+        <h1>Chat Page</h1>
         <div>
             <h1>Chat Page</h1>
             <button onClick={() => createRoom()}>Create Room</button>
             <button onClick={() => joinRoom()}>Join Room</button>
             <button onClick={sendMessage}>Send</button>
         </div>
+        <button onClick={sendMessage}></button>
+
+        <button onClick={handleLogout}>Logout</button>
+      </div>
+
+
     );
 }
