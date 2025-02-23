@@ -30,6 +30,6 @@ jobs:
     - name: Start dfx
       run: |
         dfx cache install
-        dfx start --background
+        dfx start --background --clean
     - run: npm run setup
     - run: npm test
