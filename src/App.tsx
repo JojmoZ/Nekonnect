@@ -8,9 +8,6 @@ import {
 import { Actor, HttpAgent } from '@dfinity/agent';
 import { AuthClient } from '@dfinity/auth-client';
 import { idlFactory, canisterId } from './declarations/user';
-import { GeistSans } from 'geist/font/sans';
-import { GeistMono } from 'geist/font/mono';
-
 import RegisterPage from './pages/RegisterPage';
 import TempPage from './pages/TempPage';
 import LoginPage from './pages/LoginPage';
