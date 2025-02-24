@@ -3,9 +3,10 @@ import { canisterId as messageCanisterId, createActor as createMessageActor} fro
 import { canisterId as transactionCanisterId, createActor as createTransactionActor} from "@/declarations/transaction";
 import { canisterId as roomCanisterId, createActor as createRoomActor} from "@/declarations/room";
 import { canisterId as roomUsersCanisterId, createActor as createRoomUsersActor} from "@/declarations/room_users";
+import { canisterId as loanPostCanisterId, createActor as createLoanPostActor} from "@/declarations/loan_post";
 
-export { userCanisterId, messageCanisterId, transactionCanisterId, roomCanisterId , roomUsersCanisterId};
-export { createUserActor, createMessageActor, createTransactionActor, createRoomActor , createRoomUsersActor};
+export { userCanisterId, messageCanisterId, transactionCanisterId, roomCanisterId , roomUsersCanisterId, loanPostCanisterId};
+export { createUserActor, createMessageActor, createTransactionActor, createRoomActor , createRoomUsersActor, createLoanPostActor};
 
 export class BaseService {
     protected room = createRoomActor(roomCanisterId);
@@ -13,6 +14,6 @@ export class BaseService {
     protected message = createMessageActor(messageCanisterId);
     protected transaction = createTransactionActor(transactionCanisterId);
     protected roomUsers = createRoomUsersActor(roomUsersCanisterId);
-    
+    protected loanPost = createLoanPostActor(loanPostCanisterId);
 
 }

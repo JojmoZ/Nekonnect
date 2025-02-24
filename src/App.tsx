@@ -14,6 +14,7 @@ import LoginPage from './pages/LoginPage';
 import AuthRedirect from './utils/AuthRedirect';
 import ProtectedRoute from './utils/ProtectedRoute';
 import { ChatPage } from './pages/(private)/chat';
+import CreateLoanPostPage from './pages/(private)/loanpost';
 
 function App() {
   const [username, setUsername] = useState<string | null>(null);
@@ -77,6 +78,12 @@ function App() {
             element={<ChatPage setUsername={setUsername} />}
             // element={<TempPage username={username} setUsername={setUsername} />}
             // element={<ChatPage />}
+          />
+        </Route>
+        <Route element={<ProtectedRoute isAuthenticated={isAuthenticated} />}>
+          <Route
+            path="/create"
+            element={<CreateLoanPostPage />}
           />
         </Route>
       </Routes>
