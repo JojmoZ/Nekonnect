@@ -8,7 +8,8 @@ interface LoginPageProps {
   setUsername: (username: string) => void;
 }
 
-const II_URL = 'https://identity.ic0.app'; // Mainnet Internet Identity URL
+// const II_URL = 'https://identity.ic0.app'; // Mainnet Internet Identity URL
+const II_URL = `http://rdmx6-jaaaa-aaaaa-aaadq-cai.localhost:4943/`
 
 const LoginPage: React.FC<LoginPageProps> = ({ setUsername }) => {
   const [username, setLocalUsername] = useState<string>('');

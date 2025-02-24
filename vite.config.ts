@@ -46,6 +46,12 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+      assert: 'assert/',
+      buffer: 'buffer/',
+      events: 'events/',
+      stream: 'stream-browserify/',
+      util: 'util/',
+      crypto: 'crypto-browserify/',
     },
   },
   cacheDir: '../node_modules/.vite',
