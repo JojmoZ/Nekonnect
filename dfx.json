@@ -7,6 +7,10 @@
         "node_compatibility": true
       }
     },
+    "internet_identity": {
+      "type": "pull",
+      "id": "rdmx6-jaaaa-aaaaa-aaadq-cai"
+    },
     "transaction": {
       "type": "motoko",
       "main": "backend/transaction/main.mo",
@@ -35,9 +39,16 @@
         "node_compatibility": true
       }
     },
+    "loan_post": {
+      "type": "motoko",
+      "main": "backend/loanPost/main.mo",
+      "declarations": {
+        "node_compatibility": true
+      }
+    },
     "frontend": {
       "main": "src/index.html",
-      "dependencies": ["user","transaction","room_users","message","room"],
+      "dependencies": ["user","transaction","room_users","message","room", "loan_post"],
       "type": "assets",
       "source": ["dist/"]
     }

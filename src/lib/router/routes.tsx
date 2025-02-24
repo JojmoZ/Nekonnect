@@ -13,8 +13,8 @@ export const ROUTES: RouteObject[] = [
     element: <Register />,
     path: RouteEnum.REGISTER,
   },
-  {
-    element: <ChatPage />,
-    path: RouteEnum.CHAT
-  }
+  // {
+  //   element: <ChatPage />,
+  //   path: RouteEnum.CHAT
+  // }
 ];
