@@ -2,7 +2,7 @@
 
 export default {
   darkMode: ["media", "class"],
-  content: ['./src/index.html','./src/**/*.{ts,tsx}'],
+  content: ['./src/index.html','./src/**/*.{ts,tsx,scss}',],
   theme: {
   	extend: {
   		colors: {

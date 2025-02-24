@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Actor, HttpAgent } from '@dfinity/agent';
 import { AuthClient } from '@dfinity/auth-client';
 import { idlFactory, canisterId } from '../declarations/user';
+import { UserService } from '@/services/user.service';
 
 interface LoginPageProps {
   setUsername: (username: string) => void;
@@ -10,6 +11,8 @@ interface LoginPageProps {
 
 // const II_URL = 'https://identity.ic0.app'; // Mainnet Internet Identity URL
 const II_URL = `http://rdmx6-jaaaa-aaaaa-aaadq-cai.localhost:4943/`
+
+const userService = new UserService();
 
 const LoginPage: React.FC<LoginPageProps> = ({ setUsername }) => {
   const [username, setLocalUsername] = useState<string>('');
@@ -51,27 +54,15 @@ const LoginPage: React.FC<LoginPageProps> = ({ setUsername }) => {
     }
   };
 
+
   // 🔹 Handle Internet Identity Login
   const handleIIlogin = async () => {
     try {
-      const authClient = await AuthClient.create();
+      await userService.ensureInitialized();
+      const response = await userService.login();
+      console.log(response)
+      navigate("/edit-profile")
 
-      await authClient.login({
-        identityProvider: II_URL,
-        onSuccess: async () => {
-          const identity = authClient.getIdentity();
-          const principal = identity.getPrincipal().toString();
-
-          console.log('Authenticated Principal:', principal);
-          setUsername(principal);
-          localStorage.setItem('username', principal);
-          navigate('/temp'); // Redirect after successful login
-        },
-        onError: (err) => {
-          console.error('Internet Identity Login failed:', err);
-          setError('Authentication failed. Try again.');
-        },
-      });
     } catch (err) {
       console.error('Auth error:', err);
       setError('Something went wrong. Try again.');
@@ -79,7 +70,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ setUsername }) => {
   };
 
   return (
-    <div className="flex items-center justify-center h-screen bg-gray-100">
+    <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
       <h2 className="text-2xl font-semibold text-center mb-4 text-blue-500">
         Login
       </h2>
