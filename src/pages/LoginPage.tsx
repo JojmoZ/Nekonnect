@@ -79,7 +79,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ setUsername }) => {
   };
 
   return (
-    <div className="flex items-center justify-center h-screen bg-gray-100">
+    <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
       <h2 className="text-2xl font-semibold text-center mb-4 text-blue-500">
         Login
       </h2>

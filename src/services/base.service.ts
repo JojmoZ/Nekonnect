@@ -1,4 +1,4 @@
-import { canisterId as userCanisterId, createActor as createUserActor} from "@/declarations/user";
+import { canisterId as userCanisterId, createActor as createUserActor, idlFactory} from "@/declarations/user";
 import { canisterId as messageCanisterId, createActor as createMessageActor} from "@/declarations/message";
 import { canisterId as transactionCanisterId, createActor as createTransactionActor} from "@/declarations/transaction";
 import { canisterId as roomCanisterId, createActor as createRoomActor} from "@/declarations/room";
@@ -7,9 +7,11 @@ import { AnonymousIdentity, HttpAgent, SignIdentity } from "@dfinity/agent";
 import { AuthClient } from "@dfinity/auth-client";
 import { Principal } from "@dfinity/principal";
 import { canisterId as loanPostCanisterId, createActor as createLoanPostActor} from "@/declarations/loan_post";
+import exp from "constants";
 
 export { userCanisterId, messageCanisterId, transactionCanisterId, roomCanisterId , roomUsersCanisterId, loanPostCanisterId};
 export { createUserActor, createMessageActor, createTransactionActor, createRoomActor , createRoomUsersActor, createLoanPostActor};
+export {idlFactory}
 
 export class BaseService {
     private async getAgent() {
