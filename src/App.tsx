@@ -9,11 +9,15 @@ import { Actor, HttpAgent } from '@dfinity/agent';
 import { AuthClient } from '@dfinity/auth-client';
 import { idlFactory, canisterId } from './declarations/user';
 import RegisterPage from './pages/RegisterPage';
+
 import TempPage from './pages/TempPage';
-import LoginPage from './pages/LoginPage';
-import AuthRedirect from './utils/AuthRedirect';
-import ProtectedRoute from './utils/ProtectedRoute';
-import { ChatPage } from './pages/(private)/chat';
+import CreateLoanPostPage from './pages/(private)/loanpost';
+import LoginPage from '@/pages/LoginPage';
+import AuthRedirect from '@/lib/utils/AuthRedirect';
+import ProtectedRoute from '@/lib/utils/ProtectedRoute';
+import { ChatPage } from '@/pages/(private)/chat';
+
+
 
 function App() {
   const [username, setUsername] = useState<string | null>(null);
@@ -77,6 +81,12 @@ function App() {
             element={<ChatPage setUsername={setUsername} />}
             // element={<TempPage username={username} setUsername={setUsername} />}
             // element={<ChatPage />}
+          />
+        </Route>
+        <Route element={<ProtectedRoute isAuthenticated={isAuthenticated} />}>
+          <Route
+            path="/create"
+            element={<CreateLoanPostPage />}
           />
         </Route>
       </Routes>

@@ -2,3 +2,5 @@
 base = "0.11.3"
 ic-websocket-cdk = "0.4.1"
 fuzz = "0.2.1"
+uuid = "1.0.0"
+date-time = "1.0.2"

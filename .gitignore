@@ -23,6 +23,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+temp_ic/*
 temp_ic
 # Canisters
 /src/declarations

@@ -6,9 +6,10 @@ import { canisterId as roomUsersCanisterId, createActor as createRoomUsersActor}
 import { AnonymousIdentity, HttpAgent, SignIdentity } from "@dfinity/agent";
 import { AuthClient } from "@dfinity/auth-client";
 import { Principal } from "@dfinity/principal";
+import { canisterId as loanPostCanisterId, createActor as createLoanPostActor} from "@/declarations/loan_post";
 
-export { userCanisterId, messageCanisterId, transactionCanisterId, roomCanisterId , roomUsersCanisterId};
-export { createUserActor, createMessageActor, createTransactionActor, createRoomActor , createRoomUsersActor};
+export { userCanisterId, messageCanisterId, transactionCanisterId, roomCanisterId , roomUsersCanisterId, loanPostCanisterId};
+export { createUserActor, createMessageActor, createTransactionActor, createRoomActor , createRoomUsersActor, createLoanPostActor};
 
 export class BaseService {
     private async getAgent() {
@@ -22,6 +23,7 @@ export class BaseService {
     protected message = createMessageActor(messageCanisterId);
     protected transaction = createTransactionActor(transactionCanisterId);
     protected roomUsers = createRoomUsersActor(roomUsersCanisterId);
+    protected loanPost = createLoanPostActor(loanPostCanisterId);
 
     constructor() {
         this.initialization();
@@ -38,6 +40,7 @@ export class BaseService {
         this.message = createMessageActor(messageCanisterId, {agent : this.agent});
         this.transaction = createTransactionActor(transactionCanisterId, {agent : this.agent});
         this.roomUsers = createRoomUsersActor(roomUsersCanisterId, {agent : this.agent});
+        this.loanPost = createLoanPostActor(loanPostCanisterId, {agent : this.agent});
     }
 
     async getCallerPrincipal () : Promise<Principal> { 
@@ -56,5 +59,6 @@ export class BaseService {
             throw new Error("Invalid identity type: Expected SignIdentity");
         }
     }
+    
 
 }
