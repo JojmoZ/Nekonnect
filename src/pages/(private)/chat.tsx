@@ -2,8 +2,8 @@ import { Message } from "@/declarations/message/message.did";
 import { RoomUserService } from "@/services/room-users.service";
 import { RoomService } from "@/services/room.service";
 import { UserService } from "@/services/user.service";
-import { webSocket } from "@/utils/config/web-socket"
-import { roomDto, roomSchema } from "@/utils/model/dto/create-room.dto";
+import { webSocket } from "@/lib/config/web-socket"
+import { roomDto, roomSchema } from "@/lib/model/dto/create-room.dto";
 import { generateRandomIdentity } from "ic-websocket-js";
 import { join } from "path";
 import { useEffect, useState } from "react";

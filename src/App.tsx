@@ -7,15 +7,15 @@ import {
 } from 'react-router-dom';
 import { Actor, HttpAgent } from '@dfinity/agent';
 import { idlFactory, canisterId } from './declarations/user';
-import { GeistSans } from 'geist/font/sans'
-import { GeistMono } from 'geist/font/mono'
 
-import RegisterPage from './pages/RegisterPage';
+import RegisterPage from '@/pages/RegisterPage';
 import TempPage from './pages/TempPage';
-import LoginPage from './pages/LoginPage';
-import AuthRedirect from './utils/AuthRedirect';
-import ProtectedRoute from './utils/ProtectedRoute';
-import { ChatPage } from './pages/(private)/chat';
+import LoginPage from '@/pages/LoginPage';
+import AuthRedirect from '@/lib/utils/AuthRedirect';
+import ProtectedRoute from '@/lib/utils/ProtectedRoute';
+import { ChatPage } from '@/pages/(private)/chat';
+
+
 
 function App() {
   const [username, setUsername] = useState<string | null>(null);
