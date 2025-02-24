@@ -35,10 +35,11 @@ interface LoginPageProps {
         //   const backend = Actor.createActor(idlFactory, { agent, canisterId });
     
         //   await backend.logout();
-          const authClient = await AuthClient.create();
-            authClient.logout();
-          setUsername(null); // Clear user in frontend state
-          navigate('/login');
+        //   const authClient = await AuthClient.create();
+        //     authClient.logout();
+        //   setUsername(null); // Clear user in frontend state
+        //   navigate('/login');
+            await userService.logout()
         } catch (err) {
           console.error('Logout Error:', err);
         }
