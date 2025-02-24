@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { LoanPost } from "../../utils/model/entity/loan-post";
+import { LoanPost } from "@/lib/model/entity/loan-post"; 
 import { LoanPostService } from "@/services/loan-post.service";
 
 let loanPostService = new LoanPostService();

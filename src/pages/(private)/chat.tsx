@@ -5,10 +5,10 @@ import { _SERVICE, Message } from "@/declarations/message/message.did";
 import { RoomUserService } from "@/services/room-users.service";
 import { RoomService } from "@/services/room.service";
 import { UserService } from "@/services/user.service";
-import { roomDto, roomSchema } from "@/utils/model/dto/create-room.dto";
+import { roomDto, roomSchema } from "@/lib/model/dto/create-room.dto";
 import IcWebSocket, { generateRandomIdentity } from "ic-websocket-js";
 import { useEffect, useState } from "react";
-import { getWebSocket } from "@/utils/config/web-socket";
+import { getWebSocket } from "@/lib/config/web-socket";
 import { AuthClient } from "@dfinity/auth-client";
 import { get } from "http";
 import { W } from "react-router/dist/development/fog-of-war-Cm1iXIp7";
@@ -106,12 +106,12 @@ interface LoginPageProps {
                 console.log("Disconnected")
             }
 
-            response.onmessage = (event) => {
+            response.onmessage = (event : any) => {
                 console.log("Message")
                 console.log(event.data)
             }
 
-            response.onerror = (error) => {
+            response.onerror = (error : any) => {
                 console.log(error)
             }
             setSocket(response)
