@@ -7,6 +7,10 @@
         "node_compatibility": true
       }
     },
+    "internet_identity": {
+      "type": "pull",
+      "id": "rdmx6-jaaaa-aaaaa-aaadq-cai"
+    },
     "transaction": {
       "type": "motoko",
       "main": "backend/transaction/main.mo",
@@ -14,16 +18,30 @@
         "node_compatibility": true
       }
     },
-    "chat": {
+    "room_users": {
       "type": "motoko",
-      "main": "backend/chat/main.mo",
+      "main": "backend/roomUsers/main.mo",
+      "declarations": {
+        "node_compatibility": true
+      }
+    },
+    "message": {
+      "type": "motoko",
+      "main": "backend/message/main.mo",
+      "declarations": {
+        "node_compatibility": true
+      }
+    },
+    "room": {
+      "type": "motoko",
+      "main": "backend/room/main.mo",
       "declarations": {
         "node_compatibility": true
       }
     },
     "frontend": {
       "main": "src/index.html",
-      "dependencies": ["user","transaction","chat"],
+      "dependencies": ["user","transaction","room_users","message","room"],
       "type": "assets",
       "source": ["dist/"]
     }

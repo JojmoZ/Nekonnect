@@ -5,6 +5,7 @@ import { defineConfig } from 'vite';
 import environment from 'vite-plugin-environment';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import path from 'path'
+import tailwindcss from '@tailwindcss/vite'
 
 dotenv.config();
 
@@ -39,7 +40,8 @@ export default defineConfig({
     react(),
     environment('all', { prefix: 'CANISTER_' }),
     environment('all', { prefix: 'DFX_' }),
-    tsconfigPaths()
+    tsconfigPaths(),
+    tailwindcss()
   ],
   resolve: {
     alias: {

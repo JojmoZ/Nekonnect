@@ -7,6 +7,7 @@ import { idlFactory, canisterId } from '../declarations/user';
 const RegisterPage = () => {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const [image, setImage] = useState<File | null>(null);
   const [error, setError] = useState<any | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const navigate = useNavigate();
@@ -44,6 +45,26 @@ const RegisterPage = () => {
     }
   };
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setImage(e.target.files[0]);
+    }
+  };
+
+  const scan = async () => {
+    if (!image) return;
+
+    const formData = new FormData();
+    formData.append('image', image);
+
+    const response = await fetch('http://localhost:5000/ocr', {
+      method: 'POST',
+      body: formData,
+    });
+
+    const data = await response.json();
+    console.log(data.error);
+  };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
@@ -73,10 +94,20 @@ const RegisterPage = () => {
             required
           />
         </div>
+        <div>
+          <input
+            type="file"
+            name=""
+            id=""
+            accept="image/*"
+            onChange={handleImageChange}
+          />
+        </div>
         <button type="submit" className="w-full">
           Register
         </button>
       </form>
+      <button onClick={scan}>Scan</button>
       {error && <p className="mt-4 text-red-500 text-center">{error}</p>}
       {success && <p className="mt-4 text-green-500 text-center">{success}</p>}
       <p className="mt-4 text-center">

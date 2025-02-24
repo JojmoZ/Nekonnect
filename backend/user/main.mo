@@ -1,5 +1,13 @@
 import List "mo:base/List";
+import Principal "mo:base/Principal";
+import Blob "mo:base/Blob";
+import Nat8 "mo:base/Nat8";
+import Time "mo:base/Time";
+import Nat64 "mo:base/Nat64";
 import Types "types";
+import Fuzz "mo:fuzz";
+
+
 actor class UserMain() {
 
   // Stable storage for registered users
@@ -14,7 +22,7 @@ actor class UserMain() {
       return "Username already exists!";
     };
 
-    let newUser: Types.User = { username = username; password = password };
+    let newUser: Types.User = { username = username; password = password ; internetIdentity = caller };
     users := List.push<Types.User>(newUser, users);
 
     return "User registered successfully!";
@@ -48,9 +56,23 @@ actor class UserMain() {
     List.find<Types.User>(users, func(user: Types.User) : Bool { user.username == username });
   };
 
+  public func getUserByPrincipal(identity : Principal) : async ?Types.User {
+    List.find<Types.User>(users, func(user: Types.User) : Bool { user.internetIdentity == identity });
+  };
+
   // Function to logout a user
   public shared ({ caller }) func logout() : async Text {
     loggedInUsers := List.filter<(Principal, Text)>(loggedInUsers, func(entry: (Principal, Text)) : Bool { entry.0 != caller });
     return "Logged out successfully!";
+  };
+
+  public shared (msg) func getCallerPrincipal() : async Principal {
+      return msg.caller;
+  };
+
+  public func generateFakePrincipal(id : Nat) : async Principal {
+    let fuzz = Fuzz.Fuzz();
+    let principal = fuzz.principal.randomPrincipal(10);
+    principal;
   };
 }

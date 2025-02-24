@@ -16,7 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18.x]
+        node-version: [22.x]
 
     steps:
     - uses: actions/checkout@v3
@@ -30,6 +30,6 @@ jobs:
     - name: Start dfx
       run: |
         dfx cache install
-        dfx start --background
+        dfx start --background --clean
     - run: npm run setup
     - run: npm test
