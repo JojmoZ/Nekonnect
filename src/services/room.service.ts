@@ -1,6 +1,7 @@
 import { roomDto } from "@/lib/model/dto/create-room.dto";
 import { BaseService } from "./base.service";
 import { Room } from "@/lib/model/entity/room";
+import { Principal } from "@dfinity/principal";
 
 export class RoomService extends BaseService {
     async getRooms () : Promise<Room[]> { 
