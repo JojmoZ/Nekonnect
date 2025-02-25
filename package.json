@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "setup": "npm i && dfx canister create --all && dfx deps pull && dfx deps init rdmx6-jaaaa-aaaaa-aaadq-cai --argument null && dfx generate && dfx deps deploy && dfx deploy ",
+    "setup": "npm i && dfx canister create --all && dfx deps pull && dfx deps init rdmx6-jaaaa-aaaaa-aaadq-cai --argument null && dfx deps deploy && dfx deploy ",
     "start": "run-p frontend user",
     "frontend": "vite --port 3000",
     "user": "mo-dev --generate --deploy -y",

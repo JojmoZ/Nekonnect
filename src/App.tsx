@@ -59,7 +59,7 @@ function App() {
             <Navigate to={username ? '/temp' : '/login'} replace />
           }
         />
-        <Route element={<AuthRedirect isAuthenticated={username !== null} />}>
+        {/* <Route element={<AuthRedirect isAuthenticated={username !== null} />}> */}
           <Route
             path="/login"
             element={<LoginPage setUsername={setUsername} />}
@@ -69,8 +69,8 @@ function App() {
             path="/chat"
             element={<ChatPage setUsername={setUsername} />}
           />
-        </Route>
-        <Route element={<ProtectedRoute isAuthenticated={username !== null} />}>
+        {/* </Route> */}
+        {/* <Route element={<ProtectedRoute isAuthenticated={username !== null} />}> */}
           <Route
             path="/temp"
             element={<ChatPage setUsername={setUsername} />}
@@ -85,7 +85,7 @@ function App() {
             path="/edit-profile"
             element={<EditProfilePage />}
           />
-        </Route>
+        {/* </Route> */}
       </Routes>
     </Router>
   );
