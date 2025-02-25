@@ -32,7 +32,7 @@ export function LoginForm({
           </div>
           <Input id="password" type="password" required />
         </div>
-        <Button type="submit" className="w-full">
+        <Button type="submit" className="w-full" variant={"gradient"}>
           Login
         </Button>
         <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
@@ -47,14 +47,12 @@ export function LoginForm({
               fill="currentColor"
             />
           </svg>
-          Login with GitHub
+          Login with ICP
         </Button>
       </div>
-      <div className="text-center text-sm">
-        Don&apos;t have an account?{" "}
-        <a href="#" className="underline underline-offset-4">
-          Sign up
-        </a>
+      <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 [&_a]:hover:text-primary  ">
+        By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
+        and <a href="#">Privacy Policy</a>.
       </div>
     </form>
   )

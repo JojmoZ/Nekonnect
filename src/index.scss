@@ -33,25 +33,25 @@
     -webkit-text-size-adjust: 100%;
 
     /* Light Theme */
-    --background: #ffffff;
-    --foreground: #0f172a;
-    --card: #ffffff;
-    --card-foreground: #0f172a;
-    --popover: #ffffff;
-    --popover-foreground: #0f172a;
-    --primary: #00aeff;
-    --primary-foreground: #f8fafc;
-    --secondary: #f3f4f6;
-    --secondary-foreground: #1e293b;
-    --muted: #f3f4f6;
-    --muted-foreground: #64748b;
-    --accent: #f3f4f6;
-    --accent-foreground: #1e293b;
-    --destructive: #ef4444;
-    --destructive-foreground: #f8fafc;
-    --border: #e2e8f0;
-    --input: #e2e8f0;
-    --ring: #00aeff;
+    --background: 0 0% 100%;
+    --foreground: 222 47% 11%;
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+    --primary: 199 100% 50%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 220 14% 96%;
+    --secondary-foreground: 222 47% 18%;
+    --muted: 220 14% 96%;
+    --muted-foreground: 216 15% 47%;
+    --accent: 177 80% 49%;
+    --accent-foreground: 222 47% 18%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 199 100% 50%;
     --radius: 0.5rem;
     --font-geist-sans: 'Geist Sans', sans-serif;
   }
@@ -62,30 +62,30 @@
       background-color: #ffffff;
 
       /* Dark Theme */
-      --background: #0f172a;
-      --foreground: #f8fafc;
-      --card: #0f172a;
-      --card-foreground: #f8fafc;
-      --popover: #0f172a;
-      --popover-foreground: #f8fafc;
-      --primary: #00aeff;
-      --primary-foreground: #f8fafc;
-      --secondary: #1e293b;
-      --secondary-foreground: #f8fafc;
-      --muted: #1e293b;
-      --muted-foreground: #94a3b8;
-      --accent: #1e293b;
-      --accent-foreground: #f8fafc;
-      --destructive: #7f1d1d;
-      --destructive-foreground: #f8fafc;
-      --border: #1e293b;
-      --input: #1e293b;
-      --ring: #00aeff;
-      --chart-1: #3d66e6;
-      --chart-2: #39a785;
-      --chart-3: #e69c22;
-      --chart-4: #ad41e6;
-      --chart-5: #e63775;
+      --background: 217 50% 11%;
+      --foreground: 214 32% 98%;
+      --card: 217 50% 11%;
+      --card-foreground: 214 32% 98%;
+      --popover: 217 50% 11%;
+      --popover-foreground: 214 32% 98%;
+      --primary: 200 100% 50%;
+      --primary-foreground: 214 32% 98%;
+      --secondary: 222 32% 18%;
+      --secondary-foreground: 214 32% 98%;
+      --muted: 222 32% 18%;
+      --muted-foreground: 215 20% 65%;
+      --accent: 177 80% 49%;
+      --accent-foreground: 214 32% 98%;
+      --destructive: 0 63% 31%;
+      --destructive-foreground: 214 32% 98%;
+      --border: 222 32% 18%;
+      --input: 222 32% 18%;
+      --ring: 200 100% 50%;
+      --chart-1: 225 77% 57%;
+      --chart-2: 165 48% 44%;
+      --chart-3: 39 79% 52%;
+      --chart-4: 278 75% 58%;
+      --chart-5: 338 77% 56%;
     }
   }
 }
