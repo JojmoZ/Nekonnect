@@ -53,7 +53,9 @@
     --input: 214 32% 91%;
     --ring: 199 100% 50%;
     --radius: 0.5rem;
-    --font-geist-sans: 'Geist Sans', sans-serif;
+
+    --font-sans: 'Geist Sans', sans-serif;
+    --font-mono: 'Geist Mono', monospace;
   }
 
   @media (prefers-color-scheme: dark) {

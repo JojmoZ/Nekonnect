@@ -1,0 +1,63 @@
+[
+  {
+    "id": 1,
+    "title": "Community Learning Platform",
+    "description": "An online platform for sharing knowledge and skills within our community.",
+    "goal": 10000,
+    "raised": 7500,
+    "daysLeft": 15,
+    "category": "Education",
+    "imageUrl": "https://picsum.photos/seed/project1/800/400"
+  },
+  {
+    "id": 2,
+    "title": "Local Mentorship Program",
+    "description": "Connecting experienced professionals with aspiring individuals in our community.",
+    "goal": 5000,
+    "raised": 3200,
+    "daysLeft": 20,
+    "category": "Community",
+    "imageUrl": "https://picsum.photos/seed/project2/800/400"
+  },
+  {
+    "id": 3,
+    "title": "Tech Workshop Series",
+    "description": "A series of hands-on workshops to teach practical tech skills to community members.",
+    "goal": 8000,
+    "raised": 6000,
+    "daysLeft": 10,
+    "category": "Technology",
+    "imageUrl": "https://picsum.photos/seed/project3/800/400"
+  },
+  {
+    "id": 4,
+    "title": "Urban Garden Initiative",
+    "description": "Creating green spaces and promoting sustainable living in urban areas.",
+    "goal": 15000,
+    "raised": 9000,
+    "daysLeft": 25,
+    "category": "Environment",
+    "imageUrl": "https://picsum.photos/seed/project4/800/400"
+  },
+  {
+    "id": 5,
+    "title": "Community Art Project",
+    "description": "Bringing together local artists to create public art installations.",
+    "goal": 12000,
+    "raised": 4500,
+    "daysLeft": 30,
+    "category": "Arts & Culture",
+    "imageUrl": "https://picsum.photos/seed/project5/800/400"
+  },
+  {
+    "id": 6,
+    "title": "Mental Health Awareness",
+    "description": "Raising awareness and providing resources for mental health support in our community.",
+    "goal": 7000,
+    "raised": 3500,
+    "daysLeft": 18,
+    "category": "Wellness",
+    "imageUrl": "https://picsum.photos/seed/project6/800/400"
+  }
+]
+

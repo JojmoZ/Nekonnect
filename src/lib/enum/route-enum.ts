@@ -3,5 +3,6 @@ export enum RouteEnum {
     HOME = "/",
     LOGIN = "/login",
     REGISTER = "/register",
-    CHAT = "/chat"
+    CHAT = "/chat",
+    LOAN_DETAIL = "/loan/:loanId",
 }

@@ -1,5 +1,6 @@
 import { GalleryVerticalEnd } from 'lucide-react';
 import { LoginForm } from '@/components/login-form';
+// import Aurora from '@/components/ui/aurora';
 
 const Login = () => {
   return (
@@ -20,11 +21,7 @@ const Login = () => {
         </div>
       </div>
       <div className="relative hidden bg-muted lg:block">
-        <img
-          src="/placeholder.svg"
-          alt="Image"
-          className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
-        />
+        {/*<Aurora />*/}
       </div>
     </div>
   );
