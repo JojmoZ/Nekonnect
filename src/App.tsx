@@ -19,6 +19,7 @@ import { ChatPage } from '@/pages/(private)/chat';
 import { EditProfilePage } from './pages/(private)/edit-profile';
 import { UserService } from './services/user.service';
 import { Principal } from '@dfinity/principal';
+import Login from '@/pages/(public)/login';
 
 const userService = new UserService()
 
@@ -62,7 +63,7 @@ function App() {
         <Route element={<AuthRedirect isAuthenticated={username !== null} />}>
           <Route
             path="/login"
-            element={<LoginPage setUsername={setUsername} />}
+            element={<Login />}
           />
           <Route path="/register" element={<RegisterPage />} />
           <Route
