@@ -23,22 +23,22 @@ actor RoomManger {
     let params = IcWebSocketCdkTypes.WsInitParams(null, null);
     let ws_state = IcWebSocketCdkState.IcWebSocketState(params);
 
-    public shared ({ caller }) func join_room(room_id: Text) : async Result.Result<RoomUserTypes.RoomUser, Text> {
-        let isUserInRoom = await RoomUsersActor.getUserInRoom(room_id,caller);
+    public func join_room(room_id: Text,user_id: Principal) : async Result.Result<RoomUserTypes.RoomUser, Text> {
+        let isUserInRoom = await RoomUsersActor.getByRoomIdAndUserId(room_id,user_id);
         switch (isUserInRoom) {
             case (?user) {
                 let current_users = room_state.get(room_id);
                 switch (current_users) {
                     case (?users) {
                         Debug.print("Current users: " # debug_show (users));
-                        Debug.print("Caller: " # debug_show (caller));
+                        Debug.print("Caller: " # debug_show (user_id));
                         Debug.print("Room: " # debug_show (room_id));
-                        if (Array.find(users, func(u: Principal) : Bool { u == caller }) == null) {
-                            room_state.put(room_id, Array.append(users, [caller]));
+                        if (Array.find(users, func(u: Principal) : Bool { u == user_id }) == null) {
+                            room_state.put(room_id, Array.append(users, [user_id]));
                         };
                     };
                     case (null) {
-                        room_state.put(room_id, [caller]);
+                        room_state.put(room_id, [user_id]);
                     };
                 };
                 #ok(user);
