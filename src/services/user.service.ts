@@ -10,21 +10,51 @@ export class UserService extends BaseService {
 
     private II_URL = process.env.DFX_NETWORK != "ic" ? `https://identity.ic0.app/` : `http://${ process.env.CANISTER_ID_INTERNET_IDENTITY}.localhost:4943/`;
 
-    async login () {
-        try {
+   async login(): Promise<User | null> {
+    try {
+        return new Promise(async (resolve, reject) => {
             await this.authClient.login({
                 identityProvider: this.II_URL,
                 onSuccess: async () => {
-                    await this.createUser({username: ""});
+                    try {
+                        const principal = this.authClient.getIdentity().getPrincipal();
+                        let userArray = await this.user.getUserByPrincipal(principal);
+
+                        let user = userArray.length > 0 ? userArray[0] : null;
+
+                        if (!user) {
+                            user = await this.createUser({
+                                username: "",
+                                dob: "",
+                                nationality: "",
+                                gender: "Other",
+                                email: "",
+                            });
+
+                            console.log('✅ User created in backend:', user);
+                        } else {
+                            console.log('✅ User already exists in backend:', user);
+                        }
+
+                        resolve(user);
+                    } catch (error) {
+                        console.error('❌ Error fetching/creating user:', error);
+                        reject(error);
+                    }
                 },
                 onError: (err) => {
-                    console.error('Internet Identity Login failed:', err);
+                    console.error('❌ Internet Identity Login failed:', err);
+                    reject(err);
                 },
             });
-        } catch (err) {
-            console.error('Auth error:', err);
-        }
-    };
+        });
+    } catch (err) {
+        console.error('❌ Auth error:', err);
+        throw err;
+    }
+}
+
+
 
     async logout() {
         try {
@@ -49,16 +79,19 @@ export class UserService extends BaseService {
 
     async editUser(user: userDto): Promise<User> {
         try {
-            
             const response = await this.user.editUserProfile({
                 internetIdentity: await this.getCallerPrincipal(),
                 username: user.username,
+                dob: user.dob,
+                nationality: user.nationality,
+                gender: user.gender,
+                email: user.email,
             });
+
             if ('ok' in response) {
-            const { internetIdentity, username } = response.ok;
-            return { internetIdentity, username };
+                return response.ok;
             } else {
-            throw new Error(`Error editing user profile: ${response.err}`);
+                throw new Error(`Error editing user profile: ${response.err}`);
             }
         } catch (error) {
             console.error(error);
@@ -66,16 +99,19 @@ export class UserService extends BaseService {
         }
     }
 
-    async createUser(user: userDto): Promise<User> {
+     async createUser(user: userDto): Promise<User> {
         try {
-            
             const response = await this.user.createUser({
                 internetIdentity: await this.getCallerPrincipal(),
                 username: user.username,
+                dob: user.dob,
+                nationality: user.nationality,
+                gender: user.gender,
+                email: user.email,
             });
+
             if ('ok' in response) {
-                const { internetIdentity, username } = response.ok;
-                return { internetIdentity, username };
+                return response.ok;
             } else {
                 throw new Error(`Error creating user: ${response.err}`);
             }

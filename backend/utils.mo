@@ -4,12 +4,6 @@ import UUID "mo:uuid/UUID";
 
 module {
 
-    public type Response<T> = {
-        status : Nat;
-        message : Text;
-        data : T
-    };
-
     public func generateUUID() : async Text {
         let g = Source.Source();
         return UUID.toText(await g.new());

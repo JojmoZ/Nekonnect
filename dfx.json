@@ -7,6 +7,13 @@
         "node_compatibility": true
       }
     },
+    "message": {
+      "type": "motoko",
+      "main": "backend/message/main.mo",
+      "declarations": {
+        "node_compatibility": true
+      }
+    },
     "internet_identity": {
       "type": "pull",
       "id": "rdmx6-jaaaa-aaaaa-aaadq-cai"
@@ -21,13 +28,6 @@
     "room_users": {
       "type": "motoko",
       "main": "backend/roomUsers/main.mo",
-      "declarations": {
-        "node_compatibility": true
-      }
-    },
-    "message": {
-      "type": "motoko",
-      "main": "backend/message/main.mo",
       "declarations": {
         "node_compatibility": true
       }
@@ -48,7 +48,7 @@
     },
     "frontend": {
       "main": "src/index.html",
-      "dependencies": ["user","transaction","room_users","message","room", "loan_post"],
+      "dependencies": ["user","transaction","room_users","message","room", "loan_post","internet_identity"],
       "type": "assets",
       "source": ["dist/"]
     }
