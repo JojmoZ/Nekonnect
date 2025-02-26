@@ -18,11 +18,10 @@ let userService = new UserService();
 let roomUserService = new RoomUserService();
 
 
-interface LoginPageProps {
-  setUsername: (username: any) => void;
+interface IProps {
 }
   
- export const ChatPage: React.FC<LoginPageProps> = ({setUsername}) => {
+ export const ChatPage: React.FC<IProps> = () => {
     const navigate = useNavigate();
    
     
