@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "setup": "npm i && dfx canister create --all && dfx deps pull && dfx deps init rdmx6-jaaaa-aaaaa-aaadq-cai --argument null && dfx deps deploy && dfx deploy ",
+    "setup": "npm i && dfx canister create --all && dfx deps pull && dfx deps init rdmx6-jaaaa-aaaaa-aaadq-cai --argument null && dfx deps deploy && dfx generate && dfx deploy ",
     "start": "run-p frontend user",
     "frontend": "vite --port 3000",
     "user": "mo-dev --generate --deploy -y",
@@ -37,6 +37,7 @@
     "clsx": "^2.1.1",
     "ic-websocket-js": "^0.4.1",
     "lucide-react": "^0.475.0",
+    "next": "^15.1.7",
     "next-themes": "^0.4.4",
     "ogl": "^1.0.11",
     "react": "^18.3.1",
@@ -52,6 +53,7 @@
   "devDependencies": {
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.0.1",
+    "@types/canvas-confetti": "^1.9.0",
     "@types/node": "^22.13.5",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
