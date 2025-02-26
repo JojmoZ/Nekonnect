@@ -4,6 +4,13 @@ export default {
   darkMode: ['media', 'class'],
   content: ['./src/index.html', './src/**/*.{ts,tsx,scss}'],
   theme: {
+    container: {
+      center: true,
+      padding: "2rem",
+      screens: {
+        "2xl": "1400px",
+      },
+    },
     extend: {
       colors: {
         primary: {
@@ -21,6 +28,9 @@ export default {
         background: 'hsl(var(--background))',
         textColor: 'hsl(var(--text))',
         foreground: 'hsl(var(--foreground))',
+        linearGradient: {
+
+        },
         card: {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',
@@ -73,5 +83,5 @@ export default {
       "accordion-up": "accordion-up 0.2s ease-out",
     },
   },
-  plugins: [require('tailwindcss-animate')],
+  plugins: [require('tailwindcss-animate'), require("@tailwindcss/typography")],
 };
