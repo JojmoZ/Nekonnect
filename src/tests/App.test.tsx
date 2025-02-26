@@ -1,9 +1,11 @@
 import { render } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
-import App from '../App';
-import { StrictMode } from 'react';
+import React, { StrictMode } from 'react';
 import { ActorProvider, AgentProvider } from '@ic-reactor/react';
-import { canisterId, idlFactory } from '../declarations/user';
+import { canisterId, idlFactory } from '@/declarations/user';
+import { RouterProvider } from 'react-router';
+import router from '@/router';
+import { ServiceProvider } from '@/context/service-context';
 
 describe('App', () => {
   it('renders as expected', () => {
@@ -11,7 +13,9 @@ describe('App', () => {
       <StrictMode>
         <AgentProvider withProcessEnv disableAuthenticateOnMount>
           <ActorProvider idlFactory={idlFactory} canisterId={canisterId}>
-            <App />
+            <ServiceProvider>
+              <RouterProvider router={router} />
+            </ServiceProvider>
           </ActorProvider>
         </AgentProvider>
       </StrictMode>,
