@@ -11,7 +11,7 @@ import { idlFactory, canisterId } from './declarations/user';
 import RegisterPage from './pages/RegisterPage';
 
 import TempPage from './pages/TempPage';
-import CreateLoanPostPage from './pages/(private)/loanpost';
+import CreateLoanPostPage from './pages/(private)/create-loan-post';
 import LoginPage from '@/pages/LoginPage';
 import AuthRedirect from '@/lib/utils/AuthRedirect';
 import ProtectedRoute from '@/lib/utils/ProtectedRoute';
