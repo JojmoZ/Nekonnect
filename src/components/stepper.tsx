@@ -7,6 +7,7 @@ interface Step {
     title: string;
     description: string;
     content: React.ReactNode;
+    onNext?: () => Promise<boolean> | boolean;
 }
 
 interface StepperProps {
@@ -18,21 +19,27 @@ interface StepperProps {
 function Stepper({ steps, onSubmit, showProgress = true }: StepperProps) {
     const [currentStep, setCurrentStep] = useState(0);
 
-    // Handle next step
-    const handleNext = () => {
+    const handleNext = async () => {
+        const currentStepConfig = steps[currentStep];
+
+        if (currentStepConfig.onNext) {
+            const canProceed = await currentStepConfig.onNext();
+            if (!canProceed) {
+                return; 
+            }
+        }
+
         if (currentStep < steps.length - 1) {
             setCurrentStep(currentStep + 1);
         }
     };
 
-    // Handle previous step
     const handlePrevious = () => {
         if (currentStep > 0) {
             setCurrentStep(currentStep - 1);
         }
     };
 
-    // Calculate progress percentage
     const progress = ((currentStep + 1) / steps.length) * 100;
 
     return (
