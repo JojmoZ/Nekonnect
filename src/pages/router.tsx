@@ -8,7 +8,7 @@ import { ChatPage } from '@/pages/(private)/chat';
 import Home from '@/pages/(public)/home';
 import { useService } from '@/context/service-context';
 import RegisterPage from './RegisterPage';
-import CreateLoanPostPage from './(private)/loanpost';
+import CreateLoanPostPage from './(private)/create-loan-post';
 import { EditProfilePage } from './(private)/edit-profile';
 import { useEffect } from 'react';
 import ProtectedRoute from '@/lib/utils/ProtectedRoute';
