@@ -1,14 +1,16 @@
 import { LoanPost } from "@/lib/model/entity/loan-post";
 import { LoanPostService } from "@/services/loan-post.service";
 import { Button } from "@/components/ui/button";
-import { z } from "zod";
+import { bigint, z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { loanPostDto, loanPostSchema } from "@/lib/model/dto/create-loan-post.dto";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 let loanPostService = new LoanPostService();
+const categories = ["Education", "Community", "Technology", "Environment", "Arts & Culture", "Wellness"]
 
 function CreateLoanPostPage() {
 
@@ -18,10 +20,9 @@ function CreateLoanPostPage() {
             // id: "",
             title: "",
             description: "",
-            amount: 0,
-            assurance: 0,
-            interest: 0,
-            postDuration: 0
+            goal: 0,
+            category: "",
+            loanDuration: 0
         }
     });
 
@@ -29,17 +30,7 @@ function CreateLoanPostPage() {
 
         console.log(values);
 
-        const post: LoanPost = {
-            title: values.title,
-            description: values.description,
-            amount: values.amount,
-            assurance: values.assurance,
-            interest: values.interest,
-            postDuration: BigInt(values.postDuration)
-        }
-        console.log(post);
-
-        const response = await loanPostService.createLoanPost(post.title, post.description, post.amount, post.assurance, post.interest, post.postDuration);
+        const response = await loanPostService.createLoanPost(values.title, values.description, values.goal, values.category, BigInt(values.loanDuration));
         console.log(response);
     }
 
@@ -82,7 +73,7 @@ function CreateLoanPostPage() {
                     />
                     <FormField
                         control={form.control}
-                        name="amount"
+                        name="goal"
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>Amount</FormLabel>
@@ -98,42 +89,34 @@ function CreateLoanPostPage() {
                     />
                     <FormField
                         control={form.control}
-                        name="assurance"
+                        name="category"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Assurance</FormLabel>
-                                <FormControl>
-                                    <Input type="number" {...field} />
-                                </FormControl>
-                                <FormDescription>
-                                    This is your public display name.
-                                </FormDescription>
+                                <FormLabel>Category</FormLabel>
+                                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                    <FormControl>
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Select a category" />
+                                        </SelectTrigger>
+                                    </FormControl>
+                                    <SelectContent>
+                                        {categories.map((cat) => (
+                                            <SelectItem key={cat} value={cat}>
+                                                {cat}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
                                 <FormMessage />
                             </FormItem>
                         )}
                     />
                     <FormField
                         control={form.control}
-                        name="interest"
+                        name="loanDuration"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Interest</FormLabel>
-                                <FormControl>
-                                    <Input type="number" {...field} />
-                                </FormControl>
-                                <FormDescription>
-                                    This is your public display name.
-                                </FormDescription>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="postDuration"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Post Duration</FormLabel>
+                                <FormLabel>Loan Duration</FormLabel>
                                 <FormControl>
                                     <Input type="number" {...field} />
                                 </FormControl>

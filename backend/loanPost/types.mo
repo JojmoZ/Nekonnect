@@ -4,15 +4,16 @@ import Time "mo:base/Time";
 module {
 
     public type LoanPost = {
-        id: Text;
+        loanId: Text;
         title: Text;
         description: Text;
-        amount: Float;
-        assurance: Float;
-        interest: Float;
-        createAt: Time.Time;
+        goal: Float;
+        raised: Float;
+        createdAt: Time.Time;
         postDuration: Nat64;
-        loanLength: Nat64;
+        category: Text;
+        loanDuration: Nat64;
+        isFulfilled: Bool;
         debtor: Principal;
     }
 }
