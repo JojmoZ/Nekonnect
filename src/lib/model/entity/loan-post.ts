@@ -11,5 +11,6 @@ export interface LoanPost {
   category: string;
   loanDuration: bigint;   // Nat64 to bigint
   isFulfilled: boolean;
+  isVerified: boolean;
   debtor: Principal;         // Principal as string (Principal.toText())
 }

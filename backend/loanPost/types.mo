@@ -14,6 +14,8 @@ module {
         category: Text;
         loanDuration: Nat64;
         isFulfilled: Bool;
+        isVerified: Bool;
         debtor: Principal;
-    }
+    };
+
 }

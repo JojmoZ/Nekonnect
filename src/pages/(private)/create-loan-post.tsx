@@ -8,11 +8,14 @@ import { loanPostDto, loanPostSchema } from "@/lib/model/dto/create-loan-post.dt
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useState } from "react";
 
 let loanPostService = new LoanPostService();
 const categories = ["Education", "Community", "Technology", "Environment", "Arts & Culture", "Wellness"]
 
 function CreateLoanPostPage() {
+
+    const [file, setFile] = useState<File | null>(null);
 
     const form = useForm<z.infer<typeof loanPostSchema>>({
         resolver: zodResolver(loanPostSchema),
@@ -127,6 +130,22 @@ function CreateLoanPostPage() {
                             </FormItem>
                         )}
                     />
+                    <FormItem>
+                        <FormLabel>Upload File</FormLabel>
+                        <FormControl>
+                            <Input
+                                type="file"
+                                accept="image/*"
+                                onChange={(e) => {
+                                    if (e.target.files && e.target.files.length > 0) {
+                                        setFile(e.target.files[0]); // Store the selected file
+                                    }
+                                }}
+                            />
+                        </FormControl>
+                        <FormDescription>Upload a file related to your loan post.</FormDescription>
+                        <FormMessage />
+                    </FormItem>
                     <Button type="submit">Submit</Button>
                 </form>
             </Form>

@@ -28,6 +28,7 @@ actor class LoanPostMain() {
             createdAt = Time.now();
             category = category;
             isFulfilled = false;
+            isVerified = false;
             debtor = caller;
         };
 
