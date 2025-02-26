@@ -7,25 +7,27 @@ import Int64 "mo:base/Int64";
 import Array "mo:base/Array";
 import List "mo:base/List";
 import Nat "mo:base/Nat";
+import Float "mo:base/Float";
 import Types "types";
 import Utils "../utils"
 
 actor class LoanPostMain() {
     stable var posts: List.List<Types.LoanPost> = List.nil<Types.LoanPost>();
 
-    public shared ({ caller }) func createPost(title : Text, description : Text, amount : Float, assurance : Float, interest : Float, postDuration : Nat64) : async Text {
+    public shared ({ caller }) func createPost(title : Text, description : Text, goal : Float, category : Text, loanDuration : Nat64) : async Text {
         let id = await Utils.generateUUID();
 
         let post = {
-            id = id;
+            loanId = id;
             title = title;
             description = description;
-            amount = amount;
-            assurance = assurance;
-            interest = interest;
-            postDuration = postDuration;
-            loanLength = Nat64.fromIntWrap(0);
-            createAt = Time.now();
+            goal = goal;
+            raised = Float.fromInt(0);
+            postDuration = Nat64.fromIntWrap(30);
+            loanDuration = loanDuration;
+            createdAt = Time.now();
+            category = category;
+            isFulfilled = false;
             debtor = caller;
         };
 
