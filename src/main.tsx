@@ -5,12 +5,15 @@ import App from './App';
 import { userCanisterId, idlFactory } from './services/base.service'
 
 import './index.scss';
+import { ServiceProvider } from './context/service-context';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <AgentProvider withProcessEnv>
       <ActorProvider idlFactory={idlFactory} canisterId={userCanisterId}>
-        <App />
+        <ServiceProvider>
+          <App />
+        </ServiceProvider>
       </ActorProvider>
     </AgentProvider>
   </React.StrictMode>,
