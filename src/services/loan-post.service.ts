@@ -1,7 +1,7 @@
-import { ActorSubclass } from "@dfinity/agent";
+import { LoanPost } from "@/lib/model/entity/loan-post";
 import { BaseService, createLoanPostActor, loanPostCanisterId } from "./base.service";
+import { ActorSubclass } from "@dfinity/agent";
 import { _SERVICE as _LOANPOSTSERVICE } from "@/declarations/loan_post/loan_post.did";
-
 
 export class LoanPostService extends BaseService {
 
@@ -13,8 +13,11 @@ export class LoanPostService extends BaseService {
         this.initialized = this.initialization();
     }
 
-    async createLoanPost(title: string, description: string, amount: number, assurance: number, interest: number, postDuration: bigint) {
-        return await this.loanPost.createPost(title, description, amount, assurance, interest, postDuration);
+    async createLoanPost(title: string, description: string, goal: number, category: string, loanDuration: bigint) {
+        return await this.loanPost.createPost(title, description, goal, category, loanDuration);
+    }
 
+    async getLoanPosts(): Promise<LoanPost[]> {
+        return await this.loanPost.getPosts();
     }
 }
