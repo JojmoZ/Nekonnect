@@ -1,22 +1,16 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthClient } from '@dfinity/auth-client';
-import { UserService } from '@/services/user.service';
+import { useService } from '@/context/service-context';
 
-interface LoginPageProps {
-  setUsername: (username: string) => void;
-}
+const LoginPage: React.FC = () => {
 
-const userService = new UserService();
+  const { userService } = useService();
 
-const LoginPage: React.FC<LoginPageProps> = ({ setUsername }) => {
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
-
-  // 🔹 Handle Internet Identity Login
   const handleIIlogin = async () => {
     try {
-      await userService.ensureInitialized();
       const loggedInUser = await userService.login();
 
       if (loggedInUser) {

@@ -1,14 +1,24 @@
 import { User } from "@/lib/model/entity/user";
-import { BaseService } from "./base.service";
+import { BaseService, createUserActor, userCanisterId } from "./base.service";
 import { Principal } from "@dfinity/principal";
 import { AuthClient } from "@dfinity/auth-client";
-import { AnonymousIdentity, Identity, SignIdentity } from "@dfinity/agent";
+import { ActorSubclass, AnonymousIdentity, Identity, SignIdentity } from "@dfinity/agent";
 import { userDto } from "@/lib/model/dto/edit-user.dto";
 import { useNavigate } from "react-router";
+import { _SERVICE as _USERSERVICE } from "@/declarations/user/user.did";
+
 
 export class UserService extends BaseService {
+    
+    
+    private II_URL = import.meta.env.VITE_II_NETWORK != "ic" ? `https://identity.ic0.app/` : `http://${ process.env.CANISTER_ID_INTERNET_IDENTITY}.localhost:4943/`;
+    protected user! : ActorSubclass<_USERSERVICE>;
 
-    private II_URL = process.env.DFX_NETWORK != "ic" ? `https://identity.ic0.app/` : `http://${ process.env.CANISTER_ID_INTERNET_IDENTITY}.localhost:4943/`;
+    constructor() {
+        super();
+        this.user = createUserActor(userCanisterId, {agent : this.agent});
+        this.initialized = this.initialization();
+    }
 
    async login(): Promise<User | null> {
     try {
@@ -32,11 +42,11 @@ export class UserService extends BaseService {
                             });
 
                             console.log('✅ User created in backend:', user);
+                            resolve(user);
                         } else {
                             console.log('✅ User already exists in backend:', user);
                         }
 
-                        resolve(user);
                     } catch (error) {
                         console.error('❌ Error fetching/creating user:', error);
                         reject(error);
@@ -75,6 +85,10 @@ export class UserService extends BaseService {
         } else {
             throw new Error('User not found');
         }
+    }
+
+    async isAuthenticated() : Promise<boolean> {
+        return await this.authClient.isAuthenticated();
     }
 
     async editUser(user: userDto): Promise<User> {

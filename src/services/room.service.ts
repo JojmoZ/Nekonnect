@@ -1,9 +1,20 @@
 import { roomDto } from "@/lib/model/dto/create-room.dto";
-import { BaseService } from "./base.service";
+import { BaseService, createRoomActor, roomCanisterId } from "./base.service";
 import { Room } from "@/lib/model/entity/room";
 import { Principal } from "@dfinity/principal";
+import { _SERVICE as _ROOMSERVICE } from "@/declarations/room/room.did";
+import { ActorSubclass } from "@dfinity/agent";
 
 export class RoomService extends BaseService {
+
+    protected room! : ActorSubclass<_ROOMSERVICE>;
+
+    constructor() {
+        super()
+        this.room = createRoomActor(roomCanisterId, {agent : this.agent});
+        this.initialized = this.initialization();
+    }
+    
     async getRooms () : Promise<Room[]> { 
         return await this.room.getAllRooms()
     }
