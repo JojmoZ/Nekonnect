@@ -32,6 +32,13 @@
         "node_compatibility": true
       }
     },
+    "test": {
+      "type":"motoko",
+      "main": "backend/TestFile/item.mo",
+      "declarations": {
+        "node_compatibility": true
+      }
+    },
     "room": {
       "type": "motoko",
       "main": "backend/room/main.mo",
@@ -48,7 +55,7 @@
     },
     "frontend": {
       "main": "src/index.html",
-      "dependencies": ["user","transaction","room_users","message","room", "loan_post","internet_identity"],
+      "dependencies": ["user","transaction","room_users","message","room", "loan_post","internet_identity","test"],
       "type": "assets",
       "source": ["dist/"]
     }

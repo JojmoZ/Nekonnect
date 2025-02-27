@@ -1,19 +1,20 @@
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { loanPostSchema } from "@/lib/model/dto/create-loan-post.dto";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import Stepper from "@/components/stepper";
+import { LoanPostService } from "@/services/loan-post.service";
+import CreateLoanForm from "../../components/create-loan-form";
+import AssuranceForm from "../../components/assurance-form";
+import { assuranceSchema } from "@/lib/model/dto/upload-assurance.dto";
+import { loanAgreementSchema } from "@/lib/model/dto/check-agreement.dto";
+import LoanAgreementForm from "@/components/loan-agreement-form";
 
-const categories = ["Education", "Community", "Technology", "Environment", "Arts & Culture", "Wellness"];
+let loanPostService = new LoanPostService();
 
-function CreateLoanForm() {
-    const [file, setFile] = useState<File | null>(null);
+function CreateLoanPostPage() {
 
-    const form = useForm<z.infer<typeof loanPostSchema>>({
+    const loanPostForm = useForm<z.infer<typeof loanPostSchema>>({
         resolver: zodResolver(loanPostSchema),
         defaultValues: {
             title: "",
@@ -24,155 +25,89 @@ function CreateLoanForm() {
         },
     });
 
-    const onSubmit = (values: z.infer<typeof loanPostSchema>) => {
-        const formData = new FormData();
-        formData.append("title", values.title);
-        formData.append("description", values.description);
-        formData.append("goal", values.goal.toString());
-        formData.append("category", values.category);
-        formData.append("loanDuration", values.loanDuration.toString());
-        if (file) {
-            formData.append("file", file);
-        }
-        console.log("Form Data:", Object.fromEntries(formData.entries()));
+    const assuranceForm = useForm<z.infer<typeof assuranceSchema>>({
+        resolver: zodResolver(assuranceSchema),
+        defaultValues: {
+            assurance_type: "",
+            assurance_file: undefined,
+        },
+    });
+
+    const agreementForm = useForm<z.infer<typeof loanAgreementSchema>>({
+        resolver: zodResolver(loanAgreementSchema),
+        defaultValues: {
+            terms: false,
+        },
+    });
+
+    const onSubmit = async (values: z.infer<typeof loanPostSchema>) => {
+        console.log(values);
+        console.log(assuranceForm.getValues());
+        console.log(agreementForm.getValues());
+
+        const isValid = await agreementForm.trigger();
+        if (!isValid) return;
+
+        const response = await loanPostService.createLoanPost(values.title, values.description, values.goal, values.category, BigInt(values.loanDuration));
+        console.log(response);
         alert("Form submitted!");
     };
 
     const steps = [
         {
-            title: "Step 1: Title & Description",
-            description: "Enter the title and description for your loan post.",
+            title: "Step 1: Loan Details",
+            description: "Enter the details for your loan post.",
             content: (
-                <>
-                    <FormField
-                        control={form.control}
-                        name="title"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Title</FormLabel>
-                                <FormControl>
-                                    <Input placeholder="Enter title" {...field} />
-                                </FormControl>
-                                <FormDescription>This is your public display name.</FormDescription>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="description"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Description</FormLabel>
-                                <FormControl>
-                                    <Input placeholder="Enter description" {...field} />
-                                </FormControl>
-                                <FormDescription>This is your public display name.</FormDescription>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                </>
+                <FormProvider {...loanPostForm}>
+                    <CreateLoanForm/>
+                </FormProvider>
+            ),
+            onNext: async () => {
+                const isValid = await loanPostForm.trigger();
+                return isValid;
+            }
+        },
+        {
+            title: "Step 2: Assurance",
+            description: "Upload the assurance image.",
+            content: (
+                <FormProvider {...assuranceForm}>
+                    <AssuranceForm />
+                </FormProvider>
+            ),
+            onNext: async () => {
+                const isValid = await assuranceForm.trigger();
+                return isValid;
+            }
+        },
+        {
+            title: "Step 3: Verification",
+            description: "We should verify you before proceeding.",
+            content: (
+                <h1>Face Recognition</h1>
             ),
         },
         {
-            title: "Step 2: Goal & Category",
-            description: "Set the goal amount and select a category.",
+            title: "Step 4: Agreement",
+            description: "Please read the agreement before submitting.",
             content: (
-                <>
-                    <FormField
-                        control={form.control}
-                        name="goal"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Amount</FormLabel>
-                                <FormControl>
-                                    <Input type="number" {...field} />
-                                </FormControl>
-                                <FormDescription>This is your public display name.</FormDescription>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="category"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Category</FormLabel>
-                                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                    <FormControl>
-                                        <SelectTrigger>
-                                            <SelectValue placeholder="Select a category" />
-                                        </SelectTrigger>
-                                    </FormControl>
-                                    <SelectContent>
-                                        {categories.map((cat) => (
-                                            <SelectItem key={cat} value={cat}>
-                                                {cat}
-                                            </SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                </>
-            ),
-        },
-        {
-            title: "Step 3: Loan Duration & File Upload",
-            description: "Set the loan duration and upload a file.",
-            content: (
-                <>
-                    <FormField
-                        control={form.control}
-                        name="loanDuration"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Loan Duration</FormLabel>
-                                <FormControl>
-                                    <Input type="number" {...field} />
-                                </FormControl>
-                                <FormDescription>This is your public display name.</FormDescription>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormItem>
-                        <FormLabel>Upload File</FormLabel>
-                        <FormControl>
-                            <Input
-                                type="file"
-                                accept="image/*"
-                                onChange={(e) => {
-                                    if (e.target.files && e.target.files.length > 0) {
-                                        setFile(e.target.files[0]);
-                                    }
-                                }}
-                            />
-                        </FormControl>
-                        <FormDescription>Upload a file related to your loan post.</FormDescription>
-                        <FormMessage />
-                    </FormItem>
-                </>
+                <FormProvider {...agreementForm}>
+                    <LoanAgreementForm />
+                </FormProvider>
             ),
         },
     ];
 
     return (
         <div>
-            <h1 className="text-5xl tracking-tight text-center">Apply for Loan</h1>
-            <Form {...form}>
-                <Stepper
-                    steps={steps}
-                    onSubmit={form.handleSubmit(onSubmit)}
-                    showProgress={true}
-                />
-            </Form>
+            <h1 className="text-5xl tracking-tight text-center mb-4">Apply for Loan</h1>
+            <Stepper
+                steps={steps}
+                onSubmit={loanPostForm.handleSubmit(onSubmit)}
+                showProgress={true}
+            />
         </div>
     );
 }
 
-export default CreateLoanForm;
+export default CreateLoanPostPage;
