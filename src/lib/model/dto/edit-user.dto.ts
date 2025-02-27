@@ -1,4 +1,3 @@
-import { Principal } from "@dfinity/principal";
 import { z } from "zod";
 
 export const userSchema = z.object({
