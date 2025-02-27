@@ -8,6 +8,7 @@ import AuthRedirect from '@/lib/utils/AuthRedirect';
 import Login from '@/pages/(public)/login';
 import { createBrowserRouter, redirect } from 'react-router-dom';
 import TempPage from './pages/TempPage';
+import PostVerificationPage from './pages/(private)/post-verification';
 
 const router = createBrowserRouter([
   {
@@ -45,6 +46,10 @@ const router = createBrowserRouter([
       {
         path: "/temp2",
         element: <TempPage/>
+      },
+      {
+        path: "/post-verification",
+        element: <PostVerificationPage />
       }
     ],
   },

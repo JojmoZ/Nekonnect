@@ -60,7 +60,7 @@ function AssuranceForm() {
                         <div className="mt-4">
                             <Label>Selected File: {file? file.name : "No file is selected."}</Label>
                         </div>
-                        <FormDescription>This is your assurance type.</FormDescription>
+                        <FormDescription>This is your assurance file.</FormDescription>
                         <FormMessage />
                     </FormItem>
                 )}
