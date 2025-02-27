@@ -7,6 +7,7 @@ import ProtectedRoute from '@/lib/utils/ProtectedRoute';
 import AuthRedirect from '@/lib/utils/AuthRedirect';
 import Login from '@/pages/(public)/login';
 import { createBrowserRouter, redirect } from 'react-router-dom';
+import TempPage from './pages/TempPage';
 
 const router = createBrowserRouter([
   {
@@ -23,7 +24,7 @@ const router = createBrowserRouter([
     ],
   },
   {
-    element: <ProtectedRoute />,
+    // element: <ProtectedRoute />,
     children: [
       {
         path: "/home",
@@ -40,6 +41,10 @@ const router = createBrowserRouter([
       {
         path: "/chat",
         element: <ChatPage />,
+      },
+      {
+        path: "/temp2",
+        element: <TempPage/>
       }
     ],
   },
