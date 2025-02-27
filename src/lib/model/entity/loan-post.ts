@@ -6,11 +6,13 @@ export interface LoanPost {
   description: string;
   goal: number;
   raised: number;
-  createdAt: bigint;        // Time.Time in Motoko corresponds to Date in JS/TS
+  createdAt: string;        
+  verifiedAt: string;  
   postDuration: bigint;   // Nat64 can map to bigint in TS
   category: string;
   loanDuration: bigint;   // Nat64 to bigint
   isFulfilled: boolean;
   isVerified: boolean;
   debtor: Principal;         // Principal as string (Principal.toText())
+  assuranceId: string;
 }

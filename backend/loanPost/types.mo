@@ -1,5 +1,4 @@
 import Nat64 "mo:base/Nat64";
-import Time "mo:base/Time";
 
 module {
 
@@ -9,7 +8,8 @@ module {
         description: Text;
         goal: Float;
         raised: Float;
-        createdAt: Time.Time;
+        createdAt: Text;
+        verifiedAt: Text;
         postDuration: Nat64;
         category: Text;
         loanDuration: Nat64;

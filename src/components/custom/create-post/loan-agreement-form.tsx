@@ -1,6 +1,6 @@
 import { useFormContext } from "react-hook-form";
-import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "./ui/form";
-import { Checkbox } from "./ui/checkbox";
+import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../../ui/form";
+import { Checkbox } from "../../ui/checkbox";
 
 function LoanAgreementForm() {
 
