@@ -97,14 +97,15 @@
       --chart-4: 278 75% 58%;
       --chart-5: 338 77% 56%;
 
-      --sidebar-background: 240 5.9% 10%;
-      --sidebar-foreground: 240 4.8% 95.9%;
-      --sidebar-primary: 224.3 76.3% 48%;
-      --sidebar-primary-foreground: 0 0% 100%;
-      --sidebar-accent: 240 3.7% 15.9%;
-      --sidebar-accent-foreground: 240 4.8% 95.9%;
-      --sidebar-border: 240 3.7% 15.9%;
-      --sidebar-ring: 217.2 91.2% 59.8%;
+      --sidebar-background: 222 32% 15%; /* Slightly lighter than main background */
+      --sidebar-foreground: 215 20% 85%; /* Softer than main foreground */
+      --sidebar-primary: 177 80% 49%; /* Use accent color to differentiate */
+      --sidebar-primary-foreground: 214 32% 98%; /* Keep readability */
+      --sidebar-accent: 217 50% 18%; /* Darker than main accent for contrast */
+      --sidebar-accent-foreground: 214 32% 98%; /* Same foreground */
+      --sidebar-border: 222 32% 22%; /* Slightly brighter than sidebar background */
+      --sidebar-ring: 177 80% 49%; /* Tie the focus ring to the accent */
+
     }
   }
 }

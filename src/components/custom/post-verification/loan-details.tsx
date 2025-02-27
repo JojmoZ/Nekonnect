@@ -2,6 +2,7 @@ import React from 'react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Principal } from '@dfinity/principal';
 import Typography from '../typography';
+import { Button } from '@/components/ui/button';
 
 type Loan = {
   loanId: string;
@@ -19,6 +20,16 @@ type LoanDisplayProps = {
 };
 
 const LoanDisplay: React.FC<LoanDisplayProps> = ({ loan }) => {
+
+    const onAccept = () => {
+        // Accept the loan
+    };
+
+    const onReject = () => {
+        // Reject the loan
+    };
+
+
   return (
     <Card className="w-full max-w-2xl">
       <CardHeader>
@@ -71,6 +82,15 @@ const LoanDisplay: React.FC<LoanDisplayProps> = ({ loan }) => {
         <div>
           <Typography variant="subtitle1">Assurance Type</Typography>
           <Typography variant="body1">Land Certificate</Typography>
+        </div>
+
+        <div className="flex gap-4">
+          <Button onClick={onAccept} variant="default">
+            Accept
+          </Button>
+          <Button onClick={onReject} variant="destructive">
+            Reject
+          </Button>
         </div>
       </CardContent>
     </Card>
