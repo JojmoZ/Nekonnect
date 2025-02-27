@@ -16,6 +16,13 @@ module {
         isFulfilled: Bool;
         isVerified: Bool;
         debtor: Principal;
+        assuranceId: Text;
     };
+
+    public type LoanAssurance = {
+        assuranceId: Text;
+        assuranceType: Text;
+        assuranceFile: Text;
+    }
 
 }
