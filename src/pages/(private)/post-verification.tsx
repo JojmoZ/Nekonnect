@@ -1,4 +1,5 @@
-import { AppSidebar } from "@/components/app-sidebar"
+import { AppSidebar } from "@/components/custom/post-verification/post-verification-sidebar"
+import LoanDisplay from "@/components/custom/post-verification/loan-details";
 import { Separator } from "@/components/ui/separator"
 import {
   SidebarInset,
@@ -39,10 +40,7 @@ const ContentArea: React.FC = () => {
   return (
     <div className="flex flex-1 flex-col gap-4 p-4">
       {selectedPost ? (
-        <div className="selected-content">
-          <h2>{selectedPost.title}</h2>
-          <p>{selectedPost.description}</p>
-        </div>
+        <LoanDisplay loan={selectedPost} />
       ) : (
         Array.from({ length: 24 }).map((_, index) => (
           <div
