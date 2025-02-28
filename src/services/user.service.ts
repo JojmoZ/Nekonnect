@@ -1,4 +1,4 @@
-import { User } from "@/lib/model/entity/user";
+import { User as AppUser} from "@/lib/model/entity/user";
 import { BaseService, createUserActor, userCanisterId } from "./base.service";
 import { Principal } from "@dfinity/principal";
 import { AuthClient } from "@dfinity/auth-client";
@@ -6,8 +6,7 @@ import { ActorSubclass, AnonymousIdentity, Identity, SignIdentity } from "@dfini
 import { userDto } from "@/lib/model/dto/edit-user.dto";
 import { useNavigate } from "react-router";
 import { _SERVICE as _USERSERVICE } from "@/declarations/user/user.did";
-
-
+import { User as BackendUser } from "@/declarations/user/user.did"; 
 export class UserService extends BaseService {
     
     
@@ -19,8 +18,7 @@ export class UserService extends BaseService {
         this.user = createUserActor(userCanisterId, {agent : this.agent});
         this.initialized = this.initialization();
     }
-
-   async login(): Promise<User | null> {
+async login(): Promise<AppUser | null> {
     try {
         return new Promise(async (resolve, reject) => {
             await this.authClient.login({
@@ -30,36 +28,44 @@ export class UserService extends BaseService {
                         const principal = this.authClient.getIdentity().getPrincipal();
                         let userArray = await this.user.getUserByPrincipal(principal);
 
-                        let user = userArray.length > 0 ? userArray[0] : null;
+                        let user: AppUser | null = userArray.length > 0 && userArray[0] !== undefined ? userArray[0] : null;
 
                         if (!user) {
                             user = await this.createUser({
+                                internetIdentity: principal, // ✅ Ensure `internetIdentity` is included
                                 username: "",
                                 dob: "",
                                 nationality: "",
                                 gender: "Other",
                                 email: "",
+                                faceEncoding: [], // ✅ Default empty `faceEncoding` (Never undefined)
                             });
 
-                            console.log('✅ User created in backend:', user);
-                            resolve(user);
+                            console.log("✅ User created in backend:", user);
                         } else {
-                            console.log('✅ User already exists in backend:', user);
+                            console.log("✅ User already exists in backend:", user);
                         }
 
+                        // ✅ Convert `faceEncoding` to the correct format before returning
+                        resolve({
+                            ...user,
+                            faceEncoding: user.faceEncoding && user.faceEncoding.length > 0
+                                ? [new Uint8Array(user.faceEncoding[0] as number[])] // ✅ Convert `number[]` to `Uint8Array`
+                                : [],
+                        });
                     } catch (error) {
-                        console.error('❌ Error fetching/creating user:', error);
+                        console.error("❌ Error fetching/creating user:", error);
                         reject(error);
                     }
                 },
                 onError: (err) => {
-                    console.error('❌ Internet Identity Login failed:', err);
+                    console.error("❌ Internet Identity Login failed:", err);
                     reject(err);
                 },
             });
         });
     } catch (err) {
-        console.error('❌ Auth error:', err);
+        console.error("❌ Auth error:", err);
         throw err;
     }
 }
@@ -74,65 +80,87 @@ export class UserService extends BaseService {
         }
     }
 
-    async me() : Promise<User> {
-        const principal = this.authClient.getIdentity().getPrincipal();
-        if (principal instanceof AnonymousIdentity) {
-            throw new Error('User is not authenticated');
-        }
-        const users = await this.user.getUserByPrincipal(principal);
-        if (users.length > 0 && users[0] != null) {
-            return users[0];
-        } else {
-            throw new Error('User not found');
-        }
+    async me(): Promise<AppUser> {
+    const principal = this.authClient.getIdentity().getPrincipal();
+    if (principal instanceof AnonymousIdentity) {
+        throw new Error("User is not authenticated");
     }
+
+    const users = await this.user.getUserByPrincipal(principal);
+
+    if (users.length > 0 && users[0] != null) {
+        // ✅ Convert `number[]` to `Uint8Array` if necessary
+        return {
+            ...users[0],
+            faceEncoding: users[0].faceEncoding && users[0].faceEncoding.length > 0 && users[0].faceEncoding[0]
+                ? [new Uint8Array(users[0].faceEncoding[0])] // ✅ Convert number[] to Uint8Array
+                : [], // ✅ Ensure `faceEncoding` is always defined
+        } as AppUser;
+    } else {
+        throw new Error("User not found");
+    }
+}
+
 
     async isAuthenticated() : Promise<boolean> {
         return await this.authClient.isAuthenticated();
     }
 
-    async editUser(user: userDto): Promise<User> {
-        try {
-            const response = await this.user.editUserProfile({
-                internetIdentity: await this.getCallerPrincipal(),
-                username: user.username,
-                dob: user.dob,
-                nationality: user.nationality,
-                gender: user.gender,
-                email: user.email,
-            });
+  async editUser(user: AppUser): Promise<AppUser> {
+    try {
+        const response = await this.user.editUserProfile({
+            internetIdentity: user.internetIdentity,
+            username: user.username,
+            dob: user.dob,
+            nationality: user.nationality,
+            gender: user.gender,
+            email: user.email,
+            faceEncoding: user.faceEncoding ? [user.faceEncoding] : [], // ✅ Fix: Convert to correct format
+        } as BackendUser); // ✅ Explicitly cast to backend type
 
-            if ('ok' in response) {
-                return response.ok;
-            } else {
-                throw new Error(`Error editing user profile: ${response.err}`);
-            }
-        } catch (error) {
-            console.error(error);
-            throw error;
+        if ("ok" in response) {
+            return response.ok as AppUser; // ✅ Convert back to frontend type
+        } else {
+            throw new Error(`Error editing user profile: ${response.err}`);
         }
+    } catch (error) {
+        console.error(error);
+        throw error;
     }
+}
 
-     async createUser(user: userDto): Promise<User> {
-        try {
-            const response = await this.user.createUser({
-                internetIdentity: await this.getCallerPrincipal(),
-                username: user.username,
-                dob: user.dob,
-                nationality: user.nationality,
-                gender: user.gender,
-                email: user.email,
-            });
+     async createUser(user: AppUser): Promise<AppUser> {
+    try {
+        const response = await this.user.createUser({
+            internetIdentity: user.internetIdentity,
+            username: user.username,
+            dob: user.dob,
+            nationality: user.nationality,
+            gender: user.gender,
+            email: user.email,
+            faceEncoding: user.faceEncoding && user.faceEncoding.length > 0 && user.faceEncoding[0]
+                ? [Array.from(user.faceEncoding[0])] 
+                : [], 
+        } as BackendUser); 
 
-            if ('ok' in response) {
-                return response.ok;
-            } else {
-                throw new Error(`Error creating user: ${response.err}`);
-            }
-        } catch (error) {
-            console.error(error);
-            throw error;
+        if ("ok" in response) {
+            return {
+                ...response.ok,
+                faceEncoding: response.ok.faceEncoding.length > 0 && response.ok.faceEncoding[0]
+                    ? [new Uint8Array(response.ok.faceEncoding[0])] 
+                    : [],
+            } as AppUser;
+        } else {
+            throw new Error(`Error creating user: ${response.err}`);
         }
+    } catch (error) {
+        console.error(error);
+        throw error;
     }
+}
+
+
+
+
     
 }
