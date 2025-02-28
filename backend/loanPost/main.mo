@@ -8,13 +8,15 @@ import Array "mo:base/Array";
 import List "mo:base/List";
 import Nat "mo:base/Nat";
 import Float "mo:base/Float";
+import Error "mo:base/Error";
 import Types "types";
-import Utils "../utils"
+import Utils "../utils";
 
 actor class LoanPostMain() {
     stable var posts: List.List<Types.LoanPost> = List.nil<Types.LoanPost>();
+    stable var assurances: List.List<Types.LoanAssurance> = List.nil<Types.LoanAssurance>();
 
-    public shared ({ caller }) func createPost(title : Text, description : Text, goal : Float, category : Text, loanDuration : Nat64) : async Text {
+    public shared ({ caller }) func createPost(title : Text, description : Text, goal : Float, category : Text, loanDuration : Nat64, assuranceType : Text, assuranceFile : [Nat8]) : async Text {
         let id = await Utils.generateUUID();
         let assuranceId = await Utils.generateUUID();
 
@@ -35,6 +37,13 @@ actor class LoanPostMain() {
             assuranceId = assuranceId;
         };
 
+        let assurance = {
+            assuranceId = assuranceId;
+            assuranceType = assuranceType;
+            assuranceFile = assuranceFile;
+        };
+
+        assurances := List.push<Types.LoanAssurance>(assurance, assurances);
         posts := List.push<Types.LoanPost>(post, posts);
 
         return "Post created successfully!";
@@ -44,23 +53,22 @@ actor class LoanPostMain() {
         return List.toArray(posts);
     };
 
-    // public shared query func getActivePosts() : async [Types.LoanPost] {
-    //     let currentTime = Int64.fromInt(Time.now()); 
-    //     let activePosts = List.filter<Types.LoanPost>(
-    //         posts,
-    //         func(post: Types.LoanPost): Bool {
-    //             currentTime <= post.createdAt + Int64.fromNat64(post.postDuration)
-    //         }
-    //     );
-    //     return List.toArray(activePosts);
+    public shared query func getActivePosts() : async [Types.LoanPost] {
+        let activePosts = List.filter<Types.LoanPost>(
+            posts,
+            func(post: Types.LoanPost): Bool {
+                return post.isVerified == true;
+            }
+        );
+        return List.toArray(activePosts);
 
-    // };
+    };
 
     public shared query func getUnverifiedPosts() : async [Types.LoanPost] {
         let unverifiedPosts = List.filter<Types.LoanPost>(
             posts,
             func(post: Types.LoanPost): Bool {
-                return post.isVerified == true;
+                return post.isVerified == false;
             }
         );
         return List.toArray(unverifiedPosts);
@@ -123,5 +131,25 @@ actor class LoanPostMain() {
         );
 
         return "Post rejected successfully!";
+    };
+
+    public shared query func getAssurance(assuranceId: Text) : async Types.LoanAssurance {
+        let assuranceOpt = List.find<Types.LoanAssurance>(
+            assurances,
+            func(assurance: Types.LoanAssurance): Bool {
+                return assurance.assuranceId == assuranceId;
+            }
+        );
+
+        switch (assuranceOpt) {
+            case (?assurance) {
+                return assurance;
+            };
+            case null {
+                throw Error.reject("Assurance not found");
+            };
+        };
+
+
     }
 }

@@ -10,7 +10,7 @@ import { useGetLoanPosts } from "@/hooks/loan-post/use-get-loan-posts"
 export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState("All")
   const [isStartProjectOpen, setIsStartProjectOpen] = useState(false)
-  const { loanPosts, getLoanPostsLoading } = useGetLoanPosts();
+  const { loanPosts, getLoanPostsLoading } = useGetLoanPosts(true);
   const categories = Array.from(new Set(loanPosts.map((post) => post.category)))
 
   const filteredProjects =

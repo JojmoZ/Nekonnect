@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/sidebar';
 import { LoanPostContext } from '@/context/loan-post-context';
 
-export function PostVerificationAppSidebar({
+export function PostVerificationSidebar({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
   const { loanPosts, setSelectedPost } = React.useContext(LoanPostContext);
