@@ -40,3 +40,4 @@ temp_ic
 
 # Virtual environment
 venv
+ocr_backend/.venv

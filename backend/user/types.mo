@@ -6,5 +6,6 @@ module {
         nationality: Text;
         gender: Text; // "Male", "Female", "Other"
         email: Text;
+        faceEncoding: ?[Nat8];
     };
 }
