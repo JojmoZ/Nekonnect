@@ -44,23 +44,22 @@ actor class LoanPostMain() {
         return List.toArray(posts);
     };
 
-    // public shared query func getActivePosts() : async [Types.LoanPost] {
-    //     let currentTime = Int64.fromInt(Time.now()); 
-    //     let activePosts = List.filter<Types.LoanPost>(
-    //         posts,
-    //         func(post: Types.LoanPost): Bool {
-    //             currentTime <= post.createdAt + Int64.fromNat64(post.postDuration)
-    //         }
-    //     );
-    //     return List.toArray(activePosts);
+    public shared query func getActivePosts() : async [Types.LoanPost] {
+        let activePosts = List.filter<Types.LoanPost>(
+            posts,
+            func(post: Types.LoanPost): Bool {
+                return post.isVerified == true;
+            }
+        );
+        return List.toArray(activePosts);
 
-    // };
+    };
 
     public shared query func getUnverifiedPosts() : async [Types.LoanPost] {
         let unverifiedPosts = List.filter<Types.LoanPost>(
             posts,
             func(post: Types.LoanPost): Bool {
-                return post.isVerified == true;
+                return post.isVerified == false;
             }
         );
         return List.toArray(unverifiedPosts);

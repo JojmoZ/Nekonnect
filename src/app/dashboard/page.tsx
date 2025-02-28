@@ -1,4 +1,4 @@
-import { AppSidebar } from "@/components/custom/post-verification/post-verification-sidebar"
+import { PostVerificationSidebar } from "@/components/custom/post-verification/post-verification-sidebar"
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -17,7 +17,7 @@ import {
 export default function Page() {
   return (
     <SidebarProvider>
-      <AppSidebar />
+      <PostVerificationSidebar />
       <SidebarInset>
         <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
           <SidebarTrigger className="-ml-1" />

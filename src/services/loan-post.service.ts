@@ -20,4 +20,21 @@ export class LoanPostService extends BaseService {
     async getLoanPosts(): Promise<LoanPost[]> {
         return await this.loanPost.getPosts();
     }
+
+    async getActivePosts(): Promise<LoanPost[]> {
+        return await this.loanPost.getActivePosts();
+    }
+
+    async getUnverifiedPosts(): Promise<LoanPost[]> {
+        return await this.loanPost.getUnverifiedPosts();
+    }
+
+    async acceptPost(loanId: string): Promise<String> {
+        return await this.loanPost.acceptPost(loanId);
+    }
+
+    async rejectPost(loanId: string): Promise<String> {
+        return await this.loanPost.rejectPost(loanId);
+    }
+
 }

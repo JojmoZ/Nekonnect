@@ -1,33 +1,25 @@
 import React from 'react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
-import { Principal } from '@dfinity/principal';
 import Typography from '../typography';
 import { Button } from '@/components/ui/button';
-
-type Loan = {
-  loanId: string;
-  title: string;
-  description: string;
-  goal: number;
-  createdAt: string;
-  category: string;
-  loanDuration: bigint;
-  debtor: Principal;
-};
+import { LoanPost } from '@/lib/model/entity/loan-post';
+import { LoanPostService } from '@/services/loan-post.service';
 
 type LoanDisplayProps = {
-  loan: Loan;
+  loan: LoanPost;
 };
+
+const loanPostService = new LoanPostService();
 
 const LoanDisplay: React.FC<LoanDisplayProps> = ({ loan }) => {
 
-    const onAccept = () => {
-        // Accept the loan
-    };
+  const onAccept = () => {
+    const response = loanPostService.acceptPost(loan.loanId);
+  };
 
-    const onReject = () => {
-        // Reject the loan
-    };
+  const onReject = () => {
+    const response = loanPostService.rejectPost(loan.loanId);
+  };
 
 
   return (
@@ -38,11 +30,11 @@ const LoanDisplay: React.FC<LoanDisplayProps> = ({ loan }) => {
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="w-full h-fit rounded-lg overflow-hidden">
-            <img
-              src={"https://placehold.co/800x600/png"}
-              alt={loan.title}
-              className="w-full h-full object-cover"
-            />
+          <img
+            src={"https://placehold.co/800x600/png"}
+            alt={loan.title}
+            className="w-full h-full object-cover"
+          />
         </div>
 
         <div>

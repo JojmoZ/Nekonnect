@@ -1,4 +1,4 @@
-import { AppSidebar } from "@/components/custom/post-verification/post-verification-sidebar"
+import { PostVerificationSidebar } from "@/components/custom/post-verification/post-verification-sidebar"
 import LoanDisplay from "@/components/custom/post-verification/loan-details";
 import { Separator } from "@/components/ui/separator"
 import {
@@ -12,16 +12,16 @@ import { useContext } from "react";
 
 function PostVerificationPage() {
 
-  const { loanPosts, getLoanPostsLoading } = useGetLoanPosts();
+  const { loanPosts, getLoanPostsLoading } = useGetLoanPosts(false);
 
   return (
     <LoanPostProvider loanPosts={loanPosts}>
-      <SidebarProvider       style={
+      <SidebarProvider style={
         {
           "--sidebar-width": "350px",
         } as React.CSSProperties
       }>
-        <AppSidebar />
+        <PostVerificationSidebar />
         <SidebarInset>
           <header className="sticky top-0 flex shrink-0 items-center gap-2 border-b bg-background p-4">
             <SidebarTrigger className="-ml-1" />
