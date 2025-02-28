@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { LoanPost } from '@/lib/model/entity/loan-post';
 import { LoanPostService } from '@/services/loan-post.service';
 import { useGetLoanAssurance } from '@/hooks/loan-post/use-get-loan-assurance';
+import { toast } from 'sonner';
 
 type LoanDisplayProps = {
   loan: LoanPost;
@@ -17,11 +18,31 @@ const LoanDisplay: React.FC<LoanDisplayProps> = ({ loan }) => {
   const { assurance, imageUrl, getAssuranceLoading } = useGetLoanAssurance(loan.assuranceId);
 
   const onAccept = () => {
-    const response = loanPostService.acceptPost(loan.loanId);
+    return loanPostService.acceptPost(loan.loanId);
   };
 
   const onReject = () => {
-    const response = loanPostService.rejectPost(loan.loanId);
+    return loanPostService.rejectPost(loan.loanId);
+  };
+
+  const handleAccept = () => {
+    toast.promise(onAccept(), {
+      loading: 'Accepting loan post...', // Loading message
+      success: (data) => {
+        return `Loan post accepted successfully!`; // Success message
+      },
+      error: 'Failed to accept loan post', // Error message
+    });
+  };
+  
+  const handleReject = () => {
+    toast.promise(onReject(), {
+      loading: 'Rejecting loan post...', // Loading message
+      success: (data) => {
+        return `Loan post rejected successfully!`; // Success message
+      },
+      error: 'Failed to reject loan post', // Error message
+    });
   };
 
 
@@ -80,10 +101,10 @@ const LoanDisplay: React.FC<LoanDisplayProps> = ({ loan }) => {
         </div>
 
         <div className="flex gap-4">
-          <Button onClick={onAccept} variant="default">
+          <Button onClick={handleAccept} variant="default">
             Accept
           </Button>
-          <Button onClick={onReject} variant="destructive">
+          <Button onClick={handleReject} variant="destructive">
             Reject
           </Button>
         </div>
