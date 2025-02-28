@@ -40,15 +40,18 @@ function CreateLoanPostPage() {
         },
     });
 
-    const onSubmit = async (values: z.infer<typeof loanPostSchema>) => {
-        console.log(values);
-        console.log(assuranceForm.getValues());
-        console.log(agreementForm.getValues());
-
+    const onSubmit = async () => {
+        
         const isValid = await agreementForm.trigger();
         if (!isValid) return;
 
-        const response = await loanPostService.createLoanPost(values.title, values.description, values.goal, values.category, BigInt(values.loanDuration));
+        const loanPostValues = loanPostForm.getValues();
+        const assuranceValues = assuranceForm.getValues();
+
+        const arrayBuffer = await assuranceValues.assurance_file.arrayBuffer();
+        const uint8Array = new Uint8Array(arrayBuffer);
+
+        const response = await loanPostService.createLoanPost(loanPostValues.title, loanPostValues.description, Number(loanPostValues.goal), loanPostValues.category, BigInt(loanPostValues.loanDuration), assuranceValues.assurance_type, uint8Array);
         console.log(response);
         alert("Form submitted!");
     };
@@ -103,7 +106,7 @@ function CreateLoanPostPage() {
             <h1 className="text-5xl tracking-tight text-center mb-4">Apply for Loan</h1>
             <Stepper
                 steps={steps}
-                onSubmit={loanPostForm.handleSubmit(onSubmit)}
+                onSubmit={onSubmit}
                 showProgress={true}
             />
         </div>

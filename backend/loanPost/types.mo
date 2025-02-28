@@ -1,4 +1,5 @@
 import Nat64 "mo:base/Nat64";
+import Nat8 "mo:base/Nat8";
 
 module {
 
@@ -22,7 +23,7 @@ module {
     public type LoanAssurance = {
         assuranceId: Text;
         assuranceType: Text;
-        assuranceFile: Text;
+        assuranceFile: [Nat8];
     }
 
 }

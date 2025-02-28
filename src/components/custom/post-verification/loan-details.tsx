@@ -4,6 +4,7 @@ import Typography from '../typography';
 import { Button } from '@/components/ui/button';
 import { LoanPost } from '@/lib/model/entity/loan-post';
 import { LoanPostService } from '@/services/loan-post.service';
+import { useGetLoanAssurance } from '@/hooks/loan-post/use-get-loan-assurance';
 
 type LoanDisplayProps = {
   loan: LoanPost;
@@ -12,6 +13,8 @@ type LoanDisplayProps = {
 const loanPostService = new LoanPostService();
 
 const LoanDisplay: React.FC<LoanDisplayProps> = ({ loan }) => {
+
+  const { assurance, imageUrl, getAssuranceLoading } = useGetLoanAssurance(loan.assuranceId);
 
   const onAccept = () => {
     const response = loanPostService.acceptPost(loan.loanId);
@@ -31,7 +34,7 @@ const LoanDisplay: React.FC<LoanDisplayProps> = ({ loan }) => {
       <CardContent className="space-y-4">
         <div className="w-full h-fit rounded-lg overflow-hidden">
           <img
-            src={"https://placehold.co/800x600/png"}
+            src={imageUrl? imageUrl : "https://placehold.co/800x600/png"}
             alt={loan.title}
             className="w-full h-full object-cover"
           />
@@ -73,7 +76,7 @@ const LoanDisplay: React.FC<LoanDisplayProps> = ({ loan }) => {
 
         <div>
           <Typography variant="subtitle1">Assurance Type</Typography>
-          <Typography variant="body1">Land Certificate</Typography>
+          <Typography variant="body1">{assurance?.assuranceType}</Typography>
         </div>
 
         <div className="flex gap-4">
