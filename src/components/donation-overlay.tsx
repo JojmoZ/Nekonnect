@@ -17,17 +17,21 @@ import { transactionSchema } from '@/lib/model/dto/create-transaction.dto';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from './ui/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
+import useServiceContext from '@/hooks/use-service-context';
+import { toast } from 'sonner';
 
 interface DonationOverlayProps {
   isOpen: boolean;
   onClose: () => void;
   projectTitle: string;
+  loanId: string;
 }
 
 export function DonationOverlay({
   isOpen,
   onClose,
   projectTitle,
+  loanId
 }: DonationOverlayProps) {
   const transactionForm = useForm<z.infer<typeof transactionSchema>>({
     resolver: zodResolver(transactionSchema),
@@ -38,7 +42,25 @@ export function DonationOverlay({
     },
   });
 
-  const handleSubmit = () => {};
+  const { transactionService } = useServiceContext();
+
+  const handleSubmit = async () => {
+    const { amount, type } = transactionForm.getValues();
+    const process = transactionService.createTransaction(loanId, amount, type);
+    
+    toast.promise(process, {
+      loading: 'Processing...',
+      success: 'Transaction successful!',
+      error: 'Transaction failed!',
+    });
+
+    onClose();
+    confetti({
+      particleCount: 100,
+      spread: 70,
+      origin: { y: 0.6 },
+    });
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>

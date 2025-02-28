@@ -37,18 +37,18 @@ const categoryColors = {
 
 function LoanDetailPage() {
   const { id } = useParams();
-  const { loanPost } = useGetLoanPost(id ? id : '');
+  const { loanPost } = useGetLoanPost(id ?? '');
 
   const [isDonationOverlayOpen, setIsDonationOverlayOpen] = useState(false);
 
   const progress =
-    ((loanPost?.raised as number) / (loanPost?.goal as number)) * 100;
+    ((loanPost?.raised ?? 0) / (loanPost?.goal ?? 0)) * 100;
   const Icon = categoryIcons[loanPost?.category as keyof typeof categoryIcons];
 
   return (
     <div className="space-y-6">
       {!loanPost ? (
-        <div>Loading...//</div>
+        <div>Loading...</div>
       ) : (
         <div>
           <Card>
@@ -117,6 +117,7 @@ function LoanDetailPage() {
             isOpen={isDonationOverlayOpen}
             onClose={() => setIsDonationOverlayOpen(false)}
             projectTitle={loanPost.title}
+            loanId={loanPost.loanId}
           />
         </div>
       )}

@@ -1,16 +1,15 @@
 import Types "../user/types";
+import Principal "mo:base/Principal";
 module {
 
     type User = Types.User;
 
-    // dummy type for now
-    type Transaction = {
-        id: Text;
-        amount: Int;
+    public type Transaction = {
+        transactionId: Text;
+        loanId: Text;
+        amount: Float;
         date: Text;
-        description: Text;
-        category: Text;
-        account: Text;
-        user: User;
+        method: Text;
+        lender: Principal;
     }
 }

@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { BookOpen, Leaf, Cpu, Palette, Heart, Users, LayoutGrid } from "lucide-react"
 import { LoanPost } from "@/lib/model/entity/loan-post"
+import { Link } from "react-router"
 
 const categoryIcons = {
   All: LayoutGrid,
@@ -73,7 +74,7 @@ export function ProjectCard({ project }: { project: LoanPost }) {
       <CardFooter className="flex justify-between items-center">
         <span className="text-sm text-muted-foreground">{daysLeft.toLocaleString()} days left</span>
         <Button asChild>
-          <a href={`/post/${project.loanId}`}>Support This Project</a>
+          <Link to={`/post/${project.loanId}`}>Support This Project</Link>
         </Button>
       </CardFooter>
     </Card>

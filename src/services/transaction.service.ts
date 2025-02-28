@@ -11,4 +11,9 @@ export class TransactionService extends BaseService {
         this.transaction = createTransactionActor(transactionCanisterId, {agent : this.agent});
         this.initialized = this.initialization();
     }
+
+    async createTransaction(loanId: string, amount: number, method: string) {
+        return await this.transaction.createTransaction(loanId, amount, method);
+        
+    }
 }
