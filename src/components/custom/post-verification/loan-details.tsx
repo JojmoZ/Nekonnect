@@ -27,21 +27,21 @@ const LoanDisplay: React.FC<LoanDisplayProps> = ({ loan }) => {
 
   const handleAccept = () => {
     toast.promise(onAccept(), {
-      loading: 'Accepting loan post...', // Loading message
+      loading: 'Accepting loan post...', 
       success: (data) => {
-        return `Loan post accepted successfully!`; // Success message
+        return `Loan post accepted successfully!`;
       },
-      error: 'Failed to accept loan post', // Error message
+      error: 'Failed to accept loan post',
     });
   };
   
   const handleReject = () => {
     toast.promise(onReject(), {
-      loading: 'Rejecting loan post...', // Loading message
+      loading: 'Rejecting loan post...', 
       success: (data) => {
-        return `Loan post rejected successfully!`; // Success message
+        return `Loan post rejected successfully!`;
       },
-      error: 'Failed to reject loan post', // Error message
+      error: 'Failed to reject loan post',
     });
   };
 

@@ -53,6 +53,24 @@ actor class LoanPostMain() {
         return List.toArray(posts);
     };
 
+    public shared query func getPost(loanId : Text) : async Types.LoanPost {
+        let postOpt = List.find<Types.LoanPost>(
+            posts,
+            func(post: Types.LoanPost): Bool {
+                return post.loanId == loanId;
+            }
+        );
+
+        switch (postOpt) {
+            case (?post) {
+                return post;
+            };
+            case (null) {
+                throw Error.reject("Post not found!");
+            };
+        };
+    };
+
     public shared query func getActivePosts() : async [Types.LoanPost] {
         let activePosts = List.filter<Types.LoanPost>(
             posts,

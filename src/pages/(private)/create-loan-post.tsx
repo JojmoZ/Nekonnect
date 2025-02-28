@@ -3,16 +3,17 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 import Stepper from "@/components/stepper";
-import { LoanPostService } from "@/services/loan-post.service";
 import CreateLoanForm from "../../components/custom/create-post/create-loan-form";
 import AssuranceForm from "../../components/custom/create-post/assurance-form";
 import { assuranceSchema } from "@/lib/model/dto/upload-assurance.dto";
 import { loanAgreementSchema } from "@/lib/model/dto/check-agreement.dto";
 import LoanAgreementForm from "@/components/custom/create-post/loan-agreement-form";
-
-let loanPostService = new LoanPostService();
+import { toast } from "sonner";
+import useServiceContext from "@/hooks/use-service-context";
 
 function CreateLoanPostPage() {
+
+    const { loanPostService } = useServiceContext();
 
     const loanPostForm = useForm<z.infer<typeof loanPostSchema>>({
         resolver: zodResolver(loanPostSchema),
@@ -51,9 +52,23 @@ function CreateLoanPostPage() {
         const arrayBuffer = await assuranceValues.assurance_file.arrayBuffer();
         const uint8Array = new Uint8Array(arrayBuffer);
 
-        const response = await loanPostService.createLoanPost(loanPostValues.title, loanPostValues.description, Number(loanPostValues.goal), loanPostValues.category, BigInt(loanPostValues.loanDuration), assuranceValues.assurance_type, uint8Array);
-        console.log(response);
-        alert("Form submitted!");
+        const create = async () => {
+            return await loanPostService.createLoanPost(
+                loanPostValues.title,
+                loanPostValues.description,
+                Number(loanPostValues.goal),
+                loanPostValues.category,
+                BigInt(loanPostValues.loanDuration),
+                assuranceValues.assurance_type,
+                uint8Array,
+            );
+        }
+        
+        toast.promise(create(), {
+            loading: "Creating loan post...",
+            success: "Loan post created successfully.",
+            error: "Failed to create loan post.",
+        });
     };
 
     const steps = [

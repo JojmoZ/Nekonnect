@@ -27,11 +27,11 @@ export default function Home() {
           Start Your Campaign
         </Button>
       </div>
-      {/* <CategoryFilter
+      <CategoryFilter
         categories={categories}
         selectedCategory={selectedCategory}
         onCategoryChange={setSelectedCategory}
-      /> */}
+      />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {filteredProjects.map((post) => (
           <ProjectCard key={post.loanId} project={post} />

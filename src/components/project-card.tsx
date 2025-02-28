@@ -56,7 +56,7 @@ export function ProjectCard({ project }: { project: LoanPost }) {
       <CardHeader>
         <div className="flex justify-between items-center mb-2">
           <CardTitle>{project.title}</CardTitle>
-          {/* <Icon className={`w-5 h-5 ${categoryColors[project.category as keyof typeof categoryColors]}`} /> */}
+          <Icon className={`w-5 h-5 ${categoryColors[project.category as keyof typeof categoryColors]}`} />
         </div>
         <div className={`text-sm ${categoryColors[project.category as keyof typeof categoryColors]}`}>
           {project.category}
@@ -73,7 +73,7 @@ export function ProjectCard({ project }: { project: LoanPost }) {
       <CardFooter className="flex justify-between items-center">
         <span className="text-sm text-muted-foreground">{daysLeft.toLocaleString()} days left</span>
         <Button asChild>
-          <a href={`/projects/${project.loanId}`}>Support This Project</a>
+          <a href={`/post/${project.loanId}`}>Support This Project</a>
         </Button>
       </CardFooter>
     </Card>
