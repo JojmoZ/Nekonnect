@@ -1,27 +1,28 @@
-import { AppSidebar } from "@/components/custom/post-verification/post-verification-sidebar"
-import LoanDisplay from "@/components/custom/post-verification/loan-details";
-import { Separator } from "@/components/ui/separator"
+import { PostVerificationAppSidebar } from '@/components/custom/post-verification/post-verification-sidebar';
+import LoanDisplay from '@/components/custom/post-verification/loan-details';
+import { Separator } from '@/components/ui/separator';
 import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
-} from "@/components/ui/sidebar"
-import { LoanPostContext, LoanPostProvider } from "@/context/loan-post-context";
-import { useGetLoanPosts } from "@/hooks/loan-post/use-get-loan-posts";
-import { useContext } from "react";
+} from '@/components/ui/sidebar';
+import { LoanPostContext, LoanPostProvider } from '@/context/loan-post-context';
+import { useGetLoanPosts } from '@/hooks/loan-post/use-get-loan-posts';
+import { useContext } from 'react';
 
 function PostVerificationPage() {
-
   const { loanPosts, getLoanPostsLoading } = useGetLoanPosts();
 
   return (
     <LoanPostProvider loanPosts={loanPosts}>
-      <SidebarProvider       style={
-        {
-          "--sidebar-width": "350px",
-        } as React.CSSProperties
-      }>
-        <AppSidebar />
+      <SidebarProvider
+        style={
+          {
+            '--sidebar-width': '350px',
+          } as React.CSSProperties
+        }
+      >
+        <PostVerificationAppSidebar />
         <SidebarInset>
           <header className="sticky top-0 flex shrink-0 items-center gap-2 border-b bg-background p-4">
             <SidebarTrigger className="-ml-1" />
@@ -31,7 +32,7 @@ function PostVerificationPage() {
         </SidebarInset>
       </SidebarProvider>
     </LoanPostProvider>
-  )
+  );
 }
 
 const ContentArea: React.FC = () => {
