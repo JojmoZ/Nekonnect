@@ -26,7 +26,8 @@ actor class LoanPostMain() {
             raised = Float.fromInt(0);
             postDuration = Nat64.fromIntWrap(30);
             loanDuration = loanDuration;
-            createdAt = Time.now();
+            createdAt = Utils.timeToDateString(Time.now());
+            verifiedAt = "";
             category = category;
             isFulfilled = false;
             isVerified = false;
@@ -67,46 +68,47 @@ actor class LoanPostMain() {
 
     public shared func acceptPost(loanId: Text) : async Text {
 
-    let postOpt = List.find<Types.LoanPost>(
-        posts,
-        func(post: Types.LoanPost): Bool {
-            return post.loanId == loanId;
-        }
-    );
+        let postOpt = List.find<Types.LoanPost>(
+            posts,
+            func(post: Types.LoanPost): Bool {
+                return post.loanId == loanId;
+            }
+        );
 
-    switch (postOpt) {
-        case (null) {
-            return "Post not found!";
-        };
-        case (?post) {
-            let updatedPost : Types.LoanPost = {
-                loanId = post.loanId;
-                title = post.title;
-                description = post.description;
-                goal = post.goal;
-                raised = post.raised;
-                createdAt = post.createdAt;
-                postDuration = post.postDuration;
-                category = post.category;
-                loanDuration = post.loanDuration;
-                isFulfilled = post.isFulfilled;
-                isVerified = true; 
-                debtor = post.debtor;
-                assuranceId = post.assuranceId;
+        switch (postOpt) {
+            case (null) {
+                return "Post not found!";
             };
+            case (?post) {
+                let updatedPost : Types.LoanPost = {
+                    loanId = post.loanId;
+                    title = post.title;
+                    description = post.description;
+                    goal = post.goal;
+                    raised = post.raised;
+                    createdAt = post.createdAt;
+                    verifiedAt = Utils.timeToDateString(Time.now());
+                    postDuration = post.postDuration;
+                    category = post.category;
+                    loanDuration = post.loanDuration;
+                    isFulfilled = post.isFulfilled;
+                    isVerified = true; 
+                    debtor = post.debtor;
+                    assuranceId = post.assuranceId;
+                };
 
-            posts := List.map<Types.LoanPost, Types.LoanPost>(
-                posts,
-                func(p: Types.LoanPost): Types.LoanPost {
-                    if (p.loanId == loanId) {
-                        return updatedPost;
-                    } else {
-                        return p;
+                posts := List.map<Types.LoanPost, Types.LoanPost>(
+                    posts,
+                    func(p: Types.LoanPost): Types.LoanPost {
+                        if (p.loanId == loanId) {
+                            return updatedPost;
+                        } else {
+                            return p;
+                        }
                     }
-                }
-            );
+                );
 
-            return "Post verified successfully!";
+                return "Post verified successfully!";
             };
         };
     };

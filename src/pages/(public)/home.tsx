@@ -1,34 +1,20 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { ProjectCard } from "@/components/project-card"
 import { CategoryFilter } from "@/components/category-filter"
 import { Button } from "@/components/ui/button"
-import projectsData from "../../../data/projects.json"
 import { StartProjectOverlay } from "@/components/start-project-overlay"
-import { LoanPost } from "@/lib/model/entity/loan-post"
-import { LoanPostService } from "@/services/loan-post.service"
-
-const categories = Array.from(new Set(projectsData.map((project) => project.category)))
-let loanPostService = new LoanPostService();
+import { useGetLoanPosts } from "@/hooks/loan-post/use-get-loan-posts"
 
 export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState("All")
   const [isStartProjectOpen, setIsStartProjectOpen] = useState(false)
-  const [projects, setProjects] = useState<LoanPost[]>([])
-
-  useEffect(() => {
-    const fetchProjects = async () => {
-      const response = await loanPostService.getLoanPosts();
-      console.log(response);
-      setProjects(response)
-    }
-
-    fetchProjects()
-  }, [])
+  const { loanPosts, getLoanPostsLoading } = useGetLoanPosts();
+  const categories = Array.from(new Set(loanPosts.map((post) => post.category)))
 
   const filteredProjects =
-    selectedCategory === "All" ? projects : projects.filter((project) => project.category === selectedCategory)
+    selectedCategory === "All" ? loanPosts : loanPosts.filter((post) => post.category === selectedCategory)
 
   return (
     <div className="space-y-12">
@@ -41,14 +27,14 @@ export default function Home() {
           Start Your Campaign
         </Button>
       </div>
-      <CategoryFilter
+      {/* <CategoryFilter
         categories={categories}
         selectedCategory={selectedCategory}
         onCategoryChange={setSelectedCategory}
-      />
+      /> */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {filteredProjects.map((project) => (
-          <ProjectCard key={project.loanId} project={project} />
+        {filteredProjects.map((post) => (
+          <ProjectCard key={post.loanId} project={post} />
         ))}
       </div>
       <StartProjectOverlay isOpen={isStartProjectOpen} onClose={() => setIsStartProjectOpen(false)} />

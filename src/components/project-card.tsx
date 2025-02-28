@@ -34,16 +34,20 @@ const categoryColors = {
 //   category: string
 // }
 
+function parseDateStringToDate(dateString: string): Date {
+  const [day, month, year] = dateString.split("/").map(Number);
+  return new Date(year, month - 1, day);
+}
+
 export function ProjectCard({ project }: { project: LoanPost }) {
   const progress = (project.raised / project.goal) * 100
-  const daysLeft = project.postDuration - BigInt(
-    Math.floor(
-      (Date.now() - new Date(Number(project.createdAt / 1_000_000n)).getTime()) /
-        (1000 * 60 * 60 * 24)
-    )
-  );
+  const createdAtDate = parseDateStringToDate(project.createdAt);
 
-  console.log(project)
+  const daysLeft = project.postDuration - BigInt(
+      Math.floor(
+          (Date.now() - createdAtDate.getTime()) / (1000 * 60 * 60 * 24)
+      )
+  );
   
   const Icon = categoryIcons[project.category as keyof typeof categoryIcons]
 

@@ -1,4 +1,4 @@
-import { AppSidebar } from "@/components/app-sidebar"
+import { AppSidebar } from "@/components/custom/post-verification/post-verification-sidebar"
 import {
   Breadcrumb,
   BreadcrumbItem,
