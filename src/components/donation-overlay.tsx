@@ -36,7 +36,7 @@ export function DonationOverlay({
   const transactionForm = useForm<z.infer<typeof transactionSchema>>({
     resolver: zodResolver(transactionSchema),
     defaultValues: {
-      loanId: '',
+      loanId: loanId,
       amount: 0,
       type: "",
     },
@@ -46,7 +46,7 @@ export function DonationOverlay({
 
   const handleSubmit = async () => {
     const { amount, type } = transactionForm.getValues();
-    const process = transactionService.createTransaction(loanId, amount, type);
+    const process = transactionService.createTransaction(loanId, Number(amount), type);
     
     toast.promise(process, {
       loading: 'Processing...',
@@ -72,7 +72,7 @@ export function DonationOverlay({
           </DialogDescription>
         </DialogHeader>
         <FormProvider {...transactionForm}>
-          <form className="space-y-8">
+          <form onSubmit={transactionForm.handleSubmit(handleSubmit)} className="space-y-8">
             <FormField
               control={transactionForm.control}
               name="amount"
@@ -113,7 +113,7 @@ export function DonationOverlay({
                 </FormItem>
               )}
             />
-            <Button onClick={handleSubmit}>Donate</Button>
+            <Button type='submit'>Donate</Button>
           </form>
         </FormProvider>
       </DialogContent>
