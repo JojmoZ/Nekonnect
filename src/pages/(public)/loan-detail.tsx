@@ -37,13 +37,19 @@ const categoryColors = {
 
 function LoanDetailPage() {
   const { id } = useParams();
-  const { loanPost } = useGetLoanPost(id ?? '');
+  const { loanPost, refetch } = useGetLoanPost(id ?? '');
 
   const [isDonationOverlayOpen, setIsDonationOverlayOpen] = useState(false);
 
   const progress =
     ((loanPost?.raised ?? 0) / (loanPost?.goal ?? 0)) * 100;
   const Icon = categoryIcons[loanPost?.category as keyof typeof categoryIcons];
+
+  const handleDonationSuccess = () => {
+    refetch();
+    console.log(loanPost);
+    setIsDonationOverlayOpen(false); 
+  };
 
   return (
     <div className="space-y-6">
@@ -118,6 +124,7 @@ function LoanDetailPage() {
             onClose={() => setIsDonationOverlayOpen(false)}
             projectTitle={loanPost.title}
             loanId={loanPost.loanId}
+            onDonationSuccess={handleDonationSuccess}
           />
         </div>
       )}

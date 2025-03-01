@@ -11,21 +11,21 @@ export function useGetLoanPost(loanId: string) {
   const [loading, setLoading] = useState<boolean>(true);
   // const { loanPostService } = useServiceContext();
 
+  const fetchLoanPost = async () => {
+    try {
+      const response = await loanPostService.getLoanPost(loanId);
+      setLoanPost(response);
+    } catch (error) {
+      console.error('Error fetching loan post:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    console.log('Fetching loan post for ID:', loanId); // Log fetch
-    const fetchLoanPost = async () => {
-      try {
-        const response = await loanPostService.getLoanPost(loanId);
-        setLoanPost(response);
-      } catch (error) {
-        console.error('Error fetching loan post:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
 
     fetchLoanPost();
   }, [loanId, loanPostService]);
 
-  return { loanPost, getLoanPostLoading: loading };
+  return { loanPost, getLoanPostLoading: loading, refetch: fetchLoanPost };
 }
