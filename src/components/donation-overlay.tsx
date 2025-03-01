@@ -19,46 +19,43 @@ import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessa
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import useServiceContext from '@/hooks/use-service-context';
 import { toast } from 'sonner';
+import { useCreateTransaction } from '@/hooks/transaction/create-transaction';
 
 interface DonationOverlayProps {
   isOpen: boolean;
   onClose: () => void;
   projectTitle: string;
   loanId: string;
+  onDonationSuccess: () => void;
 }
 
 export function DonationOverlay({
   isOpen,
   onClose,
   projectTitle,
-  loanId
+  loanId,
+  onDonationSuccess,
 }: DonationOverlayProps) {
-  const transactionForm = useForm<z.infer<typeof transactionSchema>>({
-    resolver: zodResolver(transactionSchema),
-    defaultValues: {
-      loanId: loanId,
-      amount: 0,
-      type: "",
-    },
-  });
 
-  const { transactionService } = useServiceContext();
+  const { transactionForm, handleCreate } = useCreateTransaction(loanId);
+
+  
 
   const handleSubmit = async () => {
-    const { amount, type } = transactionForm.getValues();
-    const process = transactionService.createTransaction(loanId, Number(amount), type);
-    
-    toast.promise(process, {
+    toast.promise(handleCreate(), {
       loading: 'Processing...',
-      success: 'Transaction successful!',
-      error: 'Transaction failed!',
-    });
-
-    onClose();
-    confetti({
-      particleCount: 100,
-      spread: 70,
-      origin: { y: 0.6 },
+      success: (message) => {
+        onDonationSuccess();
+        confetti({
+          particleCount: 100,
+          spread: 70,
+          origin: { y: 0.6 },
+        });
+        return message; 
+      },
+      error: (err) => {
+        return 'Transaction Failed! ' + err.message; 
+      },
     });
   };
 

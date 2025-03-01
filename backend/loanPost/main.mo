@@ -185,6 +185,12 @@ actor class LoanPostMain() {
                 return "Post not found!";
             };
             case (?post) {
+
+                // Validate if the raised amount is greater than the goal then throw an error
+                if (post.raised + amount > post.goal) {
+                    return "Amount exceeds the goal! Raised: " # Float.toText(post.raised);
+                };
+
                 let updatedPost : Types.LoanPost = {
                     loanId = post.loanId;
                     title = post.title;

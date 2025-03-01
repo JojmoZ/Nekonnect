@@ -15,7 +15,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
       <ActorProvider idlFactory={idlFactory} canisterId={userCanisterId}>
         <ServiceProvider>
           <RouterProvider router={router} />
-          <Toaster />
+          <Toaster richColors />
         </ServiceProvider>
       </ActorProvider>
     </AgentProvider>
