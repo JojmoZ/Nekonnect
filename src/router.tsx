@@ -10,57 +10,59 @@ import { createBrowserRouter, redirect } from 'react-router-dom';
 import TempPage from './pages/TempPage';
 import PostVerificationPage from './pages/(private)/post-verification';
 import LoanDetailPage from './pages/(public)/loan-detail';
+import MainLayout from '@/pages/main-layout';
 
 const router = createBrowserRouter([
   {
     element: <AuthRedirect />,
     children: [
       {
-        path: "/login",
+        path: '/login',
         element: <Login />,
       },
       {
-        path: "/register",
+        path: '/register',
         element: <RegisterPage />,
       },
     ],
   },
   {
-    // element: <ProtectedRoute />,
+    path: '/',
+    element: <MainLayout />,
     children: [
       {
-        path: "/home",
+        index: true,
         element: <Home />,
       },
       {
-        path: "/create",
+        path: '/create',
         element: <CreateLoanPostPage />,
       },
       {
-        path: "/edit-profile",
+        path: '/edit-profile',
         element: <EditProfilePage />,
       },
       {
-        path: "/chat",
+        path: '/chat',
         element: <ChatPage />,
       },
       {
-        path: "/temp2",
-        element: <TempPage/>
+        path: '/temp2',
+        element: <TempPage />,
       },
       {
-        path: "/post-verification",
-        element: <PostVerificationPage />
+        path: '/post-verification',
+        element: <PostVerificationPage />,
       },
       {
-        path: "/post/:id",
-        element: <LoanDetailPage />
-      }
+        path: '/post/:id',
+        element: <LoanDetailPage />,
+      },
     ],
   },
   {
-    path: "*",
-    loader: () => redirect("/login"),
+    path: '*',
+    loader: () => redirect('/login'),
   },
 ]);
 

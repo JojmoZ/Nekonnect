@@ -1,6 +1,4 @@
 import { useEffect, useState } from 'react';
-import darkLogo from '@/assets/logo-dark.svg';
-import lightLogo from '@/assets/logo-light.svg';
 
 const Logo  = () => {
   const [isDark, setIsDark] = useState(false);
@@ -23,7 +21,7 @@ const Logo  = () => {
   }, []);
 
   return (
-    <img src={isDark ? darkLogo : lightLogo} alt="NeKonnect Logo" />
+    <img src={isDark ? '@/assets/logo-white.svg' : '@/assets/logo-black.svg'} alt="NeKonnect Logo" />
   );
 
 }
