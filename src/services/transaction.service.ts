@@ -1,6 +1,6 @@
 import { _SERVICE as _TRANSACTIONSERVICE } from "@/declarations/transaction/transaction.did";
 import { ActorSubclass } from "@dfinity/agent";
-import { BaseService, createTransactionActor, transactionCanisterId } from "./base.service";
+import { BaseService, createTransactionActor, transactionCanisterId, loanPostCanisterId } from "./base.service";
 
 export class TransactionService extends BaseService {
 
@@ -13,7 +13,6 @@ export class TransactionService extends BaseService {
     }
 
     async createTransaction(loanId: string, amount: number, method: string) {
-        return await this.transaction.createTransaction(loanId, amount, method);
-        
+        return await this.transaction.createTransaction(loanId, amount, method, loanPostCanisterId);
     }
 }
