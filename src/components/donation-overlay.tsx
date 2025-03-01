@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -8,18 +7,12 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import confetti from 'canvas-confetti';
-import Stepper from './stepper';
-import { FormProvider, useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { transactionSchema } from '@/lib/model/dto/create-transaction.dto';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from './ui/form';
+import { FormProvider } from 'react-hook-form';
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from './ui/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
-import useServiceContext from '@/hooks/use-service-context';
 import { toast } from 'sonner';
-import { useCreateTransaction } from '@/hooks/transaction/create-transaction';
+import { useCreateTransaction } from '@/hooks/transaction/use-create-transaction';
 
 interface DonationOverlayProps {
   isOpen: boolean;

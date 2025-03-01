@@ -1,71 +1,25 @@
-import { loanPostSchema } from '@/lib/model/dto/create-loan-post.dto';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { FormProvider, useForm } from 'react-hook-form';
-import { z } from 'zod';
+import { FormProvider } from 'react-hook-form';
 import Stepper from '@/components/stepper';
 import CreateLoanForm from '../../components/custom/create-post/create-loan-form';
 import AssuranceForm from '../../components/custom/create-post/assurance-form';
-import { assuranceSchema } from '@/lib/model/dto/upload-assurance.dto';
-import { loanAgreementSchema } from '@/lib/model/dto/check-agreement.dto';
 import LoanAgreementForm from '@/components/custom/create-post/loan-agreement-form';
 import { toast } from 'sonner';
-import useServiceContext from '@/hooks/use-service-context';
 import { FaceRecognitionForm } from '@/components/custom/create-post/face-recognition-form';
+import { useCreateLoanPost } from '@/hooks/loan-post/use-create-loan-post';
+import { useState } from 'react';
+import SuccessDialog from '@/components/custom/success-dialog';
 
 function CreateLoanPostPage() {
-  const { loanPostService } = useServiceContext();
-
-  const loanPostForm = useForm<z.infer<typeof loanPostSchema>>({
-    resolver: zodResolver(loanPostSchema),
-    defaultValues: {
-      title: '',
-      description: '',
-      goal: 0,
-      category: '',
-      loanDuration: 0,
-    },
-  });
-
-  const assuranceForm = useForm<z.infer<typeof assuranceSchema>>({
-    resolver: zodResolver(assuranceSchema),
-    defaultValues: {
-      assurance_type: '',
-      assurance_file: undefined,
-    },
-  });
-
-  const agreementForm = useForm<z.infer<typeof loanAgreementSchema>>({
-    resolver: zodResolver(loanAgreementSchema),
-    defaultValues: {
-      terms: false,
-    },
-  });
+  const { loanPostForm, assuranceForm, agreementForm, onCreate } = useCreateLoanPost();
+  const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState(false);
 
   const onSubmit = async () => {
-    const isValid = await agreementForm.trigger();
-    if (!isValid) return;
-
-    const loanPostValues = loanPostForm.getValues();
-    const assuranceValues = assuranceForm.getValues();
-
-    const arrayBuffer = await assuranceValues.assurance_file.arrayBuffer();
-    const uint8Array = new Uint8Array(arrayBuffer);
-
-    const create = async () => {
-      return await loanPostService.createLoanPost(
-        loanPostValues.title,
-        loanPostValues.description,
-        Number(loanPostValues.goal),
-        loanPostValues.category,
-        BigInt(loanPostValues.loanDuration),
-        assuranceValues.assurance_type,
-        uint8Array,
-      );
-    };
-
-    toast.promise(create(), {
+    toast.promise(onCreate(), {
       loading: 'Creating loan post...',
-      success: 'Loan post created successfully.',
+      success: () => {
+        setIsSuccessDialogOpen(true);
+        return 'Loan post created successfully.'
+      },
       error: 'Failed to create loan post.',
     });
   };
@@ -123,6 +77,12 @@ function CreateLoanPostPage() {
         Apply for Loan
       </h1>
       <Stepper steps={steps} onSubmit={onSubmit} showProgress={true} />
+      <SuccessDialog
+        isOpen={isSuccessDialogOpen}
+        onClose={() => setIsSuccessDialogOpen(false)}
+        title="Loan Post Created Successfully"
+        description="Your loan post has been created successfully. You can now view it in your dashboard."
+      />
     </div>
   );
 }
