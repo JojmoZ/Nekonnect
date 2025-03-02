@@ -11,6 +11,9 @@ import {
 } from "@/components/ui/navigation-menu"
 import { ListItem } from '@/components/ui/list-item';
 import Link from 'next/link';
+import { useGetAuthenticated } from '@/hooks/user/use-get-authenticated';
+import useServiceContext from '@/hooks/use-service-context';
+import { useNavigate } from 'react-router';
 
 const components: { title: string; href: string; description: string }[] = [
   {
@@ -51,6 +54,17 @@ const components: { title: string; href: string; description: string }[] = [
 ]
 
 function Header() {
+  const navigate = useNavigate();
+  const { isAuthenticated } = useGetAuthenticated();
+  const { userService } = useServiceContext();
+  const logout = () => {
+    userService.logout();
+  }
+
+  const redirect = () => {
+    navigate('/login');
+  }
+
   return (
     <header>
       <Logo />
@@ -115,7 +129,12 @@ function Header() {
           </NavigationMenuItem>
         </NavigationMenuList>
       </NavigationMenu>
-      <Button variant={"gradient"}>Sign In</Button>
+      {
+        !isAuthenticated ?
+          <Button variant={"gradient"} onClick={redirect}>Sign In</Button>
+          :
+          <Button variant={"gradient"} onClick={logout}>Log out</Button>
+      }
     </header>
   );
 }

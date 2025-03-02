@@ -1,18 +1,9 @@
-import { useService } from '@/context/service-context';
-import { useEffect, useState } from 'react';
+import { useGetAuthenticated } from '@/hooks/user/use-get-authenticated';
 import { Navigate, Outlet } from 'react-router-dom';
 
 
 const ProtectedRoute: React.FC = () => {
-  const { userService } = useService();
-  const [ isAuthenticated, setIsAuthenticated ] = useState<Boolean | null>(null);
-
-    
-  useEffect(() => {
-    userService.isAuthenticated().then(isAuthenticated => {
-      setIsAuthenticated(isAuthenticated);
-    })
-  }, []);
+  const { isAuthenticated } = useGetAuthenticated(); 
   
   if (isAuthenticated === null) {
     return <div>Loading...</div>;
