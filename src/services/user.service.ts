@@ -10,7 +10,7 @@ import { User as BackendUser } from "@/declarations/user/user.did";
 export class UserService extends BaseService {
     
     
-    private II_URL = import.meta.env.VITE_II_NETWORK != "ic" ? `https://identity.ic0.app/` : `http://${ process.env.CANISTER_ID_INTERNET_IDENTITY}.localhost:4943/`;
+    private II_URL = import.meta.env.VITE_II_NETWORK == "ic" ? `https://identity.ic0.app/` : `http://${ process.env.CANISTER_ID_INTERNET_IDENTITY}.localhost:4943/`;
     protected user! : ActorSubclass<_USERSERVICE>;
 
     constructor() {
