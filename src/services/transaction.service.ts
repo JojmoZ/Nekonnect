@@ -9,7 +9,7 @@ export class TransactionService extends BaseService {
     
     constructor() {
         super()
-        this.transaction = createTransactionActor(transactionCanisterId, {agent : this.agent});
+        this.transaction = createTransactionActor(transactionCanisterId, {agent : BaseService.agent});
         this.initialized = this.initialization();
     }
 

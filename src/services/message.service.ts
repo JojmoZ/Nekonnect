@@ -10,4 +10,5 @@ export class MessageService extends BaseService {
         this.message = createMessageActor(messageCanisterId, {agent : BaseService.agent});
         this.initialized = this.initialization();
     }
+
 }

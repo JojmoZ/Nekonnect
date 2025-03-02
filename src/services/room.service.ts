@@ -20,11 +20,21 @@ export class RoomService extends BaseService {
     }
 
     async createRoom(roomDto : roomDto) {
-        return await this.room.createRoom(roomDto.room_id, roomDto.room_name, roomDto.room_type);
+        return await this.room.createRoom( roomDto.room_name, roomDto.room_type);
     }
 
     async joinRoom(roomId : string,userId : Principal) {
         return await this.room.join_room(roomId,userId);
+    }
+
+    async createPrivateRoom(receiverId: Principal): Promise<string> {
+        const result = await this.room.createPrivateRoom(await this.getCallerPrincipal(), receiverId);
+
+        if ("ok" in result) {
+            return result.ok; 
+        } else {
+            throw new Error(result.err); 
+        }
     }
 
 }

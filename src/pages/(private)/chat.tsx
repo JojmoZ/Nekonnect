@@ -9,45 +9,40 @@ import { roomDto, roomSchema } from '@/lib/model/dto/create-room.dto';
 import IcWebSocket, { generateRandomIdentity } from 'ic-websocket-js';
 import { useEffect, useState } from 'react';
 import { getWebSocket } from '@/lib/config/web-socket';
-import { AuthClient } from '@dfinity/auth-client';
-import { get } from 'http';
-import { W } from 'react-router/dist/development/fog-of-war-Cm1iXIp7';
 import {
   SidebarContent,
   SidebarProvider,
   SidebarTrigger,
+  useSidebar,
 } from '@/components/ui/sidebar';
 import { Sidebar } from 'lucide-react';
 import { ChatAppSidebar } from '@/components/custom/chat/chat-sidebar';
+import useServiceContext from '@/hooks/use-service-context';
+import { MessageResponse } from '@/lib/model/dto/response/get-message-response';
+import { UserList } from '@/components/custom/chat/user-list';
+import { User } from '@/lib/model/entity/user';
+import { useForm } from 'react-hook-form';
+import { messageDto, messageSchema } from '@/lib/model/dto/send-message.dto';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 
-let roomService = new RoomService();
-let userService = new UserService();
-let roomUserService = new RoomUserService();
 
 interface IProps {}
 
 export const ChatPage: React.FC<IProps> = () => {
   const navigate = useNavigate();
 
-  const handleLogout = async () => {
-    try {
-      //   const agent = new HttpAgent({ host: 'http://127.0.0.1:4943' });
-      //   await agent.fetchRootKey();
-
-      //   const backend = Actor.createActor(idlFactory, { agent, canisterId });
-
-      //   await backend.logout();
-      //   const authClient = await AuthClient.create();
-      //     authClient.logout();
-      //   setUsername(null); // Clear user in frontend state
-      //   navigate('/login');
-      await userService.logout();
-    } catch (err) {
-      console.error('Logout Error:', err);
-    }
-  };
-
+  const [messages, setMessages] = useState<MessageResponse[]>([]);
+  const { userService, roomService, roomUserService} = useServiceContext()
   const [socket, setSocket] = useState<any>(null);
+
+  const form = useForm<messageDto>({
+        resolver: zodResolver(messageSchema),
+        defaultValues: {
+            room_id : '',
+            message : ''
+        },
+    });
 
   const sendMessage = async () => {
     const principal = await userService.getCallerPrincipal();
@@ -111,8 +106,7 @@ export const ChatPage: React.FC<IProps> = () => {
       const response = await getWebSocket(
         await userService.getCallerIdentity(),
       );
-      console.log(response);
-
+ 
       response.onopen = () => {
         console.log('Connected');
       };
@@ -133,39 +127,33 @@ export const ChatPage: React.FC<IProps> = () => {
     }
   };
 
-  useEffect(() => {
-    const response = roomService.getRooms().then((res) => {
-      console.log(res);
-    });
+  const onChat = async (user : User) => {
+    const response = await roomService.createPrivateRoom(user.internetIdentity)
+    console.log(response);
+    form.setValue('room_id', response);
+  }
+
+  const onMessage = async () => {
+    socket.send(form.getValues());
+  }
+
+  useEffect(() => {;
     getSocket();
   }, []);
 
   return (
-    <div>
-      {/* <h1>Chat Page</h1>
-        <div>
-            <h1>Chat Page</h1>
-            <button onClick={() => createRoom()}>Create Room</button>
-            <button onClick={() => joinRoom()}>Join Room</button>
-            <button onClick={sendMessage}>Send</button>
-        </div>
-        <button onClick={sendMessage}></button>
-
-        <button onClick={handleLogout}>Logout</button> */}
       <SidebarProvider
         style={
           {
-            '--sidebar-width': '500px',
+            '--sidebar-width': '600px',
           } as React.CSSProperties
         }
+        defaultOpen={false}
       >
-        <ChatAppSidebar />
         <main>
-          <SidebarTrigger>
-            <h1>Chat Page</h1> <h1>Chat Page</h1>
-          </SidebarTrigger>
+          <UserList onChat={onChat}/>
         </main>
+        <ChatAppSidebar onMessage={onMessage} form={form} messages={messages}/>
       </SidebarProvider>
-    </div>
   );
 };
