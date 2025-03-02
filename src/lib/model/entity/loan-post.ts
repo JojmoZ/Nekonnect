@@ -8,11 +8,10 @@ export interface LoanPost {
   raised: number;
   createdAt: string;        
   verifiedAt: string;  
-  postDuration: bigint;   // Nat64 can map to bigint in TS
+  postDuration: bigint;   
   category: string;
-  loanDuration: bigint;   // Nat64 to bigint
-  isFulfilled: boolean;
-  isVerified: boolean;
-  debtor: Principal;         // Principal as string (Principal.toText())
+  loanDuration: bigint;   
+  status: string;
+  debtor: Principal;        
   assuranceId: string;
 }

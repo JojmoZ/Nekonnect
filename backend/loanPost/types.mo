@@ -3,6 +3,8 @@ import Nat8 "mo:base/Nat8";
 
 module {
 
+    let _status = ["Verifying", "Funding", "Repaying", "Repaid"];
+
     public type LoanPost = {
         loanId: Text;
         title: Text;
@@ -14,8 +16,7 @@ module {
         postDuration: Nat64;
         category: Text;
         loanDuration: Nat64;
-        isFulfilled: Bool;
-        isVerified: Bool;
+        status: Text;
         debtor: Principal;
         assuranceId: Text;
     };

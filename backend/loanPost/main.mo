@@ -1,12 +1,7 @@
 import Nat64 "mo:base/Nat64";
-import HashMap "mo:base/HashMap";
 import Text "mo:base/Text";
 import Time "mo:base/Time";
-import Iter "mo:base/Iter";
-import Int64 "mo:base/Int64";
-import Array "mo:base/Array";
 import List "mo:base/List";
-import Nat "mo:base/Nat";
 import Float "mo:base/Float";
 import Error "mo:base/Error";
 import Types "types";
@@ -16,211 +11,154 @@ actor class LoanPostMain() {
     stable var posts: List.List<Types.LoanPost> = List.nil<Types.LoanPost>();
     stable var assurances: List.List<Types.LoanAssurance> = List.nil<Types.LoanAssurance>();
 
-    public shared ({ caller }) func createPost(title : Text, description : Text, goal : Float, category : Text, loanDuration : Nat64, assuranceType : Text, assuranceFile : [Nat8]) : async Text {
+    func findPost(loanId: Text) : ?Types.LoanPost {
+        List.find<Types.LoanPost>(posts, func(post: Types.LoanPost): Bool = post.loanId == loanId);
+    };
+
+    func updatePost(loanId: Text, updateFn: Types.LoanPost -> Types.LoanPost) : List.List<Types.LoanPost> {
+        List.map<Types.LoanPost, Types.LoanPost>(
+            posts,
+            func(post: Types.LoanPost): Types.LoanPost {
+                if (post.loanId == loanId) {
+                    return updateFn(post);
+                } else {
+                    return post;
+                }
+            }
+        );
+    };
+
+    func findAssurance(assuranceId: Text) : ?Types.LoanAssurance {
+        List.find<Types.LoanAssurance>(assurances, func(assurance: Types.LoanAssurance): Bool = assurance.assuranceId == assuranceId);
+    };
+
+    public shared ({ caller }) func createPost(
+        title: Text,
+        description: Text,
+        goal: Float,
+        category: Text,
+        loanDuration: Nat64,
+        assuranceType: Text,
+        assuranceFile: [Nat8]
+    ) : async Text {
         let id = await Utils.generateUUID();
         let assuranceId = await Utils.generateUUID();
 
-        let post = {
+        let post : Types.LoanPost = {
             loanId = id;
             title = title;
             description = description;
             goal = goal;
-            raised = Float.fromInt(0);
-            postDuration = Nat64.fromIntWrap(30);
+            raised = 0.0;
+            postDuration = 30;
             loanDuration = loanDuration;
             createdAt = Utils.timeToDateString(Time.now());
             verifiedAt = "";
             category = category;
-            isFulfilled = false;
-            isVerified = false;
+            status = "Verifying";
             debtor = caller;
             assuranceId = assuranceId;
         };
 
-        let assurance = {
+        let assurance : Types.LoanAssurance = {
             assuranceId = assuranceId;
             assuranceType = assuranceType;
             assuranceFile = assuranceFile;
         };
 
-        assurances := List.push<Types.LoanAssurance>(assurance, assurances);
-        posts := List.push<Types.LoanPost>(post, posts);
+        assurances := List.push(assurance, assurances);
+        posts := List.push(post, posts);
 
         return "Post created successfully!";
     };
 
     public shared query func getPosts() : async [Types.LoanPost] {
-        return List.toArray(posts);
+        List.toArray(posts);
     };
 
-    public shared query func getPost(loanId : Text) : async Types.LoanPost {
-        let postOpt = List.find<Types.LoanPost>(
-            posts,
-            func(post: Types.LoanPost): Bool {
-                return post.loanId == loanId;
-            }
-        );
-
-        switch (postOpt) {
-            case (?post) {
-                return post;
-            };
-            case (null) {
-                throw Error.reject("Post not found!");
-            };
+    public shared query func getPost(loanId: Text) : async Types.LoanPost {
+        switch (findPost(loanId)) {
+            case (?post) { post };
+            case (null) { throw Error.reject("Post not found!"); };
         };
     };
 
     public shared query func getActivePosts() : async [Types.LoanPost] {
-        let activePosts = List.filter<Types.LoanPost>(
-            posts,
-            func(post: Types.LoanPost): Bool {
-                return post.isVerified == true;
-            }
-        );
-        return List.toArray(activePosts);
-
+        List.toArray(List.filter(posts, func(post: Types.LoanPost): Bool = post.status == "Funding"));
     };
 
     public shared query func getUnverifiedPosts() : async [Types.LoanPost] {
-        let unverifiedPosts = List.filter<Types.LoanPost>(
-            posts,
-            func(post: Types.LoanPost): Bool {
-                return post.isVerified == false;
-            }
-        );
-        return List.toArray(unverifiedPosts);
+        List.toArray(List.filter(posts, func(post: Types.LoanPost): Bool = post.status == "Verifying"));
     };
 
     public shared func acceptPost(loanId: Text) : async Text {
-
-        let postOpt = List.find<Types.LoanPost>(
-            posts,
-            func(post: Types.LoanPost): Bool {
-                return post.loanId == loanId;
-            }
-        );
-
-        switch (postOpt) {
-            case (null) {
-                return "Post not found!";
-            };
+        switch (findPost(loanId)) {
+            case (null) { return "Post not found!"; };
             case (?post) {
                 let updatedPost : Types.LoanPost = {
-                    loanId = post.loanId;
-                    title = post.title;
-                    description = post.description;
-                    goal = post.goal;
-                    raised = post.raised;
-                    createdAt = post.createdAt;
+                    post with
+                    status = "Funding";
                     verifiedAt = Utils.timeToDateString(Time.now());
-                    postDuration = post.postDuration;
-                    category = post.category;
-                    loanDuration = post.loanDuration;
-                    isFulfilled = post.isFulfilled;
-                    isVerified = true; 
-                    debtor = post.debtor;
-                    assuranceId = post.assuranceId;
                 };
-
-                posts := List.map<Types.LoanPost, Types.LoanPost>(
-                    posts,
-                    func(p: Types.LoanPost): Types.LoanPost {
-                        if (p.loanId == loanId) {
-                            return updatedPost;
-                        } else {
-                            return p;
-                        }
-                    }
-                );
-
+                posts := updatePost(loanId, func(_) = updatedPost);
                 return "Post verified successfully!";
             };
         };
     };
 
-
     public shared func rejectPost(loanId: Text) : async Text {
-        posts := List.filter<Types.LoanPost>(
-            posts,
-            func(p: Types.LoanPost): Bool {
-                return p.loanId != loanId;
-            }
-        );
-
-        return "Post rejected successfully!";
+        switch (findPost(loanId)) {
+            case (null) { return "Post not found!"; };
+            case (?post) {
+                let updatedPost : Types.LoanPost = {
+                    post with
+                    status = "Rejected";
+                    verifiedAt = Utils.timeToDateString(Time.now());
+                };
+                posts := updatePost(loanId, func(_) = updatedPost);
+                return "Post rejected successfully!";
+            };
+        };
     };
 
     public shared query func getAssurance(assuranceId: Text) : async Types.LoanAssurance {
-        let assuranceOpt = List.find<Types.LoanAssurance>(
-            assurances,
-            func(assurance: Types.LoanAssurance): Bool {
-                return assurance.assuranceId == assuranceId;
-            }
-        );
-
-        switch (assuranceOpt) {
-            case (?assurance) {
-                return assurance;
-            };
-            case null {
-                throw Error.reject("Assurance not found");
-            };
+        switch (findAssurance(assuranceId)) {
+            case (?assurance) { assurance };
+            case (null) { throw Error.reject("Assurance not found"); };
         };
-
-
     };
 
-    // Update the post raised amount
     public shared func updateRaisedAmount(loanId: Text, amount: Float) : async Text {
-        let postOpt = List.find<Types.LoanPost>(
-            posts,
-            func(post: Types.LoanPost): Bool {
-                return post.loanId == loanId;
-            }
-        );
-
-        switch (postOpt) {
-            case (null) {
-                return "Post not found!";
-            };
+        switch (findPost(loanId)) {
+            case (null) { return "Post not found!"; };
             case (?post) {
+                var status = post.status;
 
-                // Validate if the raised amount is greater than the goal then throw an error
+                if (status != "Funding") {
+                    return "Post is not in funding state! Status: " # status;
+                };
+
                 if (post.raised + amount > post.goal) {
                     return "Amount exceeds the goal! Raised: " # Float.toText(post.raised);
                 };
 
-                let updatedPost : Types.LoanPost = {
-                    loanId = post.loanId;
-                    title = post.title;
-                    description = post.description;
-                    goal = post.goal;
-                    raised = post.raised + amount;
-                    createdAt = post.createdAt;
-                    verifiedAt = post.verifiedAt;
-                    postDuration = post.postDuration;
-                    category = post.category;
-                    loanDuration = post.loanDuration;
-                    isFulfilled = post.isFulfilled;
-                    isVerified = post.isVerified;
-                    debtor = post.debtor;
-                    assuranceId = post.assuranceId;
+                if (post.raised + amount == post.goal) {
+                    status := "Repaying";
                 };
 
-                posts := List.map<Types.LoanPost, Types.LoanPost>(
-                    posts,
-                    func(p: Types.LoanPost): Types.LoanPost {
-                        if (p.loanId == loanId) {
-                            return updatedPost;
-                        } else {
-                            return p;
-                        }
-                    }
-                );
-
+                let updatedPost : Types.LoanPost = {
+                    post with
+                    raised = post.raised + amount;
+                    status = status;
+                };
+                posts := updatePost(loanId, func(_) = updatedPost);
                 return "Raised amount updated successfully!";
             };
         };
     };
+
+    // TODO: Not fulfilled post, update status
+    // TODO: Loan duration + goal + interest calculation
+
+
 }

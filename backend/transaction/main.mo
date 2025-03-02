@@ -8,12 +8,6 @@ import LoanPostModule "../loanPost/interface";
 
 actor class TransactionMain() {
 
-    // dummy function for now
-    // public func getTransactionUserDetail(username : Text, userCanisterId : Text) : async ?Types.User {
-    //     let userActor = actor (userCanisterId) : UserModule.UserActor;
-    //     return await userActor.getUser(username);
-    // }
-
     stable var transactions: List.List<Types.Transaction> = List.nil<Types.Transaction>();
 
     public shared ({ caller }) func createTransaction(loanId : Text, amount : Float, method : Text, loanPostCanisterId : Text) : async Text {
@@ -26,10 +20,10 @@ actor class TransactionMain() {
             amount = amount;
             date = Utils.timeToDateString(Time.now());
             method = method;
+            status = "Ongoing";
             lender = caller;
         };
 
-        // TODO: Validate the loan raised amount
         let loanPostActor = actor (loanPostCanisterId) : LoanPostModule.LoanPostActor;
         let update = await loanPostActor.updateRaisedAmount(loanId, amount);
 
