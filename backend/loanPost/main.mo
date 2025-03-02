@@ -52,8 +52,8 @@ actor class LoanPostMain() {
             raised = 0.0;
             postDuration = 30;
             loanDuration = loanDuration;
-            createdAt = Utils.timeToDateString(Time.now());
-            verifiedAt = "";
+            createdAt = Time.now();
+            verifiedAt = 0;
             category = category;
             status = "Verifying";
             debtor = caller;
@@ -98,7 +98,7 @@ actor class LoanPostMain() {
                 let updatedPost : Types.LoanPost = {
                     post with
                     status = "Funding";
-                    verifiedAt = Utils.timeToDateString(Time.now());
+                    verifiedAt = Time.now();
                 };
                 posts := updatePost(loanId, func(_) = updatedPost);
                 return "Post verified successfully!";
@@ -113,7 +113,6 @@ actor class LoanPostMain() {
                 let updatedPost : Types.LoanPost = {
                     post with
                     status = "Rejected";
-                    verifiedAt = Utils.timeToDateString(Time.now());
                 };
                 posts := updatePost(loanId, func(_) = updatedPost);
                 return "Post rejected successfully!";

@@ -1,5 +1,6 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useGetUserTransactions } from "@/hooks/transaction/use-get-user-transactions";
+import { timeToDateString } from "@/lib/utils/DateString";
 
 const status = ["Ongoing", "Not Fulfilled", "Refunded", "Repaid"]
 
@@ -31,7 +32,7 @@ function TransactionHistoryPage() {
                       <div key={t.transactionId} className="grid grid-cols-4">
                         <div>{t.loanId}</div>
                         <div>{t.amount}</div>
-                        <div>{t.date}</div>
+                        <div>{timeToDateString(t.date)}</div>
                         <div>{t.method}</div>
                       </div>
                     );

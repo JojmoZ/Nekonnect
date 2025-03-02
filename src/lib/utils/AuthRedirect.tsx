@@ -17,7 +17,7 @@ const AuthRedirect: React.FC = ( ) => {
     return <div>Loading...</div>;
   }
   
-  return isAuthenticated ? <Navigate to="/home" replace /> : <Outlet />;
+  return isAuthenticated ? <Navigate to="/" replace /> : <Outlet />;
 };
 
 export default AuthRedirect;

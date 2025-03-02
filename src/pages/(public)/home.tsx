@@ -6,12 +6,14 @@ import { CategoryFilter } from "@/components/category-filter"
 import { Button } from "@/components/ui/button"
 import { StartProjectOverlay } from "@/components/start-project-overlay"
 import { useGetLoanPosts } from "@/hooks/loan-post/use-get-loan-posts"
+import { useNavigate } from "react-router"
 
 export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState("All")
-  const [isStartProjectOpen, setIsStartProjectOpen] = useState(false)
   const { loanPosts, getLoanPostsLoading } = useGetLoanPosts(true);
   const categories = Array.from(new Set(loanPosts.map((post) => post.category)))
+
+  const navigate = useNavigate()
 
   const filteredProjects =
     selectedCategory === "All" ? loanPosts : loanPosts.filter((post) => post.category === selectedCategory)
@@ -23,7 +25,7 @@ export default function Home() {
         <p className="text-xl text-muted-foreground">
           Discover and fund amazing projects that make a difference in our global community.
         </p>
-        <Button size="lg" className="mt-4" onClick={() => setIsStartProjectOpen(true)}>
+        <Button size="lg" className="mt-4" onClick={() => navigate("/create")}>
           Start Your Campaign
         </Button>
       </div>
@@ -37,7 +39,6 @@ export default function Home() {
           <ProjectCard key={post.loanId} project={post} />
         ))}
       </div>
-      <StartProjectOverlay isOpen={isStartProjectOpen} onClose={() => setIsStartProjectOpen(false)} />
     </div>
   )
 }
