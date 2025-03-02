@@ -10,7 +10,7 @@ import { User as BackendUser } from "@/declarations/user/user.did";
 export class UserService extends BaseService {
     
     
-    private II_URL = import.meta.env.VITE_II_NETWORK != "ic" ? `https://identity.ic0.app/` : `http://${ process.env.CANISTER_ID_INTERNET_IDENTITY}.localhost:4943/`;
+    private II_URL = import.meta.env.VITE_II_NETWORK == "ic" ? `https://identity.ic0.app/` : `http://${ process.env.CANISTER_ID_INTERNET_IDENTITY}.localhost:4943/`;
     protected user! : ActorSubclass<_USERSERVICE>;
 
     constructor() {
@@ -90,12 +90,8 @@ async login(): Promise<AppUser | null> {
 
     if (users.length > 0 && users[0] != null) {
         // ✅ Convert `number[]` to `Uint8Array` if necessary
-        return {
-            ...users[0],
-            faceEncoding: users[0].faceEncoding && users[0].faceEncoding.length > 0 && users[0].faceEncoding[0]
-                ? [new Uint8Array(users[0].faceEncoding[0])] // ✅ Convert number[] to Uint8Array
-                : [], // ✅ Ensure `faceEncoding` is always defined
-        } as AppUser;
+        return  users[0]
+            
     } else {
         throw new Error("User not found");
     }

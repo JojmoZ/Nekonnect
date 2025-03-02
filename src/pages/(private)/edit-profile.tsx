@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import Webcam from "react-webcam"; // ✅ Correct Webcam Import
+import Webcam from "react-webcam"; 
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -25,35 +25,35 @@ export const EditProfilePage = () => {
         },
     });
 
-    // Step State
-    const [step, setStep] = useState(1); // Step 1: User Info, Step 2: Face Capture
+    
+    const [step, setStep] = useState(1); 
 
-    // Webcam Setup
+    
     const webcamRef = useRef<Webcam | null>(null);
     const [capturedFace, setCapturedFace] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
 
-    // Capture Face
+    
     const captureFace = async () => {
         if (webcamRef.current) {
-            const imageSrc = webcamRef.current.getScreenshot(); // ✅ getScreenshot now works
+            const imageSrc = webcamRef.current.getScreenshot(); 
             setCapturedFace(imageSrc);
         }
     };
 
-    // Handle User Info Submission → Move to Face Capture Step
+    
     const handleUserInfoSubmit = async (values: userDto) => {
-        setStep(2); // ✅ Move to Face Capture Step
+        setStep(2); 
     };
 
-    // Final Submit (User Info + Face Data)
+    
     const handleFinalSubmit = async () => {
         setLoading(true);
         try {
-        let faceEncoding: [] | [Uint8Array] = []; // Default empty encoding
+        let faceEncoding: [] | [Uint8Array] = []; 
 
         if (capturedFace) {
-            // Send image to Python API for face encoding
+            
             const response = await fetch("http://127.0.0.1:5000/encode-face", {
                 method: "POST",
                 body: JSON.stringify({ image: capturedFace }),
@@ -62,7 +62,7 @@ export const EditProfilePage = () => {
 
             const data = await response.json();
             if (data.success) {
-                faceEncoding = [new Uint8Array(data.encoding)]; // ✅ Fix: Convert to Uint8Array & Tuple
+                faceEncoding = [new Uint8Array(data.encoding)]; 
             }
         }
         const user = await userService.me();

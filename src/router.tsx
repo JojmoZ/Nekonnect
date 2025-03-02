@@ -8,6 +8,7 @@ import AuthRedirect from '@/lib/utils/AuthRedirect';
 import Login from '@/pages/(public)/login';
 import { createBrowserRouter, redirect } from 'react-router-dom';
 import TempPage from './pages/TempPage';
+import LoginPage from './pages/LoginPage';
 
 const router = createBrowserRouter([
   {
@@ -15,7 +16,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/login",
-        element: <Login />,
+        element: <LoginPage />,
       },
       {
         path: "/register",
@@ -24,7 +25,7 @@ const router = createBrowserRouter([
     ],
   },
   {
-    // element: <ProtectedRoute />,
+    element: <ProtectedRoute />,
     children: [
       {
         path: "/home",

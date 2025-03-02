@@ -11,7 +11,7 @@ export function LoginForm({
   const navigate = useNavigate()
   const redirect = () =>{
     // Testing VU
-    navigate('/temp2')
+    // navigate('/temp2')
   } 
   return (
     <form className={cn("flex flex-col gap-6", className)} {...props}>
