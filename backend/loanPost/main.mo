@@ -4,6 +4,7 @@ import Time "mo:base/Time";
 import List "mo:base/List";
 import Float "mo:base/Float";
 import Error "mo:base/Error";
+import Timer "mo:base/Timer";
 import Types "types";
 import Utils "../utils";
 
@@ -101,6 +102,17 @@ actor class LoanPostMain() {
                     verifiedAt = Time.now();
                 };
                 posts := updatePost(loanId, func(_) = updatedPost);
+
+                // Update post status after 30 days
+                let delay = 1_000_000_000 * 60 * 60 * 24 * 30;
+                let timer = Timer.setTimer(#nanoseconds (delay), func(): async () {
+                    let updatedPost : Types.LoanPost = {
+                        post with
+                        status = "Repaying";
+                    };
+                    posts := updatePost(loanId, func(_) = updatedPost);
+                });
+
                 return "Post verified successfully!";
             };
         };
