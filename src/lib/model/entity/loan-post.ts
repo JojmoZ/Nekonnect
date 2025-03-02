@@ -6,8 +6,8 @@ export interface LoanPost {
   description: string;
   goal: number;
   raised: number;
-  createdAt: string;        
-  verifiedAt: string;  
+  createdAt: bigint;        
+  verifiedAt: bigint;  
   postDuration: bigint;   
   category: string;
   loanDuration: bigint;   

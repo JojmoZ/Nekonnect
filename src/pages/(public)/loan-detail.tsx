@@ -14,6 +14,7 @@ import {
 import { DonationOverlay } from '@/components/donation-overlay';
 import { useGetLoanPost } from '@/hooks/loan-post/use-get-loan-post';
 import { useParams } from 'react-router';
+import { daysLeft } from '@/lib/utils/DateString';
 
 const categoryIcons = {
   All: LayoutGrid,
@@ -74,15 +75,6 @@ function LoanDetailPage() {
               </div>
             </CardHeader>
             <CardContent>
-              {/* <div className="h-48 md:h-64 lg:h-80 max-w-2xl mx-auto mb-6 relative">
-            <img
-              src={loanPost.imageUrl || "/placeholder.svg"}
-              alt={loanPost.title}
-              width={800}
-              height={400}
-              className="object-cover rounded-md w-full h-full"
-            />
-          </div> */}
               <p className="text-xl mb-6">{loanPost.description}</p>
               <div className="space-y-4">
                 <Progress value={progress} className="h-4" />
@@ -90,7 +82,9 @@ function LoanDetailPage() {
                   <span>${loanPost.raised.toLocaleString()} raised</span>
                   <span>${loanPost.goal.toLocaleString()} goal</span>
                 </div>
-                {/* <p className="text-muted-foreground">{loanPost.daysLeft} days left to fund this project</p> */}
+                <p className="text-muted-foreground">
+                  {daysLeft(loanPost.verifiedAt, loanPost.postDuration).toLocaleString()} days left to fund this project
+                </p>
               </div>
             </CardContent>
           </Card>
