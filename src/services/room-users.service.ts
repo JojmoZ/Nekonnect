@@ -9,7 +9,7 @@ export class RoomUserService extends BaseService {
 
     constructor() {
         super()
-        this.roomUsers = createRoomUsersActor(roomUsersCanisterId, {agent : this.agent});
+        this.roomUsers = createRoomUsersActor(roomUsersCanisterId, {agent : BaseService.agent});
         this.initialized = this.initialization();
     }
     

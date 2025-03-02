@@ -16,18 +16,18 @@ export class UserService extends BaseService {
 
     constructor() {
         super();
-        this.user = createUserActor(userCanisterId, {agent : this.agent});
+        this.user = createUserActor(userCanisterId, {agent : BaseService.agent});
         this.initialized = this.initialization();
     }
 
    async login(): Promise<User | null> {
     try {
         return new Promise(async (resolve, reject) => {
-            await this.authClient.login({
+            await BaseService.authClient.login({
                 identityProvider: this.II_URL,
                 onSuccess: async () => {
                     try {
-                        const principal = this.authClient.getIdentity().getPrincipal();
+                        const principal = BaseService.authClient.getIdentity().getPrincipal();
                         let userArray = await this.user.getUserByPrincipal(principal);
 
                         let user = userArray.length > 0 ? userArray[0] : null;
@@ -68,27 +68,27 @@ export class UserService extends BaseService {
 
     async logout() {
         try {
-            await this.authClient.logout();
+            await BaseService.authClient.logout();
         } catch (err) {
             console.error('Logout Error:', err);
         }
     }
 
-    async me() : Promise<User> {
-        const principal = this.authClient.getIdentity().getPrincipal();
+    async me() : Promise<User | null> {
+        const principal = BaseService.authClient.getIdentity().getPrincipal();
         if (principal instanceof AnonymousIdentity) {
-            throw new Error('User is not authenticated');
+            return null;
         }
         const users = await this.user.getUserByPrincipal(principal);
         if (users.length > 0 && users[0] != null) {
             return users[0];
         } else {
-            throw new Error('User not found');
+            return null;
         }
     }
 
     async isAuthenticated() : Promise<boolean> {
-        return await this.authClient.isAuthenticated();
+        return await BaseService.authClient.isAuthenticated();
     }
 
     async editUser(user: userDto): Promise<User> {
@@ -129,6 +129,16 @@ export class UserService extends BaseService {
             } else {
                 throw new Error(`Error creating user: ${response.err}`);
             }
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
+    async getAllUser() : Promise<User[]> {
+        try {
+            const response = await this.user.getAllUsers();
+            return response;
         } catch (error) {
             console.error(error);
             throw error;

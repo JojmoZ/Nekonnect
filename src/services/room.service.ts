@@ -11,7 +11,7 @@ export class RoomService extends BaseService {
 
     constructor() {
         super()
-        this.room = createRoomActor(roomCanisterId, {agent : this.agent});
+        this.room = createRoomActor(roomCanisterId, {agent : BaseService.agent});
         this.initialized = this.initialization();
     }
     
