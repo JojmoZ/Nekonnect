@@ -11,6 +11,7 @@ import TempPage from './pages/TempPage';
 import PostVerificationPage from './pages/(private)/post-verification';
 import LoanDetailPage from './pages/(public)/loan-detail';
 import MainLayout from '@/pages/main-layout';
+import TransactionHistoryPage from './pages/(private)/transaction-history';
 
 const router = createBrowserRouter([
   {
@@ -58,6 +59,10 @@ const router = createBrowserRouter([
         path: '/post/:id',
         element: <LoanDetailPage />,
       },
+      {
+        path: '/transaction-history',
+        element: <TransactionHistoryPage />,
+      }
     ],
   },
   {

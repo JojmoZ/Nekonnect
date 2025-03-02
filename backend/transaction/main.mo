@@ -39,5 +39,9 @@ actor class TransactionMain() {
     public shared query func getTransactions(): async [Types.Transaction] {
         return List.toArray(transactions);
 
-    }
+    };
+
+    public shared query ({ caller }) func getUserTransactions(): async [Types.Transaction] {
+        return List.toArray(List.filter<Types.Transaction>(transactions, func (transaction: Types.Transaction): Bool = transaction.lender == caller ));
+    };
 }
