@@ -9,6 +9,7 @@ import Login from '@/pages/(public)/login';
 import { createBrowserRouter, redirect } from 'react-router-dom';
 import TempPage from './pages/TempPage';
 import LoginPage from './pages/LoginPage';
+import UserPage from './pages/UserPage';
 
 const router = createBrowserRouter([
   {
@@ -46,6 +47,10 @@ const router = createBrowserRouter([
       {
         path: "/temp2",
         element: <TempPage/>
+      },
+      {
+        path:"/temp",
+        element: <UserPage/>
       }
     ],
   },
