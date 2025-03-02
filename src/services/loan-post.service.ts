@@ -10,7 +10,7 @@ export class LoanPostService extends BaseService {
 
     constructor() {
         super()
-        this.loanPost = createLoanPostActor(loanPostCanisterId, {agent : this.agent});
+        this.loanPost = createLoanPostActor(loanPostCanisterId, {agent : BaseService.agent});
         this.initialized = this.initialization();
     }
 

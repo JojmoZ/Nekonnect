@@ -8,11 +8,11 @@ import Array "mo:base/Array";
 import Bool "mo:base/Bool";
 import Iter "mo:base/Iter";
 import Types "types";
+import RoomTypes "../room/types";
 
 actor RoomUsersManager {
     private let roomUsers = HashMap.HashMap<Text, TrieSet.Set<Types.RoomUser>>(10, Text.equal, Text.hash);
 
-    // Helper functions for TrieSet operations
     private func hashUser(user: Types.RoomUser) : Nat32 {
         let roomHash = Text.hash(user.room_id);
         let userHash = Principal.hash(user.user_id);
@@ -22,6 +22,7 @@ actor RoomUsersManager {
     private func equalUser(a: Types.RoomUser, b: Types.RoomUser) : Bool {
         a.room_id == b.room_id and a.user_id == b.user_id
     };
+
     public func addUserToRoom(room_id: Text, user_id: Principal) : async Result.Result<(), Text> {
         let newUser : Types.RoomUser = {
             room_id = room_id;
@@ -75,6 +76,18 @@ actor RoomUsersManager {
                 #ok(());
             };
         };
+    };
+
+    public func getUserPrivateRoom(user_sender: Principal, user_receiver: Principal) : async ?Text {
+        for ((room_id, users) in roomUsers.entries()) {
+            let user_array = TrieSet.toArray<Types.RoomUser>(users);
+            for (user in Iter.fromArray(user_array)) {
+                if (user.user_id == user_sender and user.user_id == user_receiver) {
+                    return ?room_id;
+                };
+            };
+        };
+        return null;
     };
 
 

@@ -7,7 +7,8 @@ export class MessageService extends BaseService {
 
     constructor() {
         super()
-        this.message = createMessageActor(messageCanisterId, {agent : this.agent});
+        this.message = createMessageActor(messageCanisterId, {agent : BaseService.agent});
         this.initialized = this.initialization();
     }
+
 }

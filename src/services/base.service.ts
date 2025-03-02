@@ -14,28 +14,32 @@ export {idlFactory}
 
 export class BaseService {
 
-    protected agent!: HttpAgent;
+    protected static agent: HttpAgent;
     protected initialized: Promise<void>;
-    protected authClient!: AuthClient;
+    protected static authClient: AuthClient;
 
     constructor() {
         this.initialized = this.initialization();
     }
 
     protected async initialization() {
-        this.authClient = await AuthClient.create();
-        this.agent = new HttpAgent({host : "http://127.0.0.1:4943"});
-        if (process.env.NODE_ENV === "development") {
-            await this.agent.fetchRootKey();
+        if (!BaseService.authClient) {
+            BaseService.authClient = await AuthClient.create();
         }
-    }
+        if (!BaseService.agent) {
+            BaseService.agent = new HttpAgent({host : "http://127.0.0.1:4943"});
+            if (process.env.NODE_ENV === "development") {
+                await BaseService.agent.fetchRootKey();
+            }
+        }
+        }
 
     async getCallerPrincipal () : Promise<Principal> { 
-        return this.authClient.getIdentity().getPrincipal();
+        return BaseService.authClient.getIdentity().getPrincipal();
     }
 
     async getCallerIdentity () : Promise<SignIdentity> { 
-        const identity = this.authClient.getIdentity();
+        const identity = BaseService.authClient.getIdentity();
         if (identity instanceof AnonymousIdentity) {
             throw new Error("User is not authenticated");
         }

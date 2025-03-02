@@ -5,17 +5,16 @@ import { User } from "@/lib/model/entity/user";
 export const useGetAuthenticated = () => {
     const { userService } = useServiceContext();
     const [ isAuthenticated, setIsAuthenticated ] = useState<Boolean | null>(null);
-    const [ user, setUser ] = useState<User | null>(null);
+    const [ me, setMe ] = useState<User | null>(null);
+    const [loading, setLoading] = useState(true);
+
     
     useEffect(() => {
-        userService.isAuthenticated().then(isAuthenticated => {
-            setIsAuthenticated(isAuthenticated);
-        })
-        // userService.me().then(user => {
-        //     setUser(user);
-        //     console.log(user);
-        // })
+        userService.me().then(user => {
+            setMe(user);
+            setIsAuthenticated(user != null);
+        }).finally(() => setLoading(false));
     }, []);
 
-    return { isAuthenticated, user };
+    return {loading, isAuthenticated, me };
 }
