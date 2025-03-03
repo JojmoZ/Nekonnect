@@ -2,7 +2,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useGetUserTransactions } from "@/hooks/transaction/use-get-user-transactions";
 import { timeToDateString } from "@/lib/utils/DateString";
 
-const status = ["Ongoing", "Not Fulfilled", "Refunded", "Repaid"]
+const status = ["Ongoing", "Not Fulfilled", "Repaying", "Refunded", "Repaid"]
 
 function TransactionHistoryPage() {
 
@@ -10,7 +10,7 @@ function TransactionHistoryPage() {
 
   return (
     <Tabs defaultValue={status[0]} className="w-[400px]">
-      <TabsList className="grid w-full grid-cols-4">
+      <TabsList className="grid w-full grid-cols-5">
         {
           status.map((s) => (
             <TabsTrigger key={s} value={s}>{s}</TabsTrigger>

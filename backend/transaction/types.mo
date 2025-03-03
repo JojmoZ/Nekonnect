@@ -5,7 +5,7 @@ module {
 
     type User = Types.User;
 
-    let _status = ["Ongoing", "Not Fulfilled", "Refunded", "Repaid"];
+    let _status = ["Ongoing", "Not Fulfilled", "Repaying", "Refunded", "Repaid"];
 
     public type Transaction = {
         transactionId: Text;
