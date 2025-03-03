@@ -12,6 +12,8 @@ import PostVerificationPage from './pages/(private)/post-verification';
 import LoanDetailPage from './pages/(public)/loan-detail';
 import MainLayout from '@/pages/main-layout';
 import TransactionHistoryPage from './pages/(private)/transaction-history';
+import LoginPage from './pages/LoginPage';
+import UserPage from './pages/UserPage';
 
 const router = createBrowserRouter([
   {
@@ -62,6 +64,18 @@ const router = createBrowserRouter([
       {
         path: '/transaction-history',
         element: <TransactionHistoryPage />,
+      },
+      {
+        path:"/temp",
+        element: <UserPage/>
+      },
+      {
+        path: "/temp2",
+        element: <TempPage/>
+      },
+      {
+        path:"/temp",
+        element: <UserPage/>
       }
     ],
   },
