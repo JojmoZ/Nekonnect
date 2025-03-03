@@ -69,7 +69,7 @@ export const EditProfilePage = () => {
         const user = await userService.me();
         console.log("AFTER UINT8" , faceEncoding)
         const userValues = form.getValues();
-        await userService.editUser({ ...userValues,internetIdentity: user.internetIdentity, faceEncoding });
+        await userService.editUser({ ...userValues,internetIdentity: user!.internetIdentity!, faceEncoding });
         navigate('/temp');
     } catch (err) {
         console.error("Error updating profile:", err);
