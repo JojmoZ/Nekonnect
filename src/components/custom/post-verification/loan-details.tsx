@@ -6,15 +6,16 @@ import { LoanPost } from '@/lib/model/entity/loan-post';
 import { LoanPostService } from '@/services/loan-post.service';
 import { useGetLoanAssurance } from '@/hooks/loan-post/use-get-loan-assurance';
 import { toast } from 'sonner';
+import { timeToDateString } from '@/lib/utils/DateString';
+import useServiceContext from '@/hooks/use-service-context';
 
 type LoanDisplayProps = {
   loan: LoanPost;
 };
 
-const loanPostService = new LoanPostService();
-
 const LoanDisplay: React.FC<LoanDisplayProps> = ({ loan }) => {
 
+  const { loanPostService } = useServiceContext();
   const { assurance, imageUrl, getAssuranceLoading } = useGetLoanAssurance(loan.assuranceId);
 
   const onAccept = () => {
@@ -74,7 +75,7 @@ const LoanDisplay: React.FC<LoanDisplayProps> = ({ loan }) => {
 
           <div>
             <Typography variant="subtitle1">Applied At</Typography>
-            <Typography variant="body1">{loan.createdAt}</Typography>
+            <Typography variant="body1">{timeToDateString(loan.createdAt)}</Typography>
           </div>
         </div>
 

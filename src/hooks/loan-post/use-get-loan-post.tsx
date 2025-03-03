@@ -1,15 +1,13 @@
 import { LoanPost } from '@/lib/model/entity/loan-post';
 import { useEffect, useState } from 'react';
-import { LoanPostService } from '@/services/loan-post.service';
-
-const loanPostService = new LoanPostService();
+import useServiceContext from '../use-service-context';
 
 export function useGetLoanPost(loanId: string) {
   console.log('useGetLoanPost initialized'); // Log initialization
 
   const [loanPost, setLoanPost] = useState<LoanPost>();
   const [loading, setLoading] = useState<boolean>(true);
-  // const { loanPostService } = useServiceContext();
+  const { loanPostService } = useServiceContext();
 
   const fetchLoanPost = async () => {
     try {

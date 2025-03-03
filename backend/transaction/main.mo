@@ -18,7 +18,7 @@ actor class TransactionMain() {
             transactionId = transactionId;
             loanId = loanId;
             amount = amount;
-            date = Utils.timeToDateString(Time.now());
+            date = Time.now();
             method = method;
             status = "Ongoing";
             lender = caller;

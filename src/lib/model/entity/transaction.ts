@@ -4,7 +4,7 @@ export interface Transaction {
   transactionId: string;
   loanId: string;
   amount: number;
-  date: string;
+  date: bigint;
   method: string;
   status: string;
   lender: Principal;

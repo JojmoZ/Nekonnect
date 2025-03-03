@@ -9,6 +9,7 @@ import {
   SidebarRail,
 } from '@/components/ui/sidebar';
 import { LoanPostContext } from '@/context/loan-post-context';
+import { timeToDateString } from '@/lib/utils/DateString';
 
 export function PostVerificationSidebar({
   ...props
@@ -34,7 +35,7 @@ export function PostVerificationSidebar({
                 <div className="flex w-full items-center gap-2">
                   <span>{post.debtor.toString()}</span>{' '}
                   <span className="ml-auto text-xs">
-                    {post.createdAt.toLocaleString()}
+                    {timeToDateString(post.createdAt)}
                   </span>
                 </div>
                 <span className="font-medium">{post.title}</span>
