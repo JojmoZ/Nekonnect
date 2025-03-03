@@ -1,6 +1,5 @@
-import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@radix-ui/react-dialog";
 import { Button } from "../ui/button";
-import { DialogHeader } from "../ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "../ui/dialog";
 
 interface SuccessDialogProps {
     isOpen: boolean;
@@ -17,7 +16,7 @@ function SuccessDialog({ isOpen, onClose, title, description }: SuccessDialogPro
                     <DialogTitle>{title}</DialogTitle>
                     <DialogDescription>{description}</DialogDescription>
                 </DialogHeader>
-                <Button onClick={onClose}>Close</Button>
+                <Button onClick={onClose}>Continue</Button>
             </DialogContent>
         </Dialog>
     );

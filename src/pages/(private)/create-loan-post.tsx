@@ -8,10 +8,13 @@ import { FaceRecognitionForm } from '@/components/custom/create-post/face-recogn
 import { useCreateLoanPost } from '@/hooks/loan-post/use-create-loan-post';
 import { useState } from 'react';
 import SuccessDialog from '@/components/custom/success-dialog';
+import { useNavigate } from 'react-router';
 
 function CreateLoanPostPage() {
   const { loanPostForm, assuranceForm, agreementForm, onCreate } = useCreateLoanPost();
   const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState(false);
+
+  const navigate = useNavigate();
 
   const onSubmit = async () => {
     toast.promise(onCreate(), {
@@ -23,6 +26,11 @@ function CreateLoanPostPage() {
       error: 'Failed to create loan post.',
     });
   };
+
+  const handleClose = () => {
+    setIsSuccessDialogOpen(false);
+    navigate('/');
+  }
 
   const steps = [
     {
@@ -79,9 +87,9 @@ function CreateLoanPostPage() {
       <Stepper steps={steps} onSubmit={onSubmit} showProgress={true} />
       <SuccessDialog
         isOpen={isSuccessDialogOpen}
-        onClose={() => setIsSuccessDialogOpen(false)}
-        title="Loan Post Created Successfully"
-        description="Your loan post has been created successfully. You can now view it in your dashboard."
+        onClose={handleClose}
+        title="Loan Post Requested Successfully"
+        description="Your loan post has been requested successfully. Please wait until we verify your post."
       />
     </div>
   );
