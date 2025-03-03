@@ -21,7 +21,9 @@ const Logo  = () => {
   }, []);
 
   return (
-    <img src={isDark ? './assets/logo-white.svg' : './assets/logo-black.svg'} alt="NeKonnect Logo" className='h-12'/>
+    <a href='/'>
+      <img src={isDark ? './assets/logo-white.svg' : './assets/logo-black.svg'} alt="NeKonnect Logo" className='h-12'/>
+    </a>
   );
 
 }

@@ -144,12 +144,11 @@ function Header() {
           </NavigationMenuItem>
         </NavigationMenuList>
       </NavigationMenu>
-      <Button variant="gradient" size="lg" className="font-bold">Sign In</Button>
       {
         !isAuthenticated ?
-          <Button variant={"gradient"} onClick={redirect}>Sign In</Button>
+          <Button variant="gradient" onClick={redirect}>Sign In</Button>
           :
-          <Button variant={"gradient"} onClick={logout}>Log out</Button>
+          <Button variant="gradient" onClick={logout}>Log out</Button>
       }
     </header>
   );
