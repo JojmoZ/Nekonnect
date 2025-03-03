@@ -31,9 +31,6 @@ actor RoomManager {
                 let current_users = room_state.get(room_id);
                 switch (current_users) {
                     case (?users) {
-                        Debug.print("Current users: " # debug_show (users));
-                        Debug.print("Caller: " # debug_show (user_id));
-                        Debug.print("Room: " # debug_show (room_id));
                         if (Array.find(users, func(u: Principal) : Bool { u == user_id }) == null) {
                             room_state.put(room_id, Array.append(users, [user_id]));
                         };
@@ -52,13 +49,22 @@ actor RoomManager {
     };
 
     func send_message(principal : IcWebSocketCdk.ClientPrincipal, msg : MessageTypes.Message): async () {
-        let participants = room_state.get(msg.room_id);
+        Debug.print("Sending message:" # debug_show (msg));
+        let participants = await RoomUsersActor.getAllUsersByRoomId(msg.room_id);
+        Debug.print("Participants:" # debug_show (participants));
         switch (participants) {
-            case(?users) {
+            case(users) {
                 let response = await MessageActor.createMessage(msg.room_id, msg.message, msg.user_id);
+                switch (response) {
+                    case (#ok(_)) {
+                    };
+                    case (#err(err)) {
+                        Debug.print("Could not send message:" # debug_show (#Err(err)));
+                    };
+                };
                 for (user in users.vals()) {
                     Debug.print("Principal:" # debug_show (user));
-                    switch (await IcWebSocketCdk.send(ws_state, user, to_candid(msg))) {
+                    switch (await IcWebSocketCdk.send(ws_state, user.user_id, to_candid(msg))) {
                         case (#Err(err)) {
                             Debug.print("Could not send message:" # debug_show (#Err(err)));
                         };
@@ -66,9 +72,7 @@ actor RoomManager {
                     }
                 };
             };
-            case(null) {
-                Debug.print("Room not found: " # msg.room_id);
-            }
+            
         }
     };
 

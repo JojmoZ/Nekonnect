@@ -19,12 +19,12 @@ import { Sidebar } from 'lucide-react';
 import { ChatAppSidebar } from '@/components/custom/chat/chat-sidebar';
 import useServiceContext from '@/hooks/use-service-context';
 import { MessageResponse } from '@/lib/model/dto/response/get-message-response';
-import { UserList } from '@/components/custom/chat/user-list';
 import { User } from '@/lib/model/entity/user';
 import { useForm } from 'react-hook-form';
 import { messageDto, messageSchema } from '@/lib/model/dto/send-message.dto';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { useGetAuthenticated } from '@/hooks/user/use-get-authenticated';
 
 
 interface IProps {}
@@ -35,12 +35,15 @@ export const ChatPage: React.FC<IProps> = () => {
   const [messages, setMessages] = useState<MessageResponse[]>([]);
   const { userService, roomService, roomUserService} = useServiceContext()
   const [socket, setSocket] = useState<any>(null);
+  const { me } = useGetAuthenticated();
 
   const form = useForm<messageDto>({
         resolver: zodResolver(messageSchema),
         defaultValues: {
             room_id : '',
-            message : ''
+            message : '',
+            created_at : BigInt(new Date().getTime()),
+            user_id : me?.internetIdentity,
         },
     });
 
@@ -134,6 +137,7 @@ export const ChatPage: React.FC<IProps> = () => {
   }
 
   const onMessage = async () => {
+    form.setValue('user_id', await userService.getCallerPrincipal());
     socket.send(form.getValues());
   }
 
@@ -151,9 +155,9 @@ export const ChatPage: React.FC<IProps> = () => {
         defaultOpen={false}
       >
         <main>
-          <UserList onChat={onChat}/>
+          {/* <UserList onChat={onChat}/> */}
         </main>
-        <ChatAppSidebar onMessage={onMessage} form={form} messages={messages}/>
+        {/* <ChatAppSidebar onMessage={onMessage} form={form} messages={messages}/> */}
       </SidebarProvider>
   );
 };

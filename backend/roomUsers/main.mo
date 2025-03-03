@@ -81,8 +81,17 @@ actor RoomUsersManager {
     public func getUserPrivateRoom(user_sender: Principal, user_receiver: Principal) : async ?Text {
         for ((room_id, users) in roomUsers.entries()) {
             let user_array = TrieSet.toArray<Types.RoomUser>(users);
+            var is_sender_exist = false;
+            var is_receiver_exist = false;
+
             for (user in Iter.fromArray(user_array)) {
-                if (user.user_id == user_sender and user.user_id == user_receiver) {
+                if (user.user_id == user_sender ) {
+                    is_sender_exist := true;
+                };
+                if (user.user_id == user_receiver) {
+                    is_receiver_exist := true;
+                };
+                if (is_sender_exist and is_receiver_exist) {
                     return ?room_id;
                 };
             };
