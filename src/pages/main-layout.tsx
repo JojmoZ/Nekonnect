@@ -1,4 +1,4 @@
-import { Footer } from '@/components/custom/Footer/footer';
+import { Footer } from '@/components/layout/footer';
 import Header from '@/components/layout/header';
 import { ReactNode } from 'react';
 import { Outlet } from 'react-router-dom';
@@ -15,7 +15,7 @@ function MainLayout() {
         <Outlet />
       </main>
       <Footer />
-    </> 
+    </>
   );
 }
 
