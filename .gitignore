@@ -11,7 +11,7 @@ node_modules
 dist
 dist-ssr
 *.local
-
+ocr_backend/.venv
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
@@ -40,3 +40,4 @@ temp_ic
 
 # Virtual environment
 venv
+ocr_backend/.venv
