@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Webcam from "react-webcam"; 
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
@@ -50,7 +50,7 @@ export const EditProfilePage = () => {
     const handleFinalSubmit = async () => {
         setLoading(true);
         try {
-        let faceEncoding: [] | [Uint8Array] = []; 
+        let faceEncoding: [] | [Float64Array] = []; 
 
         if (capturedFace) {
             
@@ -61,12 +61,13 @@ export const EditProfilePage = () => {
             });
 
             const data = await response.json();
+            console.log("MY FACE",data)
             if (data.success) {
-                faceEncoding = [new Uint8Array(data.encoding)]; 
+                faceEncoding = [new Float64Array(data.encoding)]; 
             }
         }
         const user = await userService.me();
-
+        console.log("AFTER UINT8" , faceEncoding)
         const userValues = form.getValues();
         await userService.editUser({ ...userValues,internetIdentity: user.internetIdentity, faceEncoding });
         navigate('/temp');

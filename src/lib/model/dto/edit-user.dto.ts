@@ -6,7 +6,7 @@ export const userSchema = z.object({
     nationality: z.string().min(2, "Nationality required"),
     gender: z.enum(["Male", "Female", "Other"]),
     email: z.string().email("Invalid email"),
-    faceEncoding: z.union([z.array(z.instanceof(Float32Array)), z.tuple([])]).optional(), 
+    faceEncoding: z.union([z.array(z.instanceof(Float64Array)), z.tuple([])]).optional(), 
 })
 
 export type userDto = z.infer<typeof userSchema>;

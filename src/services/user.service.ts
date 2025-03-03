@@ -12,7 +12,6 @@ export class UserService extends BaseService {
     
     private II_URL = import.meta.env.VITE_II_NETWORK == "ic" ? `https://identity.ic0.app/` : `http://${ process.env.CANISTER_ID_INTERNET_IDENTITY}.localhost:4943/`;
     protected user! : ActorSubclass<_USERSERVICE>;
-
     constructor() {
         super();
         this.user = createUserActor(userCanisterId, {agent : BaseService.agent});
@@ -32,27 +31,32 @@ async login(): Promise<AppUser | null> {
 
                         if (!user) {
                             user = await this.createUser({
-                                internetIdentity: principal, // ✅ Ensure `internetIdentity` is included
+                                internetIdentity: principal, 
                                 username: "",
                                 dob: "",
                                 nationality: "",
                                 gender: "Other",
                                 email: "",
-                                faceEncoding: [], // ✅ Default empty `faceEncoding` (Never undefined)
+                                faceEncoding: [], 
                             });
 
                             console.log("✅ User created in backend:", user);
-                        } else {
-                            console.log("✅ User already exists in backend:", user);
+                             await new Promise(resolve => setTimeout(resolve, 500));
+                             userArray = await this.user.getUserByPrincipal(principal);
+                             user = userArray.length > 0 && userArray[0] !== undefined ? userArray[0] : null;
+                        } 
+                        if(user){
+                            resolve({
+                                ...user,
+                                faceEncoding: user.faceEncoding && user.faceEncoding.length > 0
+                                    ? [new Float64Array(user.faceEncoding[0] as number[])] 
+                                    : [],
+                            });
+                        }else{
+                            reject(new Error("❌ User could not be found after retry."));
                         }
 
-                        // ✅ Convert `faceEncoding` to the correct format before returning
-                        resolve({
-                            ...user,
-                            faceEncoding: user.faceEncoding && user.faceEncoding.length > 0
-                                ? [new Uint8Array(user.faceEncoding[0] as number[])] // ✅ Convert `number[]` to `Uint8Array`
-                                : [],
-                        });
+                        
                     } catch (error) {
                         console.error("❌ Error fetching/creating user:", error);
                         reject(error);
@@ -114,11 +118,18 @@ async login(): Promise<AppUser | null> {
             nationality: user.nationality,
             gender: user.gender,
             email: user.email,
-            faceEncoding: user.faceEncoding ? [user.faceEncoding] : [], // ✅ Fix: Convert to correct format
-        } as BackendUser); // ✅ Explicitly cast to backend type
+             faceEncoding: user.faceEncoding && user.faceEncoding.length > 0 
+                ? [Array.from(user.faceEncoding[0] as Float64Array)]  
+                : [],  
+        } as BackendUser); 
 
-        if ("ok" in response) {
-            return response.ok as AppUser; // ✅ Convert back to frontend type
+       if ("ok" in response) {
+            return {
+                ...response.ok,
+                faceEncoding: response.ok.faceEncoding.length > 0 && response.ok.faceEncoding[0]
+                    ? [new Uint8Array(response.ok.faceEncoding[0])]  
+                    : [],
+            } as AppUser;
         } else {
             throw new Error(`Error editing user profile: ${response.err}`);
         }
