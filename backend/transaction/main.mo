@@ -10,6 +10,23 @@ actor class TransactionMain() {
 
     stable var transactions: List.List<Types.Transaction> = List.nil<Types.Transaction>();
 
+    func findTransaction(transactionId: Text) : ?Types.Transaction {
+        List.find<Types.Transaction>(transactions, func(transaction: Types.Transaction): Bool = transaction.transactionId == transactionId);
+    };
+
+    func updateTransaction(transactionId: Text, updateFn: Types.Transaction -> Types.Transaction) : List.List<Types.Transaction> {
+        List.map<Types.Transaction, Types.Transaction>(
+            transactions,
+            func(transaction: Types.Transaction): Types.Transaction {
+                if (transaction.transactionId == transactionId) {
+                    return updateFn(transaction);
+                } else {
+                    return transaction;
+                }
+            }
+        );
+    };
+
     public shared ({ caller }) func createTransaction(loanId : Text, amount : Float, method : Text, loanPostCanisterId : Text) : async Text {
 
         let transactionId = await Utils.generateUUID();
@@ -23,6 +40,8 @@ actor class TransactionMain() {
             status = "Ongoing";
             lender = caller;
         };
+
+        // TODO: Update user balance
 
         let loanPostActor = actor (loanPostCanisterId) : LoanPostModule.LoanPostActor;
         let update = await loanPostActor.updateRaisedAmount(loanId, amount);
@@ -43,5 +62,25 @@ actor class TransactionMain() {
 
     public shared query ({ caller }) func getUserTransactions(): async [Types.Transaction] {
         return List.toArray(List.filter<Types.Transaction>(transactions, func (transaction: Types.Transaction): Bool = transaction.lender == caller ));
+    };
+
+    // Get loan post transaction
+    public shared query func getLoanPostTransactions(loanId : Text): async [Types.Transaction] {
+        return List.toArray(List.filter<Types.Transaction>(transactions, func (transaction: Types.Transaction): Bool = transaction.loanId == loanId ));
+    };
+
+    public shared func updateTransactionStatus(transactionId : Text, status : Text) : async Text {
+        switch (findTransaction(transactionId)) {
+            case (null) { return "Transaction not found!"; };
+            case (?transaction) {
+                let updatedTransaction : Types.Transaction = {
+                    transaction with
+                    status = status;
+                };
+                transactions := updateTransaction(transactionId, func(_) = updatedTransaction);
+
+                return "Transaction updated successfully!";
+            };
+        };
     };
 }

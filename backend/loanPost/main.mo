@@ -7,6 +7,7 @@ import Error "mo:base/Error";
 import Timer "mo:base/Timer";
 import Types "types";
 import Utils "../utils";
+import TransactionModule "../transaction/interface";
 
 actor class LoanPostMain() {
     stable var posts: List.List<Types.LoanPost> = List.nil<Types.LoanPost>();
@@ -93,7 +94,7 @@ actor class LoanPostMain() {
         List.toArray(List.filter(posts, func(post: Types.LoanPost): Bool = post.status == "Verifying"));
     };
 
-    public shared func acceptPost(loanId: Text) : async Text {
+    public shared func acceptPost(loanId: Text, transactionCanisterId: Text) : async Text {
         switch (findPost(loanId)) {
             case (null) { return "Post not found!"; };
             case (?post) {
@@ -105,13 +106,9 @@ actor class LoanPostMain() {
                 posts := updatePost(loanId, func(_) = updatedPost);
 
                 // Update post status after 30 days
-                let delay = 1_000_000_000 * 60 * 60 * 24 * 30;
-                let timer = Timer.setTimer(#nanoseconds (delay), func(): async () {
-                    let updatedPost : Types.LoanPost = {
-                        post with
-                        status = "Repaying";
-                    };
-                    posts := updatePost(loanId, func(_) = updatedPost);
+                let delay = 1_000_000_000 * 30 * 60 * 60 * 24;
+                let timer = Timer.setTimer(#nanoseconds (delay), func (): async () {
+                    ignore checkPostGoal(loanId, transactionCanisterId);
                 });
 
                 return "Post verified successfully!";
@@ -170,6 +167,44 @@ actor class LoanPostMain() {
     };
 
     // TODO: Not fulfilled post, update status
+    public func checkPostGoal(loanId: Text, transactionCanisterId: Text): async () {
+
+        switch(findPost(loanId)) {
+            case(null) { 
+                return;
+             };
+            case(?post) { 
+                var loanStatus = post.status;
+                var transactionStatus = "";
+                if (post.raised < post.goal) {
+                    loanStatus := "Not Fulfilled";
+                    transactionStatus := "Not Fulfilled";
+                } else {
+                    loanStatus := "Repaying";
+                    transactionStatus := "Repaying";
+                };
+
+                let updatedPost : Types.LoanPost = {
+                    post with
+                    status = loanStatus;
+                };
+                posts := updatePost(post.loanId, func(_) = updatedPost);
+
+                // Get post transactions
+                let transactionActor = actor(transactionCanisterId) : TransactionModule.TransactionActor;
+                let transactions = await transactionActor.getLoanPostTransactions(post.loanId);
+
+                // Update transaction status for each transaction
+                for (transaction in transactions.vals()) {
+                    let updateResult = await transactionActor.updateTransactionStatus(transaction.transactionId, transactionStatus);
+                };
+
+                // TODO: Refund transactions
+            };
+        };
+    }
+
+
     // TODO: Loan duration + goal + interest calculation
 
 
