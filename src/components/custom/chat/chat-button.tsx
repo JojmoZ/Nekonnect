@@ -22,15 +22,16 @@ import { Principal } from "@dfinity/principal"
 interface IProps {
     form : UseFormReturn<messageDto>,
     receiver_id : Principal
+    post_id : string | undefined
 }
 
-export function ChatButton({form, receiver_id}: IProps) {
+export function ChatButton({form, receiver_id,post_id}: IProps) {
 
     const {  roomService } = useServiceContext();
     const { toggleSidebar } = useSidebar();
 
     const onChat = async (user_id : Principal) => {
-        const response = await roomService.createPrivateRoom(user_id)
+        const response = await roomService.createPrivateRoom(user_id,post_id!)
         form.setValue('room_id', response);
         console.log(response);
         toggleSidebar()

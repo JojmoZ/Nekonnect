@@ -75,11 +75,11 @@ export const ChatPage: React.FC<IProps> = () => {
   const joinRoom = async () => {
     const principal = await userService.getCallerPrincipal();
     console.log(principal.toString());
-    const response = await roomService.joinRoom(
-      'af6dc03e-d335-423a-9aa5-190a1daa5d80',
-      principal,
-    );
-    console.log(response);
+    // const response = await roomService.joinRoom(
+    //   'af6dc03e-d335-423a-9aa5-190a1daa5d80',
+    //   principal,
+    // );
+    // console.log(response);
     const response2 = await roomUserService.getByRoomIdAndUserId(
       'af6dc03e-d335-423a-9aa5-190a1daa5d80',
       principal,
@@ -131,9 +131,9 @@ export const ChatPage: React.FC<IProps> = () => {
   };
 
   const onChat = async (user : User) => {
-    const response = await roomService.createPrivateRoom(user.internetIdentity)
-    console.log(response);
-    form.setValue('room_id', response);
+    // const response = await roomService.createPrivateRoom(user.internetIdentity)
+    // console.log(response);
+    // form.setValue('room_id', response);
   }
 
   const onMessage = async () => {

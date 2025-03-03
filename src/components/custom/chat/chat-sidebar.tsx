@@ -68,7 +68,17 @@ export function ChatAppSidebar({form,children} : IProps) {
     form.setValue('user_id', await userService.getCallerPrincipal());
     console.log(form.getValues())
     console.log(socket)
-    socket.send(form.getValues());
+    try {
+      if (socket && socket.readyState === WebSocket.OPEN) {
+        socket.send(form.getValues());
+        console.log('Message sent:', form.getValues());
+      } else {
+        console.error('WebSocket is not open. Cannot send message.');
+      }
+    } catch (error) {
+      console.error('Error sending message:', error);
+    }
+    // socket.send(form.getValues());
   }
 
   useEffect(() => {

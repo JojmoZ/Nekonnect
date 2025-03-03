@@ -1,129 +1,67 @@
-import HashMap "mo:base/HashMap";
-import Text "mo:base/Text";
-import TrieSet "mo:base/TrieSet";
+import List "mo:base/List";
 import Principal "mo:base/Principal";
-import Hash "mo:base/Hash";
 import Result "mo:base/Result";
-import Array "mo:base/Array";
-import Bool "mo:base/Bool";
 import Iter "mo:base/Iter";
+import Buffer "mo:base/Buffer";
 import Types "types";
-import RoomTypes "../room/types";
 
 actor RoomUsersManager {
-    private let roomUsers = HashMap.HashMap<Text, TrieSet.Set<Types.RoomUser>>(10, Text.equal, Text.hash);
-
-    private func hashUser(user: Types.RoomUser) : Nat32 {
-        let roomHash = Text.hash(user.room_id);
-        let userHash = Principal.hash(user.user_id);
-        roomHash +% userHash
-    };
-
-    private func equalUser(a: Types.RoomUser, b: Types.RoomUser) : Bool {
-        a.room_id == b.room_id and a.user_id == b.user_id
-    };
+    stable var roomUsers : List.List<Types.RoomUser> = List.nil<Types.RoomUser>();
 
     public func addUserToRoom(room_id: Text, user_id: Principal) : async Result.Result<(), Text> {
-        let newUser : Types.RoomUser = {
-            room_id = room_id;
-            user_id = user_id;
+        let newUser : Types.RoomUser = { room_id = room_id; user_id = user_id };
+
+        if (List.find<Types.RoomUser>(roomUsers, func(user) = user.room_id == room_id and user.user_id == user_id) != null) {
+            return #err("User already exists in the room");
         };
-        
-        switch (roomUsers.get(room_id)) {
-            case (null) {
-                let newSet = TrieSet.empty<Types.RoomUser>();
-                let updatedSet = TrieSet.put<Types.RoomUser>(
-                    newSet,
-                    newUser,
-                    hashUser(newUser),
-                    equalUser
-                );
-                roomUsers.put(room_id, updatedSet);
-                #ok(());
-            };
-            case (?existingSet) {
-                let updatedSet = TrieSet.put<Types.RoomUser>(
-                    existingSet,
-                    newUser,
-                    hashUser(newUser),
-                    equalUser
-                );
-                roomUsers.put(room_id, updatedSet);
-                #ok(());
-            };
-        };
+
+        roomUsers := List.push(newUser, roomUsers);
+        return #ok(());
     };
 
     public func removeUserFromRoom(room_id: Text, user_id: Principal) : async Result.Result<(), Text> {
-        switch (roomUsers.get(room_id)) {
-            case (null) {
-                #err("Room not found");
-            };
-            case (?existingSet) {
-                let userToRemove : Types.RoomUser = {
-                    room_id = room_id;
-                    user_id = user_id;
-                };
-                
-                let updatedSet = TrieSet.delete<Types.RoomUser>(
-                    existingSet,
-                    userToRemove,
-                    hashUser(userToRemove),
-                    equalUser
-                );
-                
-                roomUsers.put(room_id, updatedSet);
-                #ok(());
-            };
+        let updatedList = List.filter<Types.RoomUser>(roomUsers, func(user) = not (user.room_id == room_id and user.user_id == user_id));
+
+        if (List.size(updatedList) == List.size(roomUsers)) {
+            return #err("User not found in the room");
         };
+
+        roomUsers := updatedList;
+        return #ok(());
     };
 
-    public func getUserPrivateRoom(user_sender: Principal, user_receiver: Principal) : async ?Text {
-        for ((room_id, users) in roomUsers.entries()) {
-            let user_array = TrieSet.toArray<Types.RoomUser>(users);
-            var is_sender_exist = false;
-            var is_receiver_exist = false;
+    public func getUserPrivateRoom(user_sender: Principal, user_receiver: Principal) : async [Text] {
+        var roomIds : List.List<Text> = List.nil<Text>();
 
-            for (user in Iter.fromArray(user_array)) {
-                if (user.user_id == user_sender ) {
-                    is_sender_exist := true;
-                };
-                if (user.user_id == user_receiver) {
-                    is_receiver_exist := true;
-                };
-                if (is_sender_exist and is_receiver_exist) {
-                    return ?room_id;
-                };
+        for (room : Types.RoomUser in Iter.fromList<Types.RoomUser>(roomUsers)) {
+            let room_id : Text = room.room_id;
+
+            let is_sender : Bool = List.find<Types.RoomUser>(
+                roomUsers, 
+                func(user : Types.RoomUser) : Bool { user.room_id == room_id and user.user_id == user_sender }
+            ) != null;
+
+            let is_receiver : Bool = List.find<Types.RoomUser>(
+                roomUsers, 
+                func(user : Types.RoomUser) : Bool { user.room_id == room_id and user.user_id == user_receiver }
+            ) != null;
+
+            let already_added : Bool = List.some<Text>(roomIds, func(id : Text) : Bool { id == room_id });
+
+            if (is_sender and is_receiver and not already_added) {
+                roomIds := List.push(room_id, roomIds); 
             };
         };
-        return null;
+
+        return List.toArray<Text>(roomIds); 
     };
 
 
     public func getByRoomIdAndUserId(room_id: Text, user_id: Principal) : async ?Types.RoomUser {
-        switch (roomUsers.get(room_id)) {
-            case (null) { 
-                null;
-            };
-            case (?existingSet) {
-                let matchingUser = Iter.filter<Types.RoomUser>(Array.vals(TrieSet.toArray<Types.RoomUser>(existingSet)), func(user : Types.RoomUser) : Bool { user.user_id == user_id });
-                matchingUser.next();
-            };
-        };
+        List.find<Types.RoomUser>(roomUsers, func(user) = user.room_id == room_id and user.user_id == user_id);
     };
 
     public func getAllUsersByRoomId(room_id: Text) : async [Types.RoomUser] {
-        switch (roomUsers.get(room_id)) {
-            case (null) { 
-                [];
-            };
-            case (?existingSet) {
-                TrieSet.toArray<Types.RoomUser>(existingSet);
-            };
-        };
+        List.toArray<Types.RoomUser>(List.filter<Types.RoomUser>(roomUsers, func(user) = user.room_id == room_id));
     };
-
-    
-
 }
-
