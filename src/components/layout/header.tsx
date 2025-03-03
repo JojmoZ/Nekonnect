@@ -66,7 +66,7 @@ function Header() {
   }
 
   return (
-    <header className="py-md w-full flex items-center justify-between">
+    <header className="py-md px-[8rem] w-full flex items-center justify-between">
       <Logo />
       <NavigationMenu>
         <NavigationMenuList>
