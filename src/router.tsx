@@ -72,6 +72,10 @@ const router = createBrowserRouter([
       {
         path: "/temp2",
         element: <TempPage/>
+      },
+      {
+        path:"/temp",
+        element: <UserPage/>
       }
     ],
   },
