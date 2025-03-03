@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -26,6 +26,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { User } from '@/lib/model/entity/user';
 import { Principal } from '@dfinity/principal';
 import { ChatButton } from '@/components/custom/chat/chat-button';
+import { Room } from '@/lib/model/entity/room';
+import { room } from '@/declarations/room';
+import { GetRoomByPostIdResponse } from '@/lib/model/dto/response/get-room-by-post-id-response';
+import { GetRoomsResponse } from '@/declarations/room/room.did';
 
 const categoryIcons = {
   All: LayoutGrid,
@@ -52,6 +56,8 @@ function LoanDetailPage() {
   const { loanPost, refetch } = useGetLoanPost(id ?? '');
   const [isDonationOverlayOpen, setIsDonationOverlayOpen] = useState(false);
   const { me } = useGetAuthenticated();
+  const { roomService } = useServiceContext();
+  const [rooms, setRooms] = useState<GetRoomsResponse[]>([]);
 
   const progress =
     ((loanPost?.raised ?? 0) / (loanPost?.goal ?? 0)) * 100;
@@ -64,14 +70,30 @@ function LoanDetailPage() {
   };
 
   const form = useForm<messageDto>({
-    resolver: zodResolver(messageSchema),
-    defaultValues: {
-        room_id : '',
-        message : '',
-        created_at : BigInt(new Date().getTime()),
-        user_id : me?.internetIdentity,
-    },
-});
+      resolver: zodResolver(messageSchema),
+      defaultValues: {
+          room_id : '',
+          message : '',
+          created_at : BigInt(new Date().getTime()),
+          user_id : me?.internetIdentity,
+      },
+  });
+
+  const getPost = async () => {
+    if (!id) {
+      return;
+    }
+    const response = await roomService.getRoomByPostId(id)
+    console.log(response)
+    const response2 = await roomService.getRooms()
+    console.log(response2)
+    setRooms(response)
+  }
+
+  useEffect(() => {
+    getPost()
+    
+  }, [])
 
   
 
@@ -131,7 +153,7 @@ function LoanDetailPage() {
               <CardHeader >
                 <div className='flex justify-between items-center'>
                   <CardTitle>About This Project</CardTitle>
-                  <ChatButton form={form} receiver_id={loanPost.debtor} />
+                  { me?.internetIdentity.toString() != loanPost.debtor.toString() && <ChatButton form={form} receiver_id={loanPost.debtor} post_id={id!} />}
                 </div>
               </CardHeader>
               <CardContent>
@@ -144,6 +166,19 @@ function LoanDetailPage() {
                 </p>
               </CardContent>
             </Card>
+            {
+              me?.internetIdentity.toString() == loanPost.debtor.toString() && (
+                <Card>
+                  <CardHeader >
+                      <CardTitle>User Chat</CardTitle>
+                  </CardHeader>
+                  {rooms.map((room) => (
+                    <ChatButton receiver_id={room.room_user.at(0)?.user_id!} form={form} post_id={id} />
+                  ))}
+                </Card>
+              )
+            }
+            
             <DonationOverlay
               isOpen={isDonationOverlayOpen}
               onClose={() => setIsDonationOverlayOpen(false)}

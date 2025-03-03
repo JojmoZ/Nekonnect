@@ -38,6 +38,7 @@ actor class LoanPostMain() {
         description: Text,
         goal: Float,
         category: Text,
+        debtor: Principal,
         loanDuration: Nat64,
         assuranceType: Text,
         assuranceFile: [Nat8]
@@ -57,7 +58,7 @@ actor class LoanPostMain() {
             verifiedAt = 0;
             category = category;
             status = "Verifying";
-            debtor = caller;
+            debtor = debtor;
             assuranceId = assuranceId;
         };
 
