@@ -5,6 +5,8 @@ import Iter "mo:base/Iter";
 import Debug "mo:base/Debug";
 import Array "mo:base/Array";
 import Time "mo:base/Time";
+import List "mo:base/List";
+import Buffer "mo:base/Buffer";
 import Types "types";
 import IcWebSocketCdk "mo:ic-websocket-cdk";
 import IcWebSocketCdkState "mo:ic-websocket-cdk/State";
@@ -17,82 +19,52 @@ import RoomUserTypes "../roomUsers/types";
 import Utils "../utils";
 
 actor RoomManager {
-    let rooms = HashMap.HashMap<Text, Types.Room>(10,Text.equal,Text.hash);
-    
-    let room_state = HashMap.HashMap<Text, [Principal]>(10,Text.equal,Text.hash);
+    stable var rooms : List.List<Types.Room> = List.nil<Types.Room>();
 
     let params = IcWebSocketCdkTypes.WsInitParams(null, null);
     let ws_state = IcWebSocketCdkState.IcWebSocketState(params);
 
-    public func join_room(room_id: Text,user_id: Principal) : async Result.Result<RoomUserTypes.RoomUser, Text> {
-        let isUserInRoom = await RoomUsersActor.getByRoomIdAndUserId(room_id,user_id);
-        switch (isUserInRoom) {
-            case (?user) {
-                let current_users = room_state.get(room_id);
-                switch (current_users) {
-                    case (?users) {
-                        Debug.print("Current users: " # debug_show (users));
-                        Debug.print("Caller: " # debug_show (user_id));
-                        Debug.print("Room: " # debug_show (room_id));
-                        if (Array.find(users, func(u: Principal) : Bool { u == user_id }) == null) {
-                            room_state.put(room_id, Array.append(users, [user_id]));
-                        };
-                    };
-                    case (null) {
-                        room_state.put(room_id, [user_id]);
-                    };
-                };
-                #ok(user);
+
+    func send_message(principal: IcWebSocketCdk.ClientPrincipal, msg: MessageTypes.Message): async () {
+        Debug.print("Sending message: " # debug_show(msg));
+        let participants = await RoomUsersActor.getAllUsersByRoomId(msg.room_id);
+        Debug.print("Participants: " # debug_show(participants));
+
+        let response = await MessageActor.createMessage(msg.room_id, msg.message, msg.user_id);
+        switch (response) {
+            case (#err(err)) {
+                Debug.print("Could not send message: " # debug_show(#Err(err)));
+                return;
             };
-            case (null) {
-                #err("User not found in room");
+            case (_) {};
+        };
+
+        for (user in Iter.fromArray(participants)) {
+            Debug.print("Sending to Principal: " # debug_show(user));
+            switch (await IcWebSocketCdk.send(ws_state, user.user_id, to_candid(msg))) {
+                case (#Err(err)) {
+                    Debug.print("Could not send message: " # debug_show(#Err(err)));
+                };
+                case (_) {};
             };
         };
-        
     };
 
-    func send_message(principal : IcWebSocketCdk.ClientPrincipal, msg : MessageTypes.Message): async () {
-        let participants = room_state.get(msg.room_id);
-        switch (participants) {
-            case(?users) {
-                let response = await MessageActor.createMessage(msg.room_id, msg.message, msg.user_id);
-                for (user in users.vals()) {
-                    Debug.print("Principal:" # debug_show (user));
-                    switch (await IcWebSocketCdk.send(ws_state, user, to_candid(msg))) {
-                        case (#Err(err)) {
-                            Debug.print("Could not send message:" # debug_show (#Err(err)));
-                        };
-                        case (_) {};
-                    }
-                };
-            };
-            case(null) {
-                Debug.print("Room not found: " # msg.room_id);
-            }
-        }
+    func on_open(args: IcWebSocketCdk.OnOpenCallbackArgs) : async () {
+        Debug.print("Client " # debug_show(args.client_principal) # " connected");
     };
 
-    func on_open(args : IcWebSocketCdk.OnOpenCallbackArgs) : async () {
-        Debug.print("Client " # debug_show (args.client_principal) # " connected");
-        // let message : Types.Message = {
-        // message = "Connected to WebSocket";
-        // username = "System"
-        // };
-        // await send_message(args.client_principal, message);
-    };
-
-    func on_message(args : IcWebSocketCdk.OnMessageCallbackArgs) : async () {
-        let app_msg : ?MessageTypes.Message = from_candid(args.message);
-        
-        let new_msg: MessageTypes.Message = switch (app_msg) {
-            case (?msg) { 
+    func on_message(args: IcWebSocketCdk.OnMessageCallbackArgs) : async () {
+        let app_msg: ?MessageTypes.Message = from_candid(args.message);
+        let new_msg = switch (app_msg) {
+            case (?msg) {
                 let user = await UserActor.getUserByPrincipal(args.client_principal);
                 let username = switch (user) {
-                    case (?user) user.username;
+                    case (?u) u.username;
                     case (null) "Unknown";
                 };
                 { 
-                    message = Text.concat(username, msg.message);
+                    message = Text.concat(username, ": " # msg.message);
                     user_id = args.client_principal;
                     room_id = msg.room_id;
                     created_at = Time.now();
@@ -104,14 +76,12 @@ actor RoomManager {
             };
         };
 
-        Debug.print("Received message: " # debug_show (new_msg));
-
+        Debug.print("Received message: " # debug_show(new_msg));
         await send_message(args.client_principal, new_msg);
     };
 
-
-    func on_close(args : IcWebSocketCdk.OnCloseCallbackArgs) : async () {
-        Debug.print("Client " # debug_show (args.client_principal) # " disconnected");
+    func on_close(args: IcWebSocketCdk.OnCloseCallbackArgs) : async () {
+        Debug.print("Client " # debug_show(args.client_principal) # " disconnected");
     };
 
     let handlers = IcWebSocketCdkTypes.WsHandlers(
@@ -122,93 +92,90 @@ actor RoomManager {
 
     let ws = IcWebSocketCdk.IcWebSocket(ws_state, params, handlers);
 
-    public shared ({ caller }) func ws_open(args : IcWebSocketCdk.CanisterWsOpenArguments) : async IcWebSocketCdk.CanisterWsOpenResult {
+    public shared ({ caller }) func ws_open(args: IcWebSocketCdk.CanisterWsOpenArguments) : async IcWebSocketCdk.CanisterWsOpenResult {
         await ws.ws_open(caller, args);
     };
 
-    public shared ({ caller }) func ws_close(args : IcWebSocketCdk.CanisterWsCloseArguments) : async IcWebSocketCdk.CanisterWsCloseResult {
+    public shared ({ caller }) func ws_close(args: IcWebSocketCdk.CanisterWsCloseArguments) : async IcWebSocketCdk.CanisterWsCloseResult {
         await ws.ws_close(caller, args);
     };
 
-    public shared ({ caller }) func ws_message(args : IcWebSocketCdk.CanisterWsMessageArguments, msg:? MessageTypes.Message) : async IcWebSocketCdk.CanisterWsMessageResult {
+    public shared ({ caller }) func ws_message(args: IcWebSocketCdk.CanisterWsMessageArguments, msg: ?MessageTypes.Message) : async IcWebSocketCdk.CanisterWsMessageResult {
         await ws.ws_message(caller, args, msg);
     };
 
-    public shared query ({ caller }) func ws_get_messages(args : IcWebSocketCdk.CanisterWsGetMessagesArguments) : async IcWebSocketCdk.CanisterWsGetMessagesResult {
+    public shared query ({ caller }) func ws_get_messages(args: IcWebSocketCdk.CanisterWsGetMessagesArguments) : async IcWebSocketCdk.CanisterWsGetMessagesResult {
         ws.ws_get_messages(caller, args);
     };
 
-    public func getRoomById (room_id : Text) : async ?Types.Room {
-        var room =  rooms.get(room_id);
-        return room;
+    public func getRoomById(room_id: Text) : async ?Types.Room {
+        return List.find(rooms, func(room : Types.Room) : Bool { room.room_id == room_id });
     };
 
-    public func createRoom (room_name : Text,room_type : Text) : async  Result.Result<Types.Room,Text> {
-        
-
-        if (room_name == "") {
-            return #err("All Fields must been filled")
-        };
+    public func createRoom(room_name: Text, room_type: Text, post_id: Text) : async Result.Result<Types.Room, Text> {
+        if (room_name == "") return #err("Room name cannot be empty");
 
         let room_id = await Utils.generateUUID();
-
-        let newRoom : Types.Room = {
+        let newRoom: Types.Room = {
             room_id = room_id;
             room_name = room_name;
             room_type = if (room_type == "") "Private" else room_type;
+            post_id = post_id;
         };
 
-        rooms.put(room_id,newRoom);
+        rooms := List.push(newRoom, rooms);
         return #ok(newRoom);
     };
 
-    public func getAllRooms () : async [Types.Room] {
-        let roomValues = rooms.vals();
-        return Iter.toArray(roomValues);
+    public func getAllRooms() : async [Types.Room] {
+        return List.toArray(rooms);
     };
-    
-    public func createPrivateRoom(sender_id: Principal,receiver_id: Principal) : async Result.Result<Text, Text> {
-        let room = await RoomUsersActor.getUserPrivateRoom(sender_id,receiver_id);
-        switch (room) {
-            case (null) {
-                let result = await createRoom("Private Room", "Private");
 
-                switch (result) {
-                    case (#ok(new_room)) {
-                        let response =  await RoomUsersActor.addUserToRoom(new_room.room_id, sender_id);
-                        switch (response) {
-                            case(#ok(_)){
-                                let response = await join_room(new_room.room_id,sender_id);
-                            };
-                            case (#err(errorMessage)) {
-                                return #err(errorMessage);
-                            };
-                        };
-                        let response2 =  await RoomUsersActor.addUserToRoom(new_room.room_id, receiver_id);
-                        switch (response2) {
-                            case(#ok(_)){
-                                let response2 = await join_room(new_room.room_id,receiver_id);
-                            };
-                            case (#err(errorMessage)) {
-                                return #err(errorMessage);
-                            };
-                        };
-                        return #ok(new_room.room_id);
-                    };
-                    case (#err(errorMessage)) {
-                        return #err(errorMessage);
+    public func createPrivateRoom(sender_id: Principal, receiver_id: Principal, post_id: Text) : async Result.Result<Text, Text> {
+        let userRooms = await RoomUsersActor.getUserPrivateRoom(sender_id, receiver_id);
+
+        for (room_id in Iter.fromArray(userRooms)) {
+            let existing_room = await getRoomById(room_id);
+            switch (existing_room) {
+                case (?room) {
+                    if (room.post_id == post_id) {
+                        return #ok(room_id);
                     };
                 };
-            };
-            case (?room_id) {
-                let response = await join_room(room_id,sender_id);
-                let response2 = await join_room(room_id,receiver_id);
-                return #ok(room_id);
+                case (null) {};
             };
         };
-        #err("Error creating room");
-        
+        let result = await createRoom("Private Room", "Private", post_id);
+        switch (result) {
+            case (#ok(new_room)) {
+                ignore await RoomUsersActor.addUserToRoom(new_room.room_id, sender_id);
+                ignore await RoomUsersActor.addUserToRoom(new_room.room_id, receiver_id);
+                return #ok(new_room.room_id);
+            };
+            case (#err(errorMessage)) {
+                return #err(errorMessage);
+            };
+        };
+
     };
 
+    public func getRoomByPostId(post_id: Text) : async [Types.GetRoomsResponse] {
+        let filteredRooms = List.filter(rooms, func(room : Types.Room) : Bool { room.post_id == post_id });
+        let roomsArray = List.toArray(filteredRooms);
 
-}
+        let results = Buffer.Buffer<Types.GetRoomsResponse>(Array.size(roomsArray));
+
+        for (room in roomsArray.vals()) {
+            let users = await RoomUsersActor.getAllUsersByRoomId(room.room_id);
+            results.add({
+                room_id = room.room_id;
+                post_id = room.post_id;
+                room_type = room.room_type;
+                room_name = room.room_name;
+                room_user = users;
+            });
+        };
+
+        return Buffer.toArray(results);
+    };
+};

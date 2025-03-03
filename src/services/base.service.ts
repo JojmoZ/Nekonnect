@@ -24,7 +24,11 @@ export class BaseService {
 
     protected async initialization() {
         if (!BaseService.authClient) {
-            BaseService.authClient = await AuthClient.create();
+            BaseService.authClient = await AuthClient.create({
+                idleOptions : {
+                    disableIdle: true
+                }
+            });
         }
         if (!BaseService.agent) {
             BaseService.agent = new HttpAgent({host : "http://127.0.0.1:4943"});

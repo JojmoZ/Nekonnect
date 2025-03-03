@@ -1,4 +1,5 @@
 import { LoanPostService } from "@/services/loan-post.service";
+import { MessageService } from "@/services/message.service";
 import { RoomUserService } from "@/services/room-users.service";
 import { RoomService } from "@/services/room.service";
 import { TransactionService } from "@/services/transaction.service";
@@ -10,6 +11,7 @@ interface IProps {
     roomService : RoomService
     loanPostService : LoanPostService
     transactionService : TransactionService
+    messageService : MessageService
 }
 
 export const ServiceContext = React.createContext<IProps>({} as IProps);
@@ -21,6 +23,7 @@ export const ServiceProvider= ({ children } : { children: React.ReactNode }) => 
     const [roomService, setRoomService] = useState<RoomService>(new RoomService());
     const [loanPostService, setLoanPostService] = useState<LoanPostService>(new LoanPostService());
     const [transactionService, setTransactionService] = useState<TransactionService>(new TransactionService());
+    const [messageService, setMessageService] = useState<MessageService>(new MessageService());
 
     const [loading, setLoading] = useState(true);
 
@@ -31,6 +34,7 @@ export const ServiceProvider= ({ children } : { children: React.ReactNode }) => 
             const room = new RoomService();
             const loanPost = new LoanPostService();
             const transaction = new TransactionService();
+            const message = new MessageService();
 
             await Promise.all([
                 user.ensureInitialized(),
@@ -38,6 +42,7 @@ export const ServiceProvider= ({ children } : { children: React.ReactNode }) => 
                 room.ensureInitialized(),
                 loanPost.ensureInitialized(),
                 transaction.ensureInitialized(),
+                message.ensureInitialized(),
             ]);
 
             setUserService(user);
@@ -45,6 +50,7 @@ export const ServiceProvider= ({ children } : { children: React.ReactNode }) => 
             setRoomService(room);
             setLoanPostService(loanPost);
             setTransactionService(transaction);
+            setMessageService(message);
             setLoading(false);
         };
 
@@ -58,8 +64,10 @@ export const ServiceProvider= ({ children } : { children: React.ReactNode }) => 
             roomService: roomService,
             loanPostService: loanPostService,
             transactionService: transactionService,
+            messageService: messageService
+
         };
-    }, [userService, roomUserService, roomService, loanPostService, transactionService]);
+    }, [userService, roomUserService, roomService, loanPostService, transactionService, messageService]);
 
     if (loading) {
         return <div>Loading...</div>;

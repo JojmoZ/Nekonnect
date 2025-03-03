@@ -10,7 +10,7 @@ import { User as BackendUser } from "@/declarations/user/user.did";
 export class UserService extends BaseService {
 
 
-    private II_URL = import.meta.env.VITE_II_NETWORK == "ic" ? `https://identity.ic0.app/` : `http://${process.env.CANISTER_ID_INTERNET_IDENTITY}.localhost:4943/`;
+    private II_URL = import.meta.env.VITE_II_NETWORK != "ic" ? `https://identity.ic0.app/` : `http://${process.env.CANISTER_ID_INTERNET_IDENTITY}.localhost:4943/`;
     protected user!: ActorSubclass<_USERSERVICE>;
     constructor() {
         super();
@@ -75,12 +75,10 @@ export class UserService extends BaseService {
 
                         } catch (error) {
                             console.error("❌ Error fetching/creating user:", error);
-                            console.error("❌ Error fetching/creating user:", error);
                             reject(error);
                         }
                     },
                     onError: (err) => {
-                        console.error("❌ Internet Identity Login failed:", err);
                         console.error("❌ Internet Identity Login failed:", err);
                         reject(err);
                     },
@@ -115,7 +113,7 @@ export class UserService extends BaseService {
             // ✅ Convert `number[]` to `Uint8Array` if necessary
             return {
                 ...users[0],
-                faceEncoding: users[0].faceEncoding && users[0].faceEncoding.length > 0 && users[0].faceEncoding[0]
+                faceEncoding: users[0]?.faceEncoding && users[0].faceEncoding.length > 0 && users[0].faceEncoding[0]
                     ? [new Uint8Array(users[0].faceEncoding[0])] // ✅ Convert number[] to Uint8Array
                     : [], // ✅ Ensure `faceEncoding` is always defined
             } as AppUser;
@@ -166,6 +164,7 @@ export class UserService extends BaseService {
                 dob: user.dob,
                 nationality: user.nationality,
                 gender: user.gender,
+                email : user.email,
                 faceEncoding: user.faceEncoding && user.faceEncoding.length > 0 && user.faceEncoding[0]
                     ? [Array.from(user.faceEncoding[0])]
                     : [],
