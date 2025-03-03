@@ -5,6 +5,7 @@ import numpy as np
 import cv2
 from paddleocr import PaddleOCR, draw_ocr
 import re
+import face_recognition
 import base64
 app = Flask(__name__)
 CORS(app)
@@ -36,15 +37,16 @@ def verify_face():
     try:
         data = request.json
         image = decode_image(data["image"])
-        stored_encoding = np.array(data["encoding"])
-
+        stored_encoding = np.array(data["encoding"], dtype=np.float64)
         face_encodings = face_recognition.face_encodings(image)
-
-        if len(face_encodings) > 0:
-            match = face_recognition.compare_faces([stored_encoding], face_encodings[0])[0]
-            return jsonify({"success": True, "match": match})
-        else:
-            return jsonify({"success": False, "error": "No face found"})
+        print(f"Stored Encoding: {stored_encoding}")
+        print(f"New Encoding: {face_encodings[0]}")
+        if len(stored_encoding) != len(face_encodings[0]):
+            return jsonify({"success": False, "error": "Face encoding dimensions mismatch"})
+        if len(face_encodings) == 0:
+            return jsonify({"success": False, "error": "No face found in verification image"})
+        match = face_recognition.compare_faces([stored_encoding], face_encodings[0], tolerance=0.6)[0]
+        return jsonify({"success": True, "match": bool(match)})
     except Exception as e:
         return jsonify({"success": False, "error": str(e)})
     
