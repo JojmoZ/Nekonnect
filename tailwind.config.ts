@@ -28,7 +28,6 @@ export default {
   			background: 'hsl(var(--background))',
   			textColor: 'hsl(var(--text))',
   			foreground: 'hsl(var(--foreground))',
-  			linearGradient: {},
   			card: {
   				DEFAULT: 'hsl(var(--card))',
   				foreground: 'hsl(var(--card-foreground))'
@@ -74,7 +73,21 @@ export default {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
-  		}
+  		},
+		padding: {
+			'xs': '0.5rem',
+			'sm': '0.75rem',
+			'md': '1rem',
+			'lg': '1.25rem',
+			'xl': '1.5rem',
+			'2xl': '2rem',
+			'3xl': '3rem',
+			'4xl': '4rem'
+		},
+		backgroundImage: {
+			'primary-to-accent': 'linear-gradient(to right, hsl(var(--primary)), hsl(var(--accent)))',
+        	'primary-to-accent-hover': 'linear-gradient(to right, hsl(var(--primary) / 0.8), hsl(var(--accent) / 0.8))',
+		},
   	},
   	keyframes: {
   		'accordion-down': {

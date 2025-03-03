@@ -16,6 +16,10 @@
     box-sizing: border-box;
   }
 
+  * {
+    @apply border-border outline-ring/50;
+  }
+  
   :root {
     font-family: 'Geist Sans', Inter, Avenir, Helvetica, Arial, sans-serif;
     font-size: 16px;
@@ -39,7 +43,7 @@
     --card-foreground: 222 47% 11%;
     --popover: 0 0% 100%;
     --popover-foreground: 222 47% 11%;
-    --primary: 199 100% 50%;
+    --primary: 208 100% 50%;
     --primary-foreground: 210 40% 98%;
     --secondary: 220 14% 96%;
     --secondary-foreground: 222 47% 18%;
@@ -78,13 +82,11 @@
       --card-foreground: 214 32% 98%;
       --popover: 217 50% 11%;
       --popover-foreground: 214 32% 98%;
-      --primary: 200 100% 50%;
       --primary-foreground: 214 32% 98%;
       --secondary: 222 32% 18%;
       --secondary-foreground: 214 32% 98%;
       --muted: 222 32% 18%;
       --muted-foreground: 215 20% 65%;
-      --accent: 177 80% 49%;
       --accent-foreground: 214 32% 98%;
       --destructive: 0 63% 31%;
       --destructive-foreground: 214 32% 98%;
@@ -97,24 +99,32 @@
       --chart-4: 278 75% 58%;
       --chart-5: 338 77% 56%;
 
-      --sidebar-background: 222 32% 15%; /* Slightly lighter than main background */
-      --sidebar-foreground: 215 20% 85%; /* Softer than main foreground */
-      --sidebar-primary: 177 80% 49%; /* Use accent color to differentiate */
-      --sidebar-primary-foreground: 214 32% 98%; /* Keep readability */
-      --sidebar-accent: 217 50% 18%; /* Darker than main accent for contrast */
-      --sidebar-accent-foreground: 214 32% 98%; /* Same foreground */
-      --sidebar-border: 222 32% 22%; /* Slightly brighter than sidebar background */
-      --sidebar-ring: 177 80% 49%; /* Tie the focus ring to the accent */
-
+      --sidebar-background: 222 32% 15%;
+      --sidebar-foreground: 215 20% 85%;
+      --sidebar-primary: 177 80% 49%;
+      --sidebar-primary-foreground: 214 32% 98%;
+      --sidebar-accent: 217 50% 18%;
+      --sidebar-accent-foreground: 214 32% 98%;
+      --sidebar-border: 222 32% 22%;
+      --sidebar-ring: 177 80% 49%;
     }
   }
+
+  body {
+    @apply bg-background text-foreground min-h-[100vh] px-[16rem];
+  }
+  
+  img {
+    -webkit-user-drag: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+  }
 }
 
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
+@layer components {
+  
 }
+
+
