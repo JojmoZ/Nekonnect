@@ -16,7 +16,7 @@ const UserPage = () => {
     const fetchUserFaceEncoding = async () => {
         try {
             const user = await userService.me();
-            if (user.faceEncoding && user.faceEncoding.length > 0 && user.faceEncoding[0]) {
+            if (user && user.faceEncoding && user.faceEncoding.length > 0 && user.faceEncoding[0]) {
                 setStoredEncoding(Array.from(user.faceEncoding[0] as number[])); // ✅ Safe conversion
                 console.log(storedEncoding)
             } else {
