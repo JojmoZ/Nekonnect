@@ -14,9 +14,10 @@ interface StepperProps {
     steps: Step[];
     onSubmit: () => void;
     showProgress?: boolean;
+    loading?: boolean;
 }
 
-function Stepper({ steps, onSubmit, showProgress = true }: StepperProps) {
+function Stepper({ steps, onSubmit, showProgress = true, loading = false }: StepperProps) {
     const [currentStep, setCurrentStep] = useState(0);
 
     const handleNext = async () => {
@@ -60,7 +61,7 @@ function Stepper({ steps, onSubmit, showProgress = true }: StepperProps) {
                     Previous
                 </Button>
                 {currentStep === steps.length - 1 ? (
-                    <Button onClick={onSubmit}>Submit</Button>
+                    <Button onClick={onSubmit} disabled={loading}>{loading? "Submitting..." : "Submit"}</Button>
                 ) : (
                     <Button onClick={handleNext}>Next</Button>
                 )}

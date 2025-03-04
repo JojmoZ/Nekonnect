@@ -1,195 +1,84 @@
-import { useState, useRef, useEffect } from "react";
-import Webcam from "react-webcam"; 
-import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { userDto, userSchema } from "@/lib/model/dto/edit-user.dto";
-import { UserService } from "@/services/user.service";
-import { Input } from "@/components/ui/input";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router";
-
-const userService = new UserService();
+import Webcam from 'react-webcam';
+import { FormProvider } from 'react-hook-form';
+import { Button } from '@/components/ui/button';
+import { useNavigate } from 'react-router';
+import PersonalInformationForm from '@/components/custom/profile/personal-information-form';
+import Stepper from '@/components/stepper';
+import { useCaptureFace } from '@/hooks/user/use-capture-face';
+import { useEditProfile } from '@/hooks/user/use-edit-profile';
+import { useState } from 'react';
 
 export const EditProfilePage = () => {
-    const navigate = useNavigate();
-    const form = useForm<z.infer<typeof userSchema>>({
-        resolver: zodResolver(userSchema),
-        defaultValues: {
-            username: "",
-            dob: "",
-            nationality: "",
-            gender: "Other",
-            email: "",
-        },
-    });
+  const navigate = useNavigate();
 
-    
-    const [step, setStep] = useState(1); 
+  const {
+    webcamRef,
+    capturedFace,
+    captureFace,
+    faceEncoding,
+    handleCaptureSubmit,
+  } = useCaptureFace();
+  const { userForm, handleEdit } = useEditProfile({ faceEncoding });
+  const [loading, setLoading] = useState<boolean>(false);
 
-    
-    const webcamRef = useRef<Webcam | null>(null);
-    const [capturedFace, setCapturedFace] = useState<string | null>(null);
-    const [loading, setLoading] = useState<boolean>(false);
-
-    
-    const captureFace = async () => {
-        if (webcamRef.current) {
-            const imageSrc = webcamRef.current.getScreenshot(); 
-            setCapturedFace(imageSrc);
-        }
-    };
-
-    
-    const handleUserInfoSubmit = async (values: userDto) => {
-        setStep(2); 
-    };
-
-    
-    const handleFinalSubmit = async () => {
-        setLoading(true);
-        try {
-        let faceEncoding: [] | [Float64Array] = []; 
-
-        if (capturedFace) {
-            
-            const response = await fetch("http://127.0.0.1:5000/encode-face", {
-                method: "POST",
-                body: JSON.stringify({ image: capturedFace }),
-                headers: { "Content-Type": "application/json" },
-            });
-
-            const data = await response.json();
-            console.log("MY FACE",data)
-            if (data.success) {
-                faceEncoding = [new Float64Array(data.encoding)]; 
-            }
-        }
-        const user = await userService.me();
-        console.log("AFTER UINT8" , faceEncoding)
-        const userValues = form.getValues();
-        await userService.editUser({ ...userValues,internetIdentity: user!.internetIdentity!, faceEncoding });
-        navigate('/temp');
+  const handleFinalSubmit = async () => {
+    setLoading(true);
+    try {
+      await handleCaptureSubmit();
+      await handleEdit();
+      navigate('/temp');
     } catch (err) {
-        console.error("Error updating profile:", err);
+      console.error('Error updating profile:', err);
     }
-        setLoading(false);
-    };
+    setLoading(false);
+  };
 
-    return (
-        <Form {...form}>
-            {step === 1 && (
-                <form onSubmit={form.handleSubmit(handleUserInfoSubmit)}>
-                    {/* Username */}
-                    <FormField 
-                        control={form.control}
-                        name="username"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Username</FormLabel>
-                                <FormControl>
-                                    <Input placeholder="Username" {...field} />
-                                </FormControl>
-                            </FormItem>
-                        )}
-                    />
+  const steps = [
+    {
+      title: 'Step 1: User Information',
+      description: 'Enter your personal information.',
+      content: (
+        <FormProvider {...userForm}>
+          <PersonalInformationForm />
+        </FormProvider>
+      ),
+      onNext: async () => {
+        const isValid = await userForm.trigger();
+        return isValid;
+      },
+    },
+    {
+      title: 'Step 2: Face Capture',
+      description: 'Capture your face for verification.',
+      content: (
+        <div className="text-center">
+          <h2>Step 2: Face Capture</h2>
+          <Webcam ref={webcamRef} screenshotFormat="image/png" />
+          <br />
 
-                    {/* Date of Birth */}
-                    <FormField 
-                        control={form.control}
-                        name="dob"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Date of Birth</FormLabel>
-                                <FormControl>
-                                    <Input type="date" placeholder="YYYY-MM-DD" {...field} />
-                                </FormControl>
-                            </FormItem>
-                        )}
-                    />
+          <Button type="button" onClick={captureFace} className="mt-2">
+            Capture Face
+          </Button>
 
-                    {/* Nationality */}
-                    <FormField 
-                        control={form.control}
-                        name="nationality"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Nationality</FormLabel>
-                                <FormControl>
-                                    <Input placeholder="Nationality" {...field} />
-                                </FormControl>
-                            </FormItem>
-                        )}
-                    />
+          {/* Display Captured Face */}
+          {capturedFace && (
+            <div className="mt-4">
+              <h3>Captured Face Preview:</h3>
+              <img
+                src={capturedFace}
+                alt="Captured Face"
+                style={{ maxWidth: '200px' }}
+              />
+            </div>
+          )}
+        </div>
+      ),
+    },
+  ];
 
-                    {/* Gender Selection */}
-                    <FormField 
-                        control={form.control}
-                        name="gender"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Gender</FormLabel>
-                                <FormControl>
-                                    <select {...field} className="w-full p-2 border border-gray-300 rounded">
-                                        <option value="Male">Male</option>
-                                        <option value="Female">Female</option>
-                                        <option value="Other">Other</option>
-                                    </select>
-                                </FormControl>
-                            </FormItem>
-                        )}
-                    />
-
-                    {/* Email */}
-                    <FormField 
-                        control={form.control}
-                        name="email"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Email</FormLabel>
-                                <FormControl>
-                                    <Input type="email" placeholder="Email" {...field} />
-                                </FormControl>
-                            </FormItem>
-                        )}
-                    />
-
-                    {/* Next Button to Face Capture */}
-                    <Button type="submit" className="mt-4"> Next → Face Capture </Button>
-                </form>
-            )}
-
-            {/* Step 2: Face Capture */}
-            {step === 2 && (
-                <div className="text-center">
-                    <h2>Step 2: Face Capture</h2>
-                    <Webcam ref={webcamRef} screenshotFormat="image/png" />
-                    <br />
-
-                    <Button type="button" onClick={captureFace} className="mt-2">
-                        Capture Face
-                    </Button>
-
-                    {/* Display Captured Face */}
-                    {capturedFace && (
-                        <div className="mt-4">
-                            <h3>Captured Face Preview:</h3>
-                            <img src={capturedFace} alt="Captured Face" style={{ maxWidth: "200px" }} />
-                        </div>
-                    )}
-
-                    {/* Submit Final Data */}
-                    <Button 
-                        type="button" 
-                        onClick={handleFinalSubmit} 
-                        className="mt-4"
-                        disabled={loading}
-                    >
-                        {loading ? "Submitting..." : "Submit Profile"}
-                    </Button>
-                </div>
-            )}
-        </Form>
-    );
+  return (
+    <div>
+      <Stepper steps={steps} onSubmit={handleFinalSubmit} showProgress loading={loading} />
+    </div>
+  );
 };
