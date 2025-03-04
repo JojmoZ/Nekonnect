@@ -9,9 +9,11 @@ import { useCreateLoanPost } from '@/hooks/loan-post/use-create-loan-post';
 import { useState } from 'react';
 import SuccessDialog from '@/components/custom/success-dialog';
 import { useNavigate } from 'react-router';
+import { useVerifyFace } from '@/hooks/user/use-verify-face';
 
 function CreateLoanPostPage() {
   const { loanPostForm, assuranceForm, agreementForm, onCreate } = useCreateLoanPost();
+  const verificator =  useVerifyFace();
   const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState(false);
 
   const navigate = useNavigate();
@@ -63,10 +65,13 @@ function CreateLoanPostPage() {
       title: 'Step 3: Verification',
       description: 'We should verify you before proceeding.',
       content: (
-        <div>
-          <FaceRecognitionForm />
-        </div>
+          <FaceRecognitionForm verificator={verificator} />
       ),
+      onNext: async () => {
+        // Validate the face recognition result before proceeding
+        // return verificator.verificationResult;
+        return true;
+      }
     },
     {
       title: 'Step 4: Agreement',

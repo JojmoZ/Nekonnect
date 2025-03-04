@@ -1,13 +1,11 @@
 import { useRef, useState } from "react";
 import Webcam from "react-webcam";
-import useServiceContext from "../use-service-context";
 
 export function useCaptureFace() {
   const webcamRef = useRef<Webcam | null>(null);
   const [capturedFace, setCapturedFace] = useState<string | null>(null);
   const [faceEncoding, setFaceEncoding] = useState<[Float64Array] | []>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const { userService } = useServiceContext();
 
   const captureFace = async () => {
     if (webcamRef.current) {
