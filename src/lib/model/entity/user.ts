@@ -7,5 +7,6 @@ export interface User {
     nationality: string
     gender: string
     email: string
+    balance: number
     faceEncoding?: [] | [Float64Array | number[]];
 }

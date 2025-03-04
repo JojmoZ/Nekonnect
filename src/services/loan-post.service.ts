@@ -27,11 +27,13 @@ export class LoanPostService extends BaseService {
     }
 
     async getActivePosts(): Promise<LoanPost[]> {
-        return await this.loanPost.getActivePosts();
+        const posts = await this.loanPost.getPosts();
+        return posts.filter(post => post.status === 'Funding');
     }
 
     async getUnverifiedPosts(): Promise<LoanPost[]> {
-        return await this.loanPost.getUnverifiedPosts();
+        const posts = await this.loanPost.getPosts();
+        return posts.filter(post => post.status === 'Verifying');
     }
 
     async acceptPost(loanId: string): Promise<String> {

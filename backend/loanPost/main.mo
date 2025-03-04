@@ -151,6 +151,8 @@ actor class LoanPostMain() {
                     return "Amount exceeds the goal! Raised: " # Float.toText(post.raised);
                 };
 
+                // Should I cancel the timer?
+
                 if (post.raised + amount == post.goal) {
                     status := "Repaying";
                 };
@@ -207,5 +209,5 @@ actor class LoanPostMain() {
 
     // TODO: Loan duration + goal + interest calculation
 
-
+    // TODO: Repay loan
 }

@@ -37,6 +37,7 @@ export class UserService extends BaseService {
                                     nationality: "",
                                     gender: "Other",
                                     email: "",
+                                    balance: 1000,
                                     faceEncoding: [],
                                 });
 
@@ -135,6 +136,7 @@ export class UserService extends BaseService {
                 nationality: user.nationality,
                 gender: user.gender,
                 email: user.email,
+                balance: user.balance,
                 faceEncoding: user.faceEncoding && user.faceEncoding.length > 0
                     ? [Array.from(user.faceEncoding[0] as Float64Array)]
                     : [],
@@ -165,6 +167,7 @@ export class UserService extends BaseService {
                 nationality: user.nationality,
                 gender: user.gender,
                 email : user.email,
+                balance: user.balance,
                 faceEncoding: user.faceEncoding && user.faceEncoding.length > 0 && user.faceEncoding[0]
                     ? [Array.from(user.faceEncoding[0])]
                     : [],
