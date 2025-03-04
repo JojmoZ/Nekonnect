@@ -5,6 +5,8 @@ import UserType "../user/types";
 
 module {
 
+    public type User = UserType.User;
+
     public type Message = {
         message: Text;
         user_id: Principal;
@@ -14,7 +16,7 @@ module {
 
     public type MessageResponse = {
         message: Text;
-        user : ?UserType.User;
+        user : ?User;
         room_id : Text;
         created_at : Time.Time;
     }

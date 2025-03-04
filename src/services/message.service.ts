@@ -1,6 +1,6 @@
 import { _SERVICE as _MESSAGESERVICE, MessageResponse } from "@/declarations/message/message.did";
 import { ActorSubclass } from "@dfinity/agent";
-import { BaseService, createMessageActor, messageCanisterId } from "./base.service";
+import { BaseService, createMessageActor, messageCanisterId, userCanisterId } from "./base.service";
 
 export class MessageService extends BaseService {
     protected message! : ActorSubclass<_MESSAGESERVICE>
@@ -12,7 +12,7 @@ export class MessageService extends BaseService {
     }
 
     async getMessagesByRoomId(roomId : string): Promise<MessageResponse[]> {
-        return await this.message.getMessagesByRoomId(roomId);
+        return await this.message.getMessagesByRoomId(roomId, userCanisterId);
     }
 
 }

@@ -1,11 +1,13 @@
 import { Button } from "@/components/ui/button";
-import { FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
+import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { useFormContext } from "react-hook-form";
 
 function PersonalInformationForm() {
 
   const form = useFormContext();
+  const file = form.watch("image");
 
   return (
     <form className="space-y-8">
@@ -82,6 +84,35 @@ function PersonalInformationForm() {
             <FormControl>
               <Input type="email" placeholder="Email" {...field} />
             </FormControl>
+          </FormItem>
+        )}
+      />
+
+      {/* Profile Picture */}
+      <FormField
+        control={form.control}
+        name="image"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Profile Picture</FormLabel>
+            <FormControl>
+              <Input
+                type="file"
+                accept="image/*"
+                onChange={(e) => {
+                  if (e.target.files && e.target.files.length > 0) {
+                    field.onChange(e.target.files[0]);
+                  }
+                }}
+              />
+            </FormControl>
+            <div className="mt-4">
+              <Label>
+                Selected File: {file ? file.name : 'No file is selected.'}
+              </Label>
+            </div>
+            <FormDescription>This is your profile picture.</FormDescription>
+            <FormMessage />
           </FormItem>
         )}
       />

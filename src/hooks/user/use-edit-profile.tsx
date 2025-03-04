@@ -6,6 +6,7 @@ import { set, z } from "zod";
 import useServiceContext from "../use-service-context";
 import { User } from "@/lib/model/entity/user";
 import { useNavigate } from "react-router";
+import { serializeImage } from "@/lib/utils/Image";
 
 export function useEditProfile({ faceEncoding }: { faceEncoding: [Float64Array] | [] }) {
 
@@ -21,6 +22,7 @@ export function useEditProfile({ faceEncoding }: { faceEncoding: [Float64Array] 
           nationality: "",
           gender: "Other",
           email: "",
+          image: undefined,
       },
   });
 
@@ -51,6 +53,8 @@ export function useEditProfile({ faceEncoding }: { faceEncoding: [Float64Array] 
     await userService.editUser({
         ...userValues,
         internetIdentity: user!.internetIdentity!,
+        balance: user!.balance,
+        profilePicture: user!.profilePicture,
         faceEncoding
     });
   }

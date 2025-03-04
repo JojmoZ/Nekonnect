@@ -212,9 +212,10 @@ actor class LoanPostMain() {
 
 
     // TODO: Loan duration + goal + interest calculation
-    public func calculateMultiplier(loanDuration: Nat64, goal: Float) : Float {
-        // Calculation
-    }
+    // public func calculateMultiplier(loanDuration: Nat64, goal: Float) : Float {
+    //     // Calculation
+    //     return 0
+    // }
 
     // TODO: Repay loan
 }
