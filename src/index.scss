@@ -19,7 +19,7 @@
   * {
     @apply border-border outline-ring/50;
   }
-  
+
   :root {
     font-family: 'Geist Sans', Inter, Avenir, Helvetica, Arial, sans-serif;
     font-size: 16px;
@@ -112,7 +112,7 @@
   body {
     @apply bg-background text-foreground min-h-[100vh];
   }
-  
+
   img {
     -webkit-user-drag: none;
     user-select: none;
@@ -123,7 +123,7 @@
 }
 
 @layer components {
-  
+
 }
 
 

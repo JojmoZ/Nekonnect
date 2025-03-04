@@ -33,15 +33,15 @@ export default {
   				foreground: 'hsl(var(--card-foreground))'
   			},
   			popover: {
-  				DEFAULT: 'hsl(var(--popover)',
+  				DEFAULT: 'hsl(var(--popover))',
   				foreground: 'hsl(var(--popover-foreground))'
   			},
   			muted: {
-  				DEFAULT: 'hsl(var(--muted)',
+  				DEFAULT: 'hsl(var(--muted))',
   				foreground: 'hsl(var(--muted-foreground))'
   			},
   			destructive: {
-  				DEFAULT: 'hsl(var(--destructive)',
+  				DEFAULT: 'hsl(var(--destructive))',
   				foreground: 'hsl(var(--destructive-foreground))'
   			},
   			border: 'hsl(var(--border))',

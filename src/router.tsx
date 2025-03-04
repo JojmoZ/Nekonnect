@@ -14,6 +14,8 @@ import MainLayout from '@/pages/main-layout';
 import TransactionHistoryPage from './pages/(private)/transaction-history';
 import LoginPage from './pages/LoginPage';
 import UserPage from './pages/UserPage';
+import Landing from '@/pages/(public)/landing';
+import App from '@/pages/(public)/Main'
 
 const router = createBrowserRouter([
   {
@@ -35,7 +37,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Home />,
+        element: <Landing />,
       },
       {
         path: '/create',
