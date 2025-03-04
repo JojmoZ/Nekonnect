@@ -14,8 +14,8 @@ export class LoanPostService extends BaseService {
         this.initialized = this.initialization();
     }
 
-    async createLoanPost(title: string, description: string, goal: number, category: string, loanDuration: bigint, assuranceType: string, assuranceFile: Uint8Array) {
-        return await this.loanPost.createPost(title, description, goal, category,await this.getCallerPrincipal(), loanDuration, assuranceType, assuranceFile);
+    async createLoanPost(title: string, description: string, image: Uint8Array, goal: number, category: string, loanDuration: bigint, assuranceType: string, assuranceFile: Uint8Array) {
+        return await this.loanPost.createPost(title, description, image, goal, category,await this.getCallerPrincipal(), loanDuration, assuranceType, assuranceFile);
     }
 
     async getLoanPosts(): Promise<LoanPost[]> {

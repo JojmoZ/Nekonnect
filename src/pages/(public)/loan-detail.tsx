@@ -30,6 +30,7 @@ import { Room } from '@/lib/model/entity/room';
 import { room } from '@/declarations/room';
 import { GetRoomByPostIdResponse } from '@/lib/model/dto/response/get-room-by-post-id-response';
 import { GetRoomsResponse } from '@/declarations/room/room.did';
+import { deserializeImage } from '@/lib/utils/Image';
 
 const categoryIcons = {
   All: LayoutGrid,
@@ -125,6 +126,7 @@ function LoanDetailPage() {
                 </div>
               </CardHeader>
               <CardContent>
+
                 <p className="text-xl mb-6">{loanPost.description}</p>
                 <div className="space-y-4">
                   <Progress value={progress} className="h-4" />
@@ -136,6 +138,10 @@ function LoanDetailPage() {
                     {daysLeft(loanPost.verifiedAt, loanPost.postDuration).toLocaleString()} days left to fund this project
                   </p>
                 </div>
+                <img
+                  src={deserializeImage(loanPost.image)}
+                  alt={loanPost.title}
+                  className="w-full h-64 object-cover rounded-lg" />
               </CardContent>
             </Card>
             <Card>

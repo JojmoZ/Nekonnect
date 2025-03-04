@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import useServiceContext from "../use-service-context";
 import { z } from "zod";
+import { serializeImage } from "@/lib/utils/Image";
 
 export function useCreateLoanPost() {
     const { loanPostService } = useServiceContext();
@@ -14,6 +15,7 @@ export function useCreateLoanPost() {
         defaultValues: {
             title: '',
             description: '',
+            image: undefined,
             goal: 0,
             category: '',
             loanDuration: 0,
@@ -41,18 +43,16 @@ export function useCreateLoanPost() {
 
         const loanPostValues = loanPostForm.getValues();
         const assuranceValues = assuranceForm.getValues();
-
-        const arrayBuffer = await assuranceValues.assurance_file.arrayBuffer();
-        const uint8Array = new Uint8Array(arrayBuffer);
-
+        
         return await loanPostService.createLoanPost(
             loanPostValues.title,
             loanPostValues.description,
+            await serializeImage(loanPostValues.image),
             Number(loanPostValues.goal),
             loanPostValues.category,
             BigInt(loanPostValues.loanDuration),
             assuranceValues.assurance_type,
-            uint8Array,
+            await serializeImage(assuranceValues.assurance_file),
         );
     };
 

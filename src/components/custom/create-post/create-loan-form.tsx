@@ -2,12 +2,14 @@ import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessa
 import { Input } from "@/components/ui/input";
 import { useFormContext } from "react-hook-form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
 
 const categories = ["Education", "Community", "Technology", "Environment", "Arts & Culture", "Wellness"]
 
 function CreateLoanForm() {
 
-    const form = useFormContext(); 
+    const form = useFormContext();
+    const file = form.watch("assurance_file");
 
     return (
         <>
@@ -40,6 +42,31 @@ function CreateLoanForm() {
                             <FormDescription>
                                 This is your post description.
                             </FormDescription>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
+                    name="image"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Image File</FormLabel>
+                            <FormControl>
+                                <Input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={(e) => {
+                                        if (e.target.files && e.target.files.length > 0) {
+                                            field.onChange(e.target.files[0]);
+                                        }
+                                    }}
+                                />
+                            </FormControl>
+                            <div className="mt-4">
+                                <Label>Selected File: {file ? file.name : "No file is selected."}</Label>
+                            </div>
+                            <FormDescription>This is your post image.</FormDescription>
                             <FormMessage />
                         </FormItem>
                     )}

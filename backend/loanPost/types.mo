@@ -13,8 +13,10 @@ module {
         loanId: Text;
         title: Text;
         description: Text;
+        image: [Nat8];
         goal: Float;
         raised: Float;
+        multiplier: Float;
         createdAt: Time.Time;
         verifiedAt: Time.Time;
         postDuration: Nat64;

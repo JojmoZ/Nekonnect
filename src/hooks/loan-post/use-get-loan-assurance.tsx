@@ -1,4 +1,5 @@
 import { LoanAssurance } from "@/lib/model/entity/loan-assurance";
+import { deserializeImage } from "@/lib/utils/Image";
 import { LoanPostService } from "@/services/loan-post.service";
 import { useEffect, useState } from "react";
 
@@ -17,10 +18,7 @@ export function useGetLoanAssurance(assuranceId: string) {
 
             const content: any = response?.assuranceFile;
             if (content.length > 0) {
-                const blob = new Blob([new Uint8Array(content)]);
-                const imageUrl = URL.createObjectURL(blob);
-
-                setImageUrl(imageUrl);
+                setImageUrl(deserializeImage(content));
             }
         };
 

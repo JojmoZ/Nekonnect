@@ -5,6 +5,7 @@ import List "mo:base/List";
 import Float "mo:base/Float";
 import Error "mo:base/Error";
 import Timer "mo:base/Timer";
+import Nat8 "mo:base/Nat8";
 import Types "types";
 import Utils "../utils";
 import TransactionModule "../transaction/interface";
@@ -37,6 +38,7 @@ actor class LoanPostMain() {
     public shared ({ caller }) func createPost(
         title: Text,
         description: Text,
+        image: [Nat8],
         goal: Float,
         category: Text,
         debtor: Principal,
@@ -51,8 +53,10 @@ actor class LoanPostMain() {
             loanId = id;
             title = title;
             description = description;
+            image = image;
             goal = goal;
             raised = 0.0;
+            multiplier = 1.0;
             postDuration = 30;
             loanDuration = loanDuration;
             createdAt = Time.now();
@@ -168,7 +172,7 @@ actor class LoanPostMain() {
         };
     };
 
-    // TODO: Not fulfilled post, update status
+    // Not fulfilled post, update status
     public func checkPostGoal(loanId: Text, transactionCanisterId: Text): async () {
 
         switch(findPost(loanId)) {
@@ -184,6 +188,7 @@ actor class LoanPostMain() {
                 } else {
                     loanStatus := "Repaying";
                     transactionStatus := "Repaying";
+                    // TODO: Refund transactions
                 };
 
                 let updatedPost : Types.LoanPost = {
@@ -201,13 +206,15 @@ actor class LoanPostMain() {
                     let updateResult = await transactionActor.updateTransactionStatus(transaction.transactionId, transactionStatus);
                 };
 
-                // TODO: Refund transactions
             };
         };
-    }
+    };
 
 
     // TODO: Loan duration + goal + interest calculation
+    public func calculateMultiplier(loanDuration: Nat64, goal: Float) : Float {
+        // Calculation
+    }
 
     // TODO: Repay loan
 }
