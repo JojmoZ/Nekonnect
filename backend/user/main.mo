@@ -6,7 +6,7 @@ import Types "types";
 
 actor class UserMain() {
 
-  var users: List.List<Types.User> = List.nil<Types.User>();
+  stable var users: List.List<Types.User> = List.nil<Types.User>();
 
   public func getUserByPrincipal(identity : Principal) : async ?Types.User {
     List.find<Types.User>(users, func(user: Types.User) : Bool { user.internetIdentity == identity });

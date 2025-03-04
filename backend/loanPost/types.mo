@@ -1,10 +1,13 @@
 import Nat64 "mo:base/Nat64";
 import Nat8 "mo:base/Nat8";
 import Time "mo:base/Time";
+import TransactionTypes "../transaction/types";
 
 module {
 
     let _status = ["Verifying", "Funding", "Repaying", "Repaid"];
+
+    public type Transaction = TransactionTypes.Transaction;
 
     public type LoanPost = {
         loanId: Text;
