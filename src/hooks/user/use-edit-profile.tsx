@@ -7,10 +7,12 @@ import useServiceContext from "../use-service-context";
 import { User } from "@/lib/model/entity/user";
 import { useNavigate } from "react-router";
 import { serializeImage } from "@/lib/utils/Image";
+import { useGetAuthenticated } from "./use-get-authenticated";
 
 export function useEditProfile({ faceEncoding }: { faceEncoding: [Float64Array] | [] }) {
 
   const { userService } = useServiceContext();
+  const { me } = useGetAuthenticated();
   const [user, setUser] = useState<User | null>(null);
   const navigate = useNavigate();
 
@@ -26,9 +28,8 @@ export function useEditProfile({ faceEncoding }: { faceEncoding: [Float64Array] 
       },
   });
 
-  const fetchUser = async () => {
-    await userService.me().then((user) => {
-      setUser(user);
+  const fetchUser = () => {
+    setUser(me);
       if (user) {
         form.setValue('username', user.username || '');
         form.setValue('dob', user.dob || '');
@@ -38,10 +39,7 @@ export function useEditProfile({ faceEncoding }: { faceEncoding: [Float64Array] 
           (user.gender as 'Male' | 'Female' | 'Other') || 'Other',
         );
         form.setValue('email', user.email || '');
-      } else {
-        navigate('/login');
-      }
-    });
+      } 
   }
 
   useEffect(() => {

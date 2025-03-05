@@ -4,8 +4,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Mail, MapPin, Calendar, CreditCard, User2, Edit, Settings } from "lucide-react"
 import { Separator } from "@/components/ui/separator"
 import { Badge } from "@/components/ui/badge"
+import { useNavigate } from "react-router"
+import { RouteEnum } from "@/lib/enum/router-enum"
 
 export default function ProfilePage() {
+
+    const navigate = useNavigate();
+
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 p-4 md:p-8">
             <div className="max-w-6xl mx-auto">
@@ -18,7 +23,7 @@ export default function ProfilePage() {
                         </Avatar>
                     </div>
                     <div className="absolute bottom-4 right-4 md:bottom-8 md:right-8 flex gap-2">
-                        <Button size="sm" variant="outline" className="bg-background backdrop-blur-sm text-foreground hover:bg-background/80">
+                        <Button size="sm" variant="outline" className="bg-background backdrop-blur-sm text-foreground hover:bg-background/80" onClick={() => navigate(RouteEnum.EDIT_PROFILE)}>
                             <Edit className="h-4 w-4 mr-2" /> Edit Profile
                         </Button>
                         <Button size="sm" variant="outline" className="bg-background backdrop-blur-sm text-foreground hover:bg-background/80">
@@ -104,7 +109,7 @@ export default function ProfilePage() {
                                     </div>
                                 </div>
                                 <div className="mt-4">
-                                    <Button className="w-full">Find a Loan</Button>
+                                    <Button className="w-full" onClick={() => navigate(RouteEnum.BROWSE)}>Find a Loan</Button>
                                 </div>
                             </CardContent>
                         </Card>
@@ -136,7 +141,7 @@ export default function ProfilePage() {
                                         </div>
                                     ))}
                                     <div className="flex justify-center w-full">
-                                        <Button variant="outline" className="w-full" >View All</Button>
+                                        <Button variant="outline" className="w-full" onClick={() => navigate(RouteEnum.TRANSACTION_HISTORY)}>View All</Button>
                                     </div>
                                 </div>
                             </CardContent>

@@ -14,6 +14,7 @@ import Link from 'next/link';
 import { useGetAuthenticated } from '@/hooks/user/use-get-authenticated';
 import useServiceContext from '@/hooks/use-service-context';
 import { useNavigate } from 'react-router';
+import { RouteEnum } from '@/lib/enum/router-enum';
 
 const components: { title: string; href: string; description: string }[] = [
   {
@@ -79,7 +80,7 @@ function Header() {
             </Link>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <Link href="/docs" legacyBehavior passHref>
+            <Link href={RouteEnum.BROWSE} legacyBehavior passHref>
               <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                 For Lenders
               </NavigationMenuLink>

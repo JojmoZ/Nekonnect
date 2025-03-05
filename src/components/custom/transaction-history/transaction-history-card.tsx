@@ -1,4 +1,5 @@
 import { Card } from '@/components/ui/card';
+import { useGetLoanPost } from '@/hooks/loan-post/use-get-loan-post';
 import { Transaction } from '@/lib/model/entity/transaction';
 import { timeToDateString } from '@/lib/utils/DateString';
 
@@ -7,11 +8,14 @@ export function TransactionHistoryCard({
 }: {
   transaction: Transaction;
 }) {
+
+  const { loanPost } = useGetLoanPost(transaction.loanId);
+
   return (
     <Card className="p-4 w-full shadow-lg rounded-lg overflow-hidden flex justify-between items-center">
       <div className="flex flex-col gap-y-1">
-        {/* <p className="text-gray-900 font-semibold">Loan {transaction.loanId}</p> */}
-        <p className="text-gray-900 font-semibold text-lg">Loan Ganti Woe</p>
+        <p className="text-foreground font-semibold">Loan {transaction.loanId}</p>
+        <p className="text-foreground font-semibold text-lg">{loanPost?.title}</p>
         <p className="text-gray-500 text-sm">
           {timeToDateString(transaction.date)}
         </p>

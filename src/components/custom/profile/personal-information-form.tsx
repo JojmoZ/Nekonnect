@@ -2,7 +2,10 @@ import { Button } from "@/components/ui/button";
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useFormContext } from "react-hook-form";
+
+const genders = ["Male", "Female", "Other"];
 
 function PersonalInformationForm() {
 
@@ -21,6 +24,7 @@ function PersonalInformationForm() {
             <FormControl>
               <Input placeholder="Username" {...field} />
             </FormControl>
+            <FormMessage />
           </FormItem>
         )}
       />
@@ -35,6 +39,7 @@ function PersonalInformationForm() {
             <FormControl>
               <Input type="date" placeholder="YYYY-MM-DD" {...field} />
             </FormControl>
+            <FormMessage />
           </FormItem>
         )}
       />
@@ -49,6 +54,7 @@ function PersonalInformationForm() {
             <FormControl>
               <Input placeholder="Nationality" {...field} />
             </FormControl>
+            <FormMessage />
           </FormItem>
         )}
       />
@@ -56,20 +62,25 @@ function PersonalInformationForm() {
       {/* Gender Selection */}
       <FormField
         control={form.control}
-        name="gender"
+        name="category"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Gender</FormLabel>
-            <FormControl>
-              <select
-                {...field}
-                className="w-full p-2 border border-gray-300 rounded"
-              >
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Other">Other</option>
-              </select>
-            </FormControl>
+            <FormLabel>Category</FormLabel>
+            <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <FormControl>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select a category" />
+                </SelectTrigger>
+              </FormControl>
+              <SelectContent>
+                {genders.map((gender) => (
+                  <SelectItem key={gender} value={gender}>
+                    {gender}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <FormMessage />
           </FormItem>
         )}
       />
@@ -84,6 +95,7 @@ function PersonalInformationForm() {
             <FormControl>
               <Input type="email" placeholder="Email" {...field} />
             </FormControl>
+            <FormMessage />
           </FormItem>
         )}
       />
