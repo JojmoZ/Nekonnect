@@ -69,7 +69,7 @@ function Header() {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-20 items-center">
-        <Logo className="h-10" />
+        <Logo className="h-12" />
         <NavigationMenu className="ml-auto hidden gap-6 md:flex">
           <NavigationMenuList>
             {/* TODO: reroute */}
