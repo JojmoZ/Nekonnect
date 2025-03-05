@@ -7,6 +7,7 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import { Link } from 'react-router';
+import { RouteEnum } from '@/lib/enum/router-enum';
 
 const faqData = [
   {
@@ -45,20 +46,20 @@ export function CreateLoanLanding() {
       </div>
 
       <div className="relative w-full flex justify-end px-10">
-        <Card className="absolute -bottom-10 right-10 w-96 p-6 bg-white shadow-2xl rounded-lg">
-          <p className="text-gray-700 text-lg">
+        <Card className="absolute -bottom-10 right-10 w-96 p-6 bg-background shadow-2xl rounded-lg">
+          <p className="text-foreground text-lg">
             Get the financial support you need with our easy loan application
             process.
           </p>
-          <Link to="/create">
-            <Button className="mt-4 px-6 py-3 text-lg bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow-md transition-all">
+          <Link to={RouteEnum.CREATE_POST}>
+            <Button className="mt-4 px-6 py-3 text-lg bg-primary-to-accent hover:bg-primary-to-accent-hover text-white rounded-lg shadow-md transition-all">
               Create a Loan
             </Button>
           </Link>
         </Card>
       </div>
-      <div className="w-full max-w-6xl mt-24 text-center">
-        <h2 className="text-3xl font-bold text-gray-800 mb-6">
+      <div className="w-full max-w-6xl mt-24 mb-24 text-center">
+        <h2 className="text-3xl font-bold text-foreground mb-6">
           Frequently Asked Questions
         </h2>
         <Accordion type="single" collapsible className="w-full text-left">
@@ -66,12 +67,12 @@ export function CreateLoanLanding() {
             <AccordionItem
               key={id}
               value={id}
-              className="border-b border-gray-200"
+              className="border-b border-foreground"
             >
-              <AccordionTrigger className="text-lg font-semibold text-gray-900">
+              <AccordionTrigger className="text-lg font-semibold text-foreground">
                 {question}
               </AccordionTrigger>
-              <AccordionContent className="text-gray-700">
+              <AccordionContent className="text-foreground">
                 {answer}
               </AccordionContent>
             </AccordionItem>
