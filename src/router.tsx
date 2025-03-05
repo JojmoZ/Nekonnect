@@ -76,7 +76,7 @@ const router = createBrowserRouter([
         element: <TempPage />,
       },
       {
-        path: '/create-loan-landing',
+        path: RouteEnum.BORROWER,
         element: <CreateLoanLanding />,
       },
       {
