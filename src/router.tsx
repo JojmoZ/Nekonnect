@@ -14,6 +14,7 @@ import MainLayout from '@/pages/main-layout';
 import TransactionHistoryPage from './pages/(private)/transaction-history';
 import LoginPage from './pages/LoginPage';
 import UserPage from './pages/UserPage';
+import { CreateLoanLanding } from './pages/(public)/create-loan-landing';
 import Landing from '@/pages/(public)/landing';
 import App from '@/pages/(public)/Main'
 
@@ -52,10 +53,6 @@ const router = createBrowserRouter([
         element: <ChatPage />,
       },
       {
-        path: '/temp2',
-        element: <TempPage />,
-      },
-      {
         path: '/post-verification',
         element: <PostVerificationPage />,
       },
@@ -68,17 +65,17 @@ const router = createBrowserRouter([
         element: <TransactionHistoryPage />,
       },
       {
-        path:"/temp",
-        element: <UserPage/>
+        path: '/temp',
+        element: <UserPage />,
       },
       {
-        path: "/temp2",
-        element: <TempPage/>
+        path: '/temp2',
+        element: <TempPage />,
       },
       {
-        path:"/temp",
-        element: <UserPage/>
-      }
+        path: '/create-loan-landing',
+        element: <CreateLoanLanding />,
+      },
     ],
   },
   {
