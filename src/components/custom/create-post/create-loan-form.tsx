@@ -9,7 +9,7 @@ const categories = ["Education", "Community", "Technology", "Environment", "Arts
 function CreateLoanForm() {
 
     const form = useFormContext();
-    const file = form.watch("assurance_file");
+    const file = form.watch("image");
 
     return (
         <>
@@ -21,7 +21,7 @@ function CreateLoanForm() {
                         <FormItem>
                             <FormLabel>Title</FormLabel>
                             <FormControl>
-                                <Input placeholder="shadcn" {...field} />
+                                <Input placeholder="Title" {...field} />
                             </FormControl>
                             <FormDescription>
                                 This is your post title.
@@ -37,7 +37,7 @@ function CreateLoanForm() {
                         <FormItem>
                             <FormLabel>Description</FormLabel>
                             <FormControl>
-                                <Input placeholder="shadcn" {...field} />
+                                <Input placeholder="Description" {...field} />
                             </FormControl>
                             <FormDescription>
                                 This is your post description.

@@ -15,6 +15,7 @@ import { useGetAuthenticated } from '@/hooks/user/use-get-authenticated';
 import useServiceContext from '@/hooks/use-service-context';
 import { useNavigate } from 'react-router';
 import { RouteEnum } from '@/lib/enum/router-enum';
+import { toast } from 'sonner';
 
 const components: { title: string; href: string; description: string }[] = [
   {
@@ -122,14 +123,42 @@ const for_admin: { title: string; href: string; description: string }[] = [
 
 function Header() {
   const navigate = useNavigate();
-  const { isAuthenticated } = useGetAuthenticated();
+  const { isAuthenticated, fetch } = useGetAuthenticated();
   const { userService } = useServiceContext();
   const logout = () => {
-    userService.logout();
+    toast.promise(userService.logout(), {
+      loading: 'Logging out...',
+      success: () => {
+        fetch();
+        return 'Logged out successfully.';
+      },
+      error: 'Failed to log out.',
+    });
   };
 
-  const redirect = () => {
-    navigate('/login');
+  const handleIIlogin = async () => {
+    try {
+      const loggedInUser = await userService.login();
+
+      if (loggedInUser) {
+        console.log('Logged in user:', loggedInUser);
+        fetch();
+
+        if (!loggedInUser.username || loggedInUser.username.trim() === '') {
+          console.log('Redirecting to edit profile...');
+
+          navigate('/edit-profile'); // No username → go to edit profile
+        } else {
+          console.log('Redirecting to temp...');
+          navigate('/home'); // Username exists → go to temp
+        }
+      } else {
+        console.log('Failed to retrieve user information.');
+      }
+    } catch (err) {
+      console.error('Auth error:', err);
+      console.log('Something went wrong. Try again.');
+    }
   };
 
   return (
@@ -182,26 +211,18 @@ function Header() {
               </NavigationMenu>
             ))}
             <NavigationMenuItem>
-              <Link href="/docs" legacyBehavior passHref>
-                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                  About Us
-                </NavigationMenuLink>
-              </Link>
+              {!isAuthenticated ? (
+                <Button variant="gradient" onClick={handleIIlogin}>
+                  Sign In
+                </Button>
+              ) : (
+                <Button variant="gradient" onClick={logout}>
+                  Log out
+                </Button>
+              )}
             </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>
-
-        <div className="ml-auto flex items-center gap-4 md:ml-4">
-          {!isAuthenticated ? (
-            <Button variant="gradient" onClick={redirect}>
-              Sign In
-            </Button>
-          ) : (
-            <Button variant="gradient" onClick={logout}>
-              Log out
-            </Button>
-          )}
-        </div>
       </div>
     </header>
   );

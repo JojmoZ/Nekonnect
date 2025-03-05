@@ -4,7 +4,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useFormContext } from "react-hook-form";
 
-const types = ["Passport", "Driver's License", "Voter's Card", "National ID Card"];
+const types = ["Land Certificate", "Business License", "Passport", "Vehicle Registration", "Other"];
 
 function AssuranceForm() {
 

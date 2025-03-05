@@ -62,14 +62,14 @@ function PersonalInformationForm() {
       {/* Gender Selection */}
       <FormField
         control={form.control}
-        name="category"
+        name="gender"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Category</FormLabel>
+            <FormLabel>Gender</FormLabel>
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select a category" />
+                  <SelectValue placeholder="Select a gender" />
                 </SelectTrigger>
               </FormControl>
               <SelectContent>

@@ -7,6 +7,7 @@ import Stepper from '@/components/stepper';
 import { useCaptureFace } from '@/hooks/user/use-capture-face';
 import { useEditProfile } from '@/hooks/user/use-edit-profile';
 import { useState } from 'react';
+import { User } from 'lucide-react';
 
 export const EditProfilePage = () => {
   const navigate = useNavigate();
@@ -20,6 +21,7 @@ export const EditProfilePage = () => {
   } = useCaptureFace();
   const { userForm, handleEdit } = useEditProfile({ faceEncoding });
   const [loading, setLoading] = useState<boolean>(false);
+  const [cameraAvailable, setCameraAvailable] = useState<boolean>(true);
 
   const handleFinalSubmit = async () => {
     setLoading(true);
@@ -51,23 +53,47 @@ export const EditProfilePage = () => {
       title: 'Step 2: Face Capture',
       description: 'Capture your face for verification.',
       content: (
-        <div className="text-center">
-          <h2>Step 2: Face Capture</h2>
-          <Webcam ref={webcamRef} screenshotFormat="image/png" />
-          <br />
+        <div className="">
+          <h2 className="text-lg font-semibold">Face Recognition</h2>
+          <p className="text-gray-600 text-sm">
+            Please ensure your camera is active.
+          </p>
+          {cameraAvailable && (
+            <Webcam
+              ref={webcamRef}
+              className="w-full my-3 rounded-lg flex items-center justify-center bg-gray-50 border-2 border-gray-100"
+              screenshotFormat="image/png"
+              videoConstraints={{
+                width: 1280,
+                height: 720,
+                facingMode: 'user',
+              }}
+              onUserMedia={() => setCameraAvailable(true)}
+              onUserMediaError={() => setCameraAvailable(false)}
+            />
+          )}
 
-          <Button type="button" onClick={captureFace} className="mt-2">
+          {!cameraAvailable && (
+            <div className="w-full my-3 rounded-lg flex items-center justify-center bg-gray-50 border-2 border-gray-100">
+              <User className="text-gray-300 w-16 h-16" />
+              <p className="ml-6 text-red-500 text-sm">
+                Camera is not detected. Please allow camera access.
+              </p>
+            </div>
+          )}
+
+          <Button type="button" onClick={captureFace} className="mt-2 w-full">
             Capture Face
           </Button>
 
           {/* Display Captured Face */}
           {capturedFace && (
-            <div className="mt-4">
-              <h3>Captured Face Preview:</h3>
+            <div className="mt-4 space-y-2">
+              <h2 className="text-lg font-semibold">Captured Face Preview: </h2>
               <img
                 src={capturedFace}
                 alt="Captured Face"
-                style={{ maxWidth: '200px' }}
+                className='w-full rounded-lg'
               />
             </div>
           )}

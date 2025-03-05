@@ -8,13 +8,16 @@ export const useGetAuthenticated = () => {
     const [ me, setMe ] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
 
-    
-    useEffect(() => {
+    const fetch = () => {
         userService.me().then(user => {
             setMe(user);
             setIsAuthenticated(user != null);
         }).finally(() => setLoading(false));
+    }
+    
+    useEffect(() => {
+        fetch();
     }, []);
 
-    return {loading, isAuthenticated, me };
+    return {loading, isAuthenticated, me, fetch };
 }
