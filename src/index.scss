@@ -36,6 +36,9 @@
     -moz-osx-font-smoothing: grayscale;
     -webkit-text-size-adjust: 100%;
 
+    --font-sans: 'Geist Sans', sans-serif;
+    --font-mono: 'Geist Mono', monospace;
+
     /* Light Theme */
     --background: 0 0% 100%;
     --foreground: 222 47% 11%;
@@ -57,9 +60,6 @@
     --input: 214 32% 91%;
     --ring: 199 100% 50%;
     --radius: 0.5rem;
-
-    --font-sans: 'Geist Sans', sans-serif;
-    --font-mono: 'Geist Mono', monospace;
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
     --sidebar-primary: 240 5.9% 10%;
