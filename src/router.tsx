@@ -17,6 +17,7 @@ import UserPage from './pages/UserPage';
 import Landing from '@/pages/(public)/landing';
 import App from '@/pages/(public)/Main'
 import ProfilePage from './pages/(private)/profile-page';
+import LoanBrowserPage from './pages/(public)/loan-browser';
 
 const router = createBrowserRouter([
   {
@@ -83,6 +84,10 @@ const router = createBrowserRouter([
       {
         path: "/profile",
         element: <ProfilePage />
+      }, 
+      {
+        path: "/browse",
+        element: <LoanBrowserPage />
       }
     ],
   },
