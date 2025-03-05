@@ -1,5 +1,6 @@
 import { Cat, Github, Twitter, Linkedin, Instagram } from "lucide-react"
 import { Separator } from '@/components/ui/separator';
+import Logo from '@/components/logo';
 
 function Footer() {
   return (
@@ -8,8 +9,7 @@ function Footer() {
         <div className="flex flex-col items-center justify-between gap-8 md:flex-row">
           <div className="flex flex-col items-center gap-2 md:items-start">
             <div className="flex items-center gap-2 mb-4">
-              <Cat className="h-6 w-6 text-primary" />
-              <span className="text-lg font-bold">Nekonnect</span>
+              <Logo className="h-12"/>
             </div>
             <p className="text-sm text-muted-foreground mb-4 max-w-xs text-center md:text-left">
               Revolutionizing peer-to-peer lending with blockchain technology and real-world asset backing.
