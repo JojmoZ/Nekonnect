@@ -3,6 +3,6 @@ module {
     type User = Types.User;
 
     public type UserActor = actor {
-        getUser: (username: Text) -> async ?User;
+        getUserByPrincipal: (identity: Principal) -> async ?User;
     }
 }

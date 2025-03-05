@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import Webcam from "react-webcam";
 import { Button } from "@/components/ui/button";
 import { UserService } from "@/services/user.service";
+import { useNavigate } from "react-router";
 
 const userService = new UserService();
 
@@ -11,7 +12,7 @@ const UserPage = () => {
     const [verificationResult, setVerificationResult] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const [storedEncoding, setStoredEncoding] = useState<number[] | null>(null);
-
+    const navigate = useNavigate();
     useEffect(() => {
     const fetchUserFaceEncoding = async () => {
         try {
@@ -60,6 +61,9 @@ const UserPage = () => {
             const data = await response.json();
             if (data.success) {
                 setVerificationResult(data.match ? "✅ Same Face" : "❌ Not the same face");
+                if(data.match){
+                    navigate("/chat")
+                }
             } else {
                 setVerificationResult("Error: " + data.error);
             }

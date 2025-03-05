@@ -126,7 +126,6 @@ function LoanDetailPage() {
                 </div>
               </CardHeader>
               <CardContent>
-
                 <p className="text-xl mb-6">{loanPost.description}</p>
                 <div className="space-y-4">
                   <Progress value={progress} className="h-4" />

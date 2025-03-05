@@ -19,6 +19,7 @@ import {
 import { LoanPost } from '@/lib/model/entity/loan-post';
 import { Link } from 'react-router';
 import { daysLeft } from '@/lib/utils/DateString';
+import { deserializeImage } from '@/lib/utils/Image';
 
 const categoryIcons = {
   All: LayoutGrid,
@@ -61,6 +62,15 @@ export function ProjectCard({ project }: { project: LoanPost }) {
         </div>
       </CardHeader>
       <CardContent className="flex-grow">
+        {/* Image */}
+        <div className="h-36 mb-4">
+          <img
+            src={deserializeImage(project.image)}
+            alt={project.title}
+            className="object-cover w-full h-full rounded-sm"
+          />
+        </div>
+        {/* Description */}
         <p className="text-sm text-muted-foreground mb-4">
           {project.description}
         </p>

@@ -1,10 +1,6 @@
 import { User as AppUser } from "@/lib/model/entity/user";
 import { BaseService, createUserActor, userCanisterId } from "./base.service";
-import { Principal } from "@dfinity/principal";
-import { AuthClient } from "@dfinity/auth-client";
-import { ActorSubclass, AnonymousIdentity, Identity, SignIdentity } from "@dfinity/agent";
-import { userDto } from "@/lib/model/dto/edit-user.dto";
-import { useNavigate } from "react-router";
+import { ActorSubclass, AnonymousIdentity } from "@dfinity/agent";
 import { _SERVICE as _USERSERVICE } from "@/declarations/user/user.did";
 import { User as BackendUser } from "@/declarations/user/user.did";
 export class UserService extends BaseService {
@@ -38,6 +34,7 @@ export class UserService extends BaseService {
                                     gender: "Other",
                                     email: "",
                                     balance: 1000,
+                                    profilePicture: [],
                                     faceEncoding: [],
                                 });
 
@@ -137,6 +134,7 @@ export class UserService extends BaseService {
                 gender: user.gender,
                 email: user.email,
                 balance: user.balance,
+                profilePicture: user.profilePicture,
                 faceEncoding: user.faceEncoding && user.faceEncoding.length > 0
                     ? [Array.from(user.faceEncoding[0] as Float64Array)]
                     : [],
@@ -168,6 +166,7 @@ export class UserService extends BaseService {
                 gender: user.gender,
                 email : user.email,
                 balance: user.balance,
+                profilePicture: user.profilePicture,
                 faceEncoding: user.faceEncoding && user.faceEncoding.length > 0 && user.faceEncoding[0]
                     ? [Array.from(user.faceEncoding[0])]
                     : [],

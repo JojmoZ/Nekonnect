@@ -17,13 +17,16 @@ import UserPage from './pages/UserPage';
 import { CreateLoanLanding } from './pages/(public)/create-loan-landing';
 import Landing from '@/pages/(public)/landing';
 import App from '@/pages/(public)/Main'
+import ProfilePage from './pages/(private)/profile-page';
+import LoanBrowserPage from './pages/(public)/loan-browser';
+import { RouteEnum } from './lib/enum/router-enum';
 
 const router = createBrowserRouter([
   {
     element: <AuthRedirect />,
     children: [
       {
-        path: '/login',
+        path: RouteEnum.LOGIN,
         element: <Login />,
       },
       {
@@ -41,11 +44,11 @@ const router = createBrowserRouter([
         element: <Landing />,
       },
       {
-        path: '/create',
+        path: RouteEnum.CREATE_POST,
         element: <CreateLoanPostPage />,
       },
       {
-        path: '/edit-profile',
+        path: RouteEnum.EDIT_PROFILE,
         element: <EditProfilePage />,
       },
       {
@@ -53,15 +56,15 @@ const router = createBrowserRouter([
         element: <ChatPage />,
       },
       {
-        path: '/post-verification',
+        path: RouteEnum.POST_VERIFICATION,
         element: <PostVerificationPage />,
       },
       {
-        path: '/post/:id',
+        path: RouteEnum.POST,
         element: <LoanDetailPage />,
       },
       {
-        path: '/transaction-history',
+        path: RouteEnum.TRANSACTION_HISTORY,
         element: <TransactionHistoryPage />,
       },
       {
@@ -76,6 +79,17 @@ const router = createBrowserRouter([
         path: '/create-loan-landing',
         element: <CreateLoanLanding />,
       },
+        path:"/temp",
+        element: <UserPage/>
+      },
+      {
+        path: RouteEnum.PROFILE,
+        element: <ProfilePage />
+      }, 
+      {
+        path: RouteEnum.BROWSE,
+        element: <LoanBrowserPage />
+      }
     ],
   },
   {

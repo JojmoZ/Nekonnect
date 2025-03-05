@@ -1,3 +1,4 @@
+import Nat8 "mo:base/Nat8";
 module {
     public type User = {
         internetIdentity: Principal;
@@ -7,6 +8,7 @@ module {
         gender: Text; // "Male", "Female", "Other"
         email: Text;
         balance: Float;
+        profilePicture: [Nat8];
         faceEncoding: ?[Float];
     };
 }
