@@ -31,6 +31,7 @@ import { room } from '@/declarations/room';
 import { GetRoomByPostIdResponse } from '@/lib/model/dto/response/get-room-by-post-id-response';
 import { GetRoomsResponse } from '@/declarations/room/room.did';
 import { deserializeImage } from '@/lib/utils/Image';
+import LoadingScreen from './loading';
 
 const categoryIcons = {
   All: LayoutGrid,
@@ -99,12 +100,12 @@ function LoanDetailPage() {
   
 
   return (
-    <div className="space-y-6">
+    <div className="container py-8 space-y-6">
       {!loanPost ? (
-        <div>Loading...</div>
+        <LoadingScreen />
       ) : (
       <ChatAppSidebar form={form}>
-        <main>
+        <main className='space-y-4'>
             <Card>
               <CardHeader>
                 <div className="flex items-center justify-between">
@@ -140,7 +141,7 @@ function LoanDetailPage() {
                 <img
                   src={deserializeImage(loanPost.image)}
                   alt={loanPost.title}
-                  className="w-full h-64 object-cover rounded-lg" />
+                  className="w-full h-64 object-cover rounded-lg mt-6" />
               </CardContent>
             </Card>
             <Card>

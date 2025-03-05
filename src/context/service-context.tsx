@@ -1,3 +1,4 @@
+import LoadingScreen from "@/pages/(public)/loading";
 import { LoanPostService } from "@/services/loan-post.service";
 import { MessageService } from "@/services/message.service";
 import { RoomUserService } from "@/services/room-users.service";
@@ -70,7 +71,7 @@ export const ServiceProvider= ({ children } : { children: React.ReactNode }) => 
     }, [userService, roomUserService, roomService, loanPostService, transactionService, messageService]);
 
     if (loading) {
-        return <div>Loading...</div>;
+        return <LoadingScreen />;
     }
 
     return (

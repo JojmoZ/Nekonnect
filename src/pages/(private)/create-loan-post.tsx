@@ -85,8 +85,8 @@ function CreateLoanPostPage() {
   ];
 
   return (
-    <div>
-      <h1 className="text-5xl tracking-tight text-center mb-4">
+    <div className='container py-8'>
+      <h1 className="text-3xl font-bold mb-8 text-center">
         Apply for Loan
       </h1>
       <Stepper steps={steps} onSubmit={onSubmit} showProgress={true} />

@@ -12,8 +12,8 @@ export default function ProfilePage() {
     const navigate = useNavigate();
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 p-4 md:p-8">
-            <div className="max-w-6xl mx-auto">
+        <div className="container min-h-screen bg-background from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 p-4 md:p-8">
+            <div className="mx-auto">
                 {/* Header Section */}
                 <div className="relative w-full h-64 md:h-80 rounded-xl mb-24 bg-primary-to-accent">
                     <div className="absolute -bottom-16 left-8 md:left-12">
@@ -51,7 +51,7 @@ export default function ProfilePage() {
                             <CardContent>
                                 <div className="space-y-4 mt-4">
                                     <h3 className="text-lg font-semibold">Personal Information</h3>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
                                         <div className="flex items-center gap-3">
                                             <div className="bg-primary/10 p-2 rounded-full">
                                                 <Mail className="h-5 w-5 text-primary" />

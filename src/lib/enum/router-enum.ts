@@ -1,7 +1,8 @@
 export enum RouteEnum {
     ALL = '*',
     LOGIN = '/login',
-    HOME = '/',
+    LANDING = '/',
+    HOME = '/home',
     BROWSE = '/browse',
     CREATE_POST = '/create-post',
     POST = '/post/:id',
