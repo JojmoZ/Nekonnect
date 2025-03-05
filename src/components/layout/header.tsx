@@ -67,40 +67,44 @@ function Header() {
   }
 
   return (
-    <header className="py-md px-[8rem] w-full flex items-center justify-between">
-      <Logo />
-      <NavigationMenu>
-        <NavigationMenuList>
-          {/* TODO: reroute */}
-          <NavigationMenuItem>
-            <Link href="/docs" legacyBehavior passHref>
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                For Borrowers
-              </NavigationMenuLink>
-            </Link>
-          </NavigationMenuItem>
-          <NavigationMenuItem>
-            <Link href={RouteEnum.BROWSE} legacyBehavior passHref>
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                For Lenders
-              </NavigationMenuLink>
-            </Link>
-          </NavigationMenuItem>
-          <NavigationMenuItem>
-            <Link href="/docs" legacyBehavior passHref>
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                About Us
-              </NavigationMenuLink>
-            </Link>
-          </NavigationMenuItem>
-        </NavigationMenuList>
-      </NavigationMenu>
-      {
-        !isAuthenticated ?
-          <Button variant="gradient" onClick={redirect}>Sign In</Button>
-          :
-          <Button variant="gradient" onClick={logout}>Log out</Button>
-      }
+    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="container flex h-20 items-center">
+        <Logo className="h-10" />
+        <NavigationMenu className="ml-auto hidden gap-6 md:flex">
+          <NavigationMenuList>
+            {/* TODO: reroute */}
+            <NavigationMenuItem>
+              <Link href="/docs" legacyBehavior passHref>
+                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                  For Borrowers
+                </NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <Link href={RouteEnum.BROWSE} legacyBehavior passHref>
+                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                  For Lenders
+                </NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <Link href="/docs" legacyBehavior passHref>
+                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                  About Us
+                </NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
+          </NavigationMenuList>
+        </NavigationMenu>
+        <div className="ml-auto flex items-center gap-4 md:ml-4">
+          {
+            !isAuthenticated ?
+              <Button variant="gradient" onClick={redirect}>Sign In</Button>
+              :
+              <Button variant="gradient" onClick={logout}>Log out</Button>
+          }
+        </div>
+      </div>
     </header>
   );
 }

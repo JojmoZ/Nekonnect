@@ -15,38 +15,20 @@ import {
     Twitter,
     Users,
 } from 'lucide-react';
+import {
+    NavigationMenu,
+    NavigationMenuItem,
+    NavigationMenuLink,
+    NavigationMenuList,
+    navigationMenuTriggerStyle,
+} from '@/components/ui/navigation-menu';
+import Link from 'next/link';
+import { RouteEnum } from '@/lib/enum/router-enum';
+import Logo from '@/components/logo';
 
 export default function Landing() {
     return (
       <div className="flex min-h-screen flex-col">
-          <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-              <div className="container flex h-16 items-center">
-                  <div className="flex items-center gap-2 font-bold">
-                      <PawPrint className="h-6 w-6 text-primary" />
-                      <span className="text-xl">Nekonnect</span>
-                  </div>
-                  <nav className="ml-auto hidden gap-6 md:flex">
-                      <a href="#features" className="text-sm font-medium transition-colors hover:text-primary">
-                          Features
-                      </a>
-                      <a href="#how-it-works" className="text-sm font-medium transition-colors hover:text-primary">
-                          How It Works
-                      </a>
-                      <a href="#testimonials" className="text-sm font-medium transition-colors hover:text-primary">
-                          Testimonials
-                      </a>
-                      <a href="#faq" className="text-sm font-medium transition-colors hover:text-primary">
-                          FAQ
-                      </a>
-                  </nav>
-                  <div className="ml-auto flex items-center gap-4 md:ml-4">
-                      <Button variant="ghost" size="sm">
-                          Log in
-                      </Button>
-                      <Button size="sm">Sign up</Button>
-                  </div>
-              </div>
-          </header>
 
           <main className="flex-1">
               {/* Hero Section */}
