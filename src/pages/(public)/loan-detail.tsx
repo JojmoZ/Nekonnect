@@ -99,12 +99,12 @@ function LoanDetailPage() {
   
 
   return (
-    <div className="space-y-6">
+    <div className="container py-8 space-y-6">
       {!loanPost ? (
         <div>Loading...</div>
       ) : (
       <ChatAppSidebar form={form}>
-        <main>
+        <main className='space-y-4'>
             <Card>
               <CardHeader>
                 <div className="flex items-center justify-between">
@@ -140,7 +140,7 @@ function LoanDetailPage() {
                 <img
                   src={deserializeImage(loanPost.image)}
                   alt={loanPost.title}
-                  className="w-full h-64 object-cover rounded-lg" />
+                  className="w-full h-64 object-cover rounded-lg mt-6" />
               </CardContent>
             </Card>
             <Card>

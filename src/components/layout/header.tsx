@@ -74,7 +74,7 @@ function Header() {
           <NavigationMenuList>
             {/* TODO: reroute */}
             <NavigationMenuItem>
-              <Link href="/docs" legacyBehavior passHref>
+              <Link href={RouteEnum.BORROWER} legacyBehavior passHref>
                 <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                   For Borrowers
                 </NavigationMenuLink>

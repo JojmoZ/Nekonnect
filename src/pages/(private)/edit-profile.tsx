@@ -77,7 +77,10 @@ export const EditProfilePage = () => {
   ];
 
   return (
-    <div>
+    <div className='container py-8'>
+      <h1 className="text-3xl font-bold mb-8 text-center">
+        Edit Profile
+      </h1>
       <Stepper steps={steps} onSubmit={handleFinalSubmit} showProgress loading={loading} />
     </div>
   );

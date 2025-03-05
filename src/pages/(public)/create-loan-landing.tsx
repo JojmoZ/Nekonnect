@@ -45,7 +45,7 @@ export function CreateLoanLanding() {
         </div>
       </div>
 
-      <div className="relative w-full flex justify-end px-10">
+      <div className="container relative w-full flex justify-end px-10">
         <Card className="absolute -bottom-10 right-10 w-96 p-6 bg-background shadow-2xl rounded-lg">
           <p className="text-foreground text-lg">
             Get the financial support you need with our easy loan application
@@ -58,7 +58,7 @@ export function CreateLoanLanding() {
           </Link>
         </Card>
       </div>
-      <div className="w-full max-w-6xl mt-24 mb-24 text-center">
+      <div className="container w-full mt-24 mb-24 text-center">
         <h2 className="text-3xl font-bold text-foreground mb-6">
           Frequently Asked Questions
         </h2>

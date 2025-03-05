@@ -19,7 +19,7 @@ export default function Home() {
     selectedCategory === "All" ? loanPosts : loanPosts.filter((post) => post.category === selectedCategory)
 
   return (
-    <div className="space-y-12">
+    <div className="container py-8 space-y-12">
       <div className="text-center space-y-4">
         <h1 className="text-5xl tracking-tight">Support Our Community</h1>
         <p className="text-xl text-muted-foreground">

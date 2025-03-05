@@ -87,6 +87,10 @@ const router = createBrowserRouter([
         path: RouteEnum.BROWSE,
         element: <LoanBrowserPage />,
       },
+      {
+        path: RouteEnum.HOME,
+        element: <Home />,
+      }
     ],
   },
   {

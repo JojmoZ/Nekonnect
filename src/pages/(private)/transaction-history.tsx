@@ -9,26 +9,31 @@ function TransactionHistoryPage() {
   const { transactions } = useGetUserTransactions();
 
   return (
-    <Tabs defaultValue={status[0]} className="w-full">
-      <TabsList className="grid w-[400px] grid-cols-4 ">
+    <div className='container py-8 mx-auto'>
+      <h1 className='text-3xl font-bold mb-8'>
+        Transaction History
+      </h1>
+      <Tabs defaultValue={status[0]} className="w-full">
+        <TabsList className="grid w-full grid-cols-5 mx-auto">
+          {status.map((s) => (
+            <TabsTrigger key={s} value={s}>
+              {s}
+            </TabsTrigger>
+          ))}
+        </TabsList>
         {status.map((s) => (
-          <TabsTrigger key={s} value={s}>
-            {s}
-          </TabsTrigger>
+          <TabsContent key={s} value={s} className="w-full">
+            <div className="grid grid-cols-1 gap-y-2">
+              {transactions
+                ?.filter((t) => t.status === s)
+                .map((t) => (
+                  <TransactionHistoryCard key={t.loanId} transaction={t} />
+                ))}
+            </div>
+          </TabsContent>
         ))}
-      </TabsList>
-      {status.map((s) => (
-        <TabsContent key={s} value={s} className="w-full">
-          <div className="grid grid-cols-1 gap-y-4 mx-5">
-            {transactions
-              ?.filter((t) => t.status === s)
-              .map((t) => (
-                <TransactionHistoryCard key={t.loanId} transaction={t} />
-              ))}
-          </div>
-        </TabsContent>
-      ))}
-    </Tabs>
+      </Tabs>
+    </div>
   );
 }
 
