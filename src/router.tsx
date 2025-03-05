@@ -16,7 +16,7 @@ import LoginPage from './pages/LoginPage';
 import UserPage from './pages/UserPage';
 import { CreateLoanLanding } from './pages/(public)/create-loan-landing';
 import Landing from '@/pages/(public)/landing';
-import App from '@/pages/(public)/Main'
+import App from '@/pages/(public)/Main';
 import ProfilePage from './pages/(private)/profile-page';
 import LoanBrowserPage from './pages/(public)/loan-browser';
 import { RouteEnum } from './lib/enum/router-enum';
@@ -79,17 +79,14 @@ const router = createBrowserRouter([
         path: '/create-loan-landing',
         element: <CreateLoanLanding />,
       },
-        path:"/temp",
-        element: <UserPage/>
-      },
       {
         path: RouteEnum.PROFILE,
-        element: <ProfilePage />
-      }, 
+        element: <ProfilePage />,
+      },
       {
         path: RouteEnum.BROWSE,
-        element: <LoanBrowserPage />
-      }
+        element: <LoanBrowserPage />,
+      },
     ],
   },
   {
