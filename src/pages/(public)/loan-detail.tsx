@@ -31,6 +31,7 @@ import { room } from '@/declarations/room';
 import { GetRoomByPostIdResponse } from '@/lib/model/dto/response/get-room-by-post-id-response';
 import { GetRoomsResponse } from '@/declarations/room/room.did';
 import { deserializeImage } from '@/lib/utils/Image';
+import LoadingScreen from './loading';
 
 const categoryIcons = {
   All: LayoutGrid,
@@ -101,7 +102,7 @@ function LoanDetailPage() {
   return (
     <div className="container py-8 space-y-6">
       {!loanPost ? (
-        <div>Loading...</div>
+        <LoadingScreen />
       ) : (
       <ChatAppSidebar form={form}>
         <main className='space-y-4'>
