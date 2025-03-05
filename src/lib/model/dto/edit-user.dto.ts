@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+const defaultFile = new File([], 'placeholder.png', { type: 'image/png' });
+
 export const userSchema = z.object({
   username: z.string().trim().min(1, { message: 'Username cannot be empty' }),
   dob: z
@@ -15,7 +17,9 @@ export const userSchema = z.object({
     })
     .refine((file) => file.type.startsWith('image/'), {
       message: 'Only image files are allowed',
-    }),
+    })
+    .optional()
+    .default(defaultFile),
   faceEncoding: z
     .union([z.array(z.instanceof(Float64Array)), z.tuple([])])
     .optional(),

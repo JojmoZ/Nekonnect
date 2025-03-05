@@ -16,6 +16,7 @@ import LoginPage from './pages/LoginPage';
 import UserPage from './pages/UserPage';
 import Landing from '@/pages/(public)/landing';
 import App from '@/pages/(public)/Main'
+import ProfilePage from './pages/(private)/profile-page';
 
 const router = createBrowserRouter([
   {
@@ -78,6 +79,10 @@ const router = createBrowserRouter([
       {
         path:"/temp",
         element: <UserPage/>
+      },
+      {
+        path: "/profile",
+        element: <ProfilePage />
       }
     ],
   },
