@@ -14,8 +14,9 @@ import MainLayout from '@/pages/main-layout';
 import TransactionHistoryPage from './pages/(private)/transaction-history';
 import LoginPage from './pages/LoginPage';
 import UserPage from './pages/UserPage';
+import { CreateLoanLanding } from './pages/(public)/create-loan-landing';
 import Landing from '@/pages/(public)/landing';
-import App from '@/pages/(public)/Main'
+import App from '@/pages/(public)/Main';
 import ProfilePage from './pages/(private)/profile-page';
 import LoanBrowserPage from './pages/(public)/loan-browser';
 import { RouteEnum } from './lib/enum/router-enum';
@@ -55,10 +56,6 @@ const router = createBrowserRouter([
         element: <ChatPage />,
       },
       {
-        path: '/temp2',
-        element: <TempPage />,
-      },
-      {
         path: RouteEnum.POST_VERIFICATION,
         element: <PostVerificationPage />,
       },
@@ -71,25 +68,25 @@ const router = createBrowserRouter([
         element: <TransactionHistoryPage />,
       },
       {
-        path:"/temp",
-        element: <UserPage/>
+        path: '/temp',
+        element: <UserPage />,
       },
       {
-        path: "/temp2",
-        element: <TempPage/>
+        path: '/temp2',
+        element: <TempPage />,
       },
       {
-        path:"/temp",
-        element: <UserPage/>
+        path: '/create-loan-landing',
+        element: <CreateLoanLanding />,
       },
       {
         path: RouteEnum.PROFILE,
-        element: <ProfilePage />
-      }, 
+        element: <ProfilePage />,
+      },
       {
         path: RouteEnum.BROWSE,
-        element: <LoanBrowserPage />
-      }
+        element: <LoanBrowserPage />,
+      },
     ],
   },
   {
