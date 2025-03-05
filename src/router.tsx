@@ -56,10 +56,6 @@ const router = createBrowserRouter([
         element: <ChatPage />,
       },
       {
-        path: RouteEnum.POST_VERIFICATION,
-        element: <PostVerificationPage />,
-      },
-      {
         path: RouteEnum.POST,
         element: <LoanDetailPage />,
       },
@@ -92,6 +88,10 @@ const router = createBrowserRouter([
         element: <Home />,
       }
     ],
+  },
+  {
+    path: RouteEnum.POST_VERIFICATION,
+    element: <PostVerificationPage />,
   },
   {
     path: '*',

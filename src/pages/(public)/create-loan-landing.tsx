@@ -8,6 +8,7 @@ import {
 } from '@/components/ui/accordion';
 import { Link } from 'react-router';
 import { RouteEnum } from '@/lib/enum/router-enum';
+import Logo from '@/components/logo';
 
 const faqData = [
   {
@@ -32,15 +33,22 @@ const faqData = [
 export function CreateLoanLanding() {
   return (
     <div className="flex flex-col items-center">
-      <div className="relative w-full h-96 rounded-lg overflow-hidden">
+      <div className="relative w-full h-96 overflow-hidden">
         <img
           src="https://vetmed.tamu.edu/news/wp-content/uploads/sites/9/2023/05/AdobeStock_472713009.jpeg"
           alt="Loan Image"
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-          <h1 className="text-white text-5xl font-bold drop-shadow-lg text-center">
-            Nekkonect is here to be with you!
+          <h1 className="text-white text-4xl font-bold drop-shadow-lg text-center">
+            <img
+              src={
+                './assets/logo-white.png'
+              }
+              alt="NeKonnect Logo"
+              className={'h-20'}
+            />{' '}
+            is here to be with you!
           </h1>
         </div>
       </div>

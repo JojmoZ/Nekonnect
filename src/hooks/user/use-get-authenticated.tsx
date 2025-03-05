@@ -11,6 +11,7 @@ export const useGetAuthenticated = () => {
     const fetch = () => {
         userService.me().then(user => {
             setMe(user);
+            console.log(user);
             setIsAuthenticated(user != null);
         }).finally(() => setLoading(false));
     }

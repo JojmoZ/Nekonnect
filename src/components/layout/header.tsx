@@ -16,6 +16,14 @@ import useServiceContext from '@/hooks/use-service-context';
 import { useNavigate } from 'react-router';
 import { RouteEnum } from '@/lib/enum/router-enum';
 import { toast } from 'sonner';
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
+import { deserializeImage } from '@/lib/utils/Image';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '../ui/dropdown-menu';
 
 const components: { title: string; href: string; description: string }[] = [
   {
@@ -123,7 +131,7 @@ const for_admin: { title: string; href: string; description: string }[] = [
 
 function Header() {
   const navigate = useNavigate();
-  const { isAuthenticated, fetch } = useGetAuthenticated();
+  const { me, isAuthenticated, fetch } = useGetAuthenticated();
   const { userService } = useServiceContext();
   const logout = () => {
     toast.promise(userService.logout(), {
@@ -216,9 +224,40 @@ function Header() {
                   Sign In
                 </Button>
               ) : (
-                <Button variant="gradient" onClick={logout}>
-                  Log out
-                </Button>
+                // <Button variant="gradient" onClick={logout}>
+                //   Log out
+                // </Button>
+
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Avatar className="h-14 w-14 md:h-14 md:w-14 border-4 border-background shadow-xl cursor-pointer">
+                      <AvatarFallback className="bg-primary text-md">
+                        {me?.username.substring(0, 2).toUpperCase()}
+                      </AvatarFallback>
+                      <AvatarImage
+                        src={deserializeImage(me?.profilePicture ?? [])}
+                        alt={me?.username || 'User'}
+                      />
+                    </Avatar>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="container text-left">
+                    <DropdownMenuItem
+                      onClick={() => navigate(RouteEnum.PROFILE)}
+                    >
+                      Profile
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() => navigate(RouteEnum.TRANSACTION_HISTORY)}
+                    >
+                      Transaction History
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={logout}
+                    >
+                      Logout
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               )}
             </NavigationMenuItem>
           </NavigationMenuList>

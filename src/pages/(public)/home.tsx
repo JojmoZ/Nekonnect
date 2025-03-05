@@ -3,17 +3,12 @@
 import { useState } from "react"
 import { ProjectCard } from "@/components/project-card"
 import { CategoryFilter } from "@/components/category-filter"
-import { Button } from "@/components/ui/button"
-import { StartProjectOverlay } from "@/components/start-project-overlay"
 import { useGetLoanPosts } from "@/hooks/loan-post/use-get-loan-posts"
-import { useNavigate } from "react-router"
 
 export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState("All")
   const { loanPosts, getLoanPostsLoading } = useGetLoanPosts(true);
   const categories = Array.from(new Set(loanPosts.map((post) => post.category)))
-
-  const navigate = useNavigate()
 
   const filteredProjects =
     selectedCategory === "All" ? loanPosts : loanPosts.filter((post) => post.category === selectedCategory)
@@ -21,25 +16,25 @@ export default function Home() {
   return (
     <div className="container py-8 space-y-12">
       <div className="text-center space-y-4">
-        <h1 className="text-5xl tracking-tight">Support Our Community</h1>
+        <h1 className="text-5xl tracking-tight font-bold">
+          Support Our Community
+        </h1>
         <p className="text-xl text-muted-foreground">
-          Discover and fund amazing projects that make a difference in our global community.
+          Discover and fund amazing projects that make a difference in our
+          global community.
         </p>
-        <Button size="lg" className="mt-4" onClick={() => navigate("/create")}>
-          Start Your Campaign
-        </Button>
       </div>
       <CategoryFilter
         categories={categories}
         selectedCategory={selectedCategory}
         onCategoryChange={setSelectedCategory}
       />
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredProjects.map((post) => (
           <ProjectCard key={post.loanId} project={post} />
         ))}
       </div>
     </div>
-  )
+  );
 }
 

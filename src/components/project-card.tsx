@@ -85,7 +85,7 @@ export function ProjectCard({ project }: { project: LoanPost }) {
           {timeLeft(project.verifiedAt, project.postDuration)}
         </span>
         <Button asChild>
-          <Link to={`/post/${project.loanId}`}>Support This Loan</Link>
+          <Link to={`/post/${project.loanId}`}>Support</Link>
         </Button>
       </CardFooter>
     </Card>

@@ -8,6 +8,7 @@ import { User } from "@/lib/model/entity/user";
 import { useNavigate } from "react-router";
 import { serializeImage } from "@/lib/utils/Image";
 import { useGetAuthenticated } from "./use-get-authenticated";
+import { toast } from "sonner";
 
 export function useEditProfile({ faceEncoding }: { faceEncoding: [Float64Array] | [] }) {
 
@@ -28,8 +29,8 @@ export function useEditProfile({ faceEncoding }: { faceEncoding: [Float64Array] 
       },
   });
 
-  const fetchUser = () => {
-    setUser(me);
+  const fetchUser = async () => {
+    setUser(await userService.me());
       if (user) {
         form.setValue('username', user.username || '');
         form.setValue('dob', user.dob || '');
@@ -42,9 +43,17 @@ export function useEditProfile({ faceEncoding }: { faceEncoding: [Float64Array] 
       } 
   }
 
+  const handleFetch = async () => {
+    toast.promise(fetchUser(), {
+      loading: 'Loading...',
+      success: 'User fetched successfully',
+      error: 'Failed to fetch user',
+    });
+  }
+
   useEffect(() => {
-    fetchUser();
-  }, []);
+    handleFetch();
+  }, [me]);
 
   const edit = async () => {
     const userValues = form.getValues();
@@ -52,7 +61,8 @@ export function useEditProfile({ faceEncoding }: { faceEncoding: [Float64Array] 
         ...userValues,
         internetIdentity: user!.internetIdentity!,
         balance: user!.balance,
-        profilePicture: user!.profilePicture,
+        profilePicture: userValues.image
+          ? await serializeImage(userValues.image) : [],
         faceEncoding
     });
   }

@@ -6,10 +6,13 @@ import { Separator } from "@/components/ui/separator"
 import { Badge } from "@/components/ui/badge"
 import { useNavigate } from "react-router"
 import { RouteEnum } from "@/lib/enum/router-enum"
+import { useGetAuthenticated } from "@/hooks/user/use-get-authenticated"
+import { deserializeImage } from "@/lib/utils/Image"
 
 export default function ProfilePage() {
 
     const navigate = useNavigate();
+    const { me } = useGetAuthenticated();
 
     return (
         <div className="container min-h-screen bg-background from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 p-4 md:p-8">
@@ -18,8 +21,8 @@ export default function ProfilePage() {
                 <div className="relative w-full h-64 md:h-80 rounded-xl mb-24 bg-primary-to-accent">
                     <div className="absolute -bottom-16 left-8 md:left-12">
                         <Avatar className="h-32 w-32 md:h-40 md:w-40 border-4 border-background shadow-xl">
-                            <AvatarImage src={"/placeholder.svg?height=200&width=200"} alt={"alexjohnson"} />
-                            <AvatarFallback className="bg-primary text-4xl">{"alexjohnson".substring(0, 2).toUpperCase()}</AvatarFallback>
+                            <AvatarFallback className="bg-primary text-4xl">{me?.username.substring(0, 2).toUpperCase()}</AvatarFallback>
+                            <AvatarImage src={deserializeImage(me?.profilePicture?? [])} alt={me?.username} />
                         </Avatar>
                     </div>
                     <div className="absolute bottom-4 right-4 md:bottom-8 md:right-8 flex gap-2">
@@ -40,12 +43,12 @@ export default function ProfilePage() {
                             <CardHeader className="pb-2">
                                 <div className="flex justify-between items-start">
                                     <div>
-                                        <CardTitle className="text-3xl font-bold">{"alexjohnson"}</CardTitle>
+                                        <CardTitle className="text-3xl font-bold">{me?.username}</CardTitle>
                                         <CardDescription className="flex items-center gap-1 mt-1">
-                                            <User2 className="h-4 w-4" /> {"Male"}
+                                            <User2 className="h-4 w-4" /> {me?.gender}
                                         </CardDescription>
                                     </div>
-                                    <Badge className="px-3 py-1 text-sm bg-primary/10 text-primary border-primary/20">{"Canadian"}</Badge>
+                                    <Badge className="px-3 py-1 text-sm bg-primary/10 text-primary border-primary/20">{me?.nationality}</Badge>
                                 </div>
                             </CardHeader>
                             <CardContent>
@@ -58,7 +61,7 @@ export default function ProfilePage() {
                                             </div>
                                             <div>
                                                 <p className="text-sm text-muted-foreground">Email</p>
-                                                <p className="font-medium">{"alex.johnson@example.com"}</p>
+                                                <p className="font-medium">{me?.email}</p>
                                             </div>
                                         </div>
 
@@ -68,7 +71,7 @@ export default function ProfilePage() {
                                             </div>
                                             <div>
                                                 <p className="text-sm text-muted-foreground">Date of Birth</p>
-                                                <p className="font-medium">{"15 May 1992"}</p>
+                                                <p className="font-medium">{me?.dob}</p>
                                             </div>
                                         </div>
 
@@ -78,7 +81,7 @@ export default function ProfilePage() {
                                             </div>
                                             <div>
                                                 <p className="text-sm text-muted-foreground">Nationality</p>
-                                                <p className="font-medium">{"Canadian"}</p>
+                                                <p className="font-medium">{me?.nationality}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -95,7 +98,7 @@ export default function ProfilePage() {
                             <CardContent>
                                 <div className="bg-primary-to-accent-hover rounded-xl p-6 text-white">
                                     <p className="text-white/80 mb-1">Available to Lend</p>
-                                    <p className="text-3xl font-bold font-mono">${2458.75}</p>
+                                    <p className="text-3xl font-bold font-mono">${me?.balance}</p>
                                     <Separator className="my-4 bg-white/20" />
                                     <div className="flex justify-between">
                                         <div>
