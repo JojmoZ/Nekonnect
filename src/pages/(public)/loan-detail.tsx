@@ -14,7 +14,7 @@ import {
 import { DonationOverlay } from '@/components/donation-overlay';
 import { useGetLoanPost } from '@/hooks/loan-post/use-get-loan-post';
 import { useParams } from 'react-router';
-import { daysLeft } from '@/lib/utils/DateString';
+import { timeLeft } from '@/lib/utils/DateString';
 import { ChatAppSidebar } from '@/components/custom/chat/chat-sidebar';
 import { SidebarProvider, useSidebar } from '@/components/ui/sidebar';
 import { MessageResponse } from '@/lib/model/dto/response/get-message-response';
@@ -134,7 +134,7 @@ function LoanDetailPage() {
                     <span>${loanPost.goal.toLocaleString()} goal</span>
                   </div>
                   <p className="text-muted-foreground">
-                    {daysLeft(loanPost.verifiedAt, loanPost.postDuration).toLocaleString()} days left to fund this project
+                    {timeLeft(loanPost.verifiedAt, loanPost.postDuration)}
                   </p>
                 </div>
                 <img

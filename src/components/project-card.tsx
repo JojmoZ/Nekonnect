@@ -18,7 +18,7 @@ import {
 } from 'lucide-react';
 import { LoanPost } from '@/lib/model/entity/loan-post';
 import { Link } from 'react-router';
-import { daysLeft } from '@/lib/utils/DateString';
+import { timeLeft } from '@/lib/utils/DateString';
 import { deserializeImage } from '@/lib/utils/Image';
 
 const categoryIcons = {
@@ -82,10 +82,10 @@ export function ProjectCard({ project }: { project: LoanPost }) {
       </CardContent>
       <CardFooter className="flex justify-between items-center">
         <span className="text-sm text-muted-foreground">
-          {daysLeft(project.verifiedAt, project.postDuration).toLocaleString()} days left
+          {timeLeft(project.verifiedAt, project.postDuration)}
         </span>
         <Button asChild>
-          <Link to={`/post/${project.loanId}`}>Support This Project</Link>
+          <Link to={`/post/${project.loanId}`}>Support This Loan</Link>
         </Button>
       </CardFooter>
     </Card>

@@ -8,12 +8,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Progress } from "@/components/ui/progress"
 import { ProjectCard } from "@/components/project-card"
 import { useGetLoanPosts } from "@/hooks/loan-post/use-get-loan-posts"
+import { timeLeftMs } from "@/lib/utils/DateString"
 
 export default function LoanBrowserPage() {
   const [searchQuery, setSearchQuery] = useState("")
   const [categoryFilter, setCategoryFilter] = useState("all")
   const [sortBy, setSortBy] = useState("newest")
-  const [favorites, setFavorites] = useState<number[]>([])
   const { loanPosts } = useGetLoanPosts(true);
 
   // Filter projects based on search query and category
@@ -28,25 +28,18 @@ export default function LoanBrowserPage() {
   })
 
   // Sort projects based on selected sort option
-//   const sortedProjects = [...filteredProjects].sort((a, b) => {
-//     switch (sortBy) {
-//       case "newest":
-//         return b.loanId - a.loanid
-//       case "popular":
-//         return favorites.includes(b.id) ? 1 : -1
-//       case "funded":
-//         return b.raised / b.goal - a.raised / a.goal
-//       case "ending":
-//         return a.daysLeft - b.daysLeft
-//       default:
-//         return 0
-//     }
-//   })
-
-  // Toggle favorite status
-  const toggleFavorite = (id: number) => {
-    setFavorites((prev) => (prev.includes(id) ? prev.filter((projectId) => projectId !== id) : [...prev, id]))
-  }
+  const sortedProjects = [...filteredProjects].sort((a, b) => {
+    switch (sortBy) {
+      case "newest":
+        return Number(b.verifiedAt) - Number(a.verifiedAt)
+      case "funded":
+        return b.raised / b.goal - a.raised / a.goal
+      case "ending":
+        return timeLeftMs(a.verifiedAt, a.postDuration) - timeLeftMs(b.verifiedAt, b.postDuration)
+      default:
+        return 0
+    }
+  })
 
   return (
     <div className="container mx-auto py-8 px-4">
@@ -73,11 +66,7 @@ export default function LoanBrowserPage() {
             <SelectContent>
               <SelectItem value="all">All Categories</SelectItem>
               <SelectItem value="arts">Arts & Culture</SelectItem>
-              <SelectItem value="tech">Technology</SelectItem>
-              <SelectItem value="games">Games</SelectItem>
-              <SelectItem value="music">Music</SelectItem>
-              <SelectItem value="film">Film & Video</SelectItem>
-              <SelectItem value="design">Design</SelectItem>
+              <SelectItem value="environment">Environment</SelectItem>
             </SelectContent>
           </Select>
 
@@ -88,7 +77,6 @@ export default function LoanBrowserPage() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="newest">Newest</SelectItem>
-              <SelectItem value="popular">Most Popular</SelectItem>
               <SelectItem value="funded">Most Funded</SelectItem>
               <SelectItem value="ending">Ending Soon</SelectItem>
             </SelectContent>
@@ -98,8 +86,8 @@ export default function LoanBrowserPage() {
 
       {/* Projects Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredProjects.length > 0 ? (
-          filteredProjects.map((project) => (
+        {sortedProjects.length > 0 ? (
+          sortedProjects.map((project) => (
             <ProjectCard project={project}/>
           ))
         ) : (
