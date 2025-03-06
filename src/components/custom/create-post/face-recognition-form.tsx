@@ -1,7 +1,8 @@
 import { Button } from '@/components/ui/button';
 import { useVerifyFace } from '@/hooks/user/use-verify-face';
+import { UserService } from '@/services/user.service';
 import { User } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Webcam from 'react-webcam';
 
 interface ChildProps {
@@ -10,7 +11,26 @@ interface ChildProps {
 
 export function FaceRecognitionForm({ verificator }: ChildProps) {
   const [cameraAvailable, setCameraAvailable] = useState<boolean>(true);
+  const [storedEncoding, setStoredEncoding] = useState<number[] | null>(null);
+  const userService = new UserService();
+  useEffect(() => {
+    const fetchUserFaceEncoding = async () => {
+      try {
+        const user = await userService.me();
+        if (user && user.faceEncoding && user.faceEncoding.length > 0 && user.faceEncoding[0]) {
+          setStoredEncoding(Array.from(user.faceEncoding[0] as number[])); // ✅ Safe conversion
+          console.log(storedEncoding)
+        } else {
+          setStoredEncoding(null); // ✅ No stored encoding
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        setStoredEncoding(null);
+      }
+    };
 
+    fetchUserFaceEncoding();
+  }, []);
   return (
     <div className="w-full">
       <h2 className="text-lg font-semibold">Face Recognition</h2>
@@ -73,6 +93,9 @@ export function FaceRecognitionForm({ verificator }: ChildProps) {
           Start Recognition
         </Button>
       </div>
+      {(
+        <p className="mt-4 text-lg font-bold text-center">{verificator.message}</p>
+      )}
     </div>
   );
 }
