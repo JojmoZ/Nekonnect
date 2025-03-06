@@ -17,7 +17,7 @@ export function PostVerificationSidebar({
   const { loanPosts, setSelectedPost } = React.useContext(LoanPostContext);
 
   return (
-    <Sidebar {...props} className='bg-transparent my-20'>
+    <Sidebar {...props} className='bg-transparent'>
       <SidebarHeader className="gap-3.5 border-b p-4">
         <div className="flex w-full items-center justify-between">
           <div className="text-base font-bold text-foreground">Posts</div>

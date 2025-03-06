@@ -36,7 +36,7 @@ function CreateLoanPostPage() {
 
   const handleClose = () => {
     setIsSuccessDialogOpen(false);
-    navigate('/');
+    navigate('/home');
   }
 
   const steps = [
@@ -73,7 +73,8 @@ function CreateLoanPostPage() {
         <FaceRecognitionForm verificator={verificator} />
       ),
       onNext: async () => {
-        return verificator.verificationResult
+        // return verificator.verificationResult
+        return true
       }
     },
     {

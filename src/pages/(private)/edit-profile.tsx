@@ -8,6 +8,7 @@ import { useCaptureFace } from '@/hooks/user/use-capture-face';
 import { useEditProfile } from '@/hooks/user/use-edit-profile';
 import { useState } from 'react';
 import { User } from 'lucide-react';
+import { useGetAuthenticated } from '@/hooks/user/use-get-authenticated';
 
 export const EditProfilePage = () => {
   const navigate = useNavigate();
@@ -22,6 +23,7 @@ export const EditProfilePage = () => {
   const { userForm, handleEdit } = useEditProfile();
   const [loading, setLoading] = useState<boolean>(false);
   const [cameraAvailable, setCameraAvailable] = useState<boolean>(true);
+  const { fetch } = useGetAuthenticated();
 
   const handleFinalSubmit = async () => {
     setLoading(true);
@@ -34,6 +36,7 @@ export const EditProfilePage = () => {
     }
     setLoading(false);
   };
+
 
   const steps = [
     {

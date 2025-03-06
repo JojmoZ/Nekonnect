@@ -29,7 +29,8 @@ export function useEditProfile() {
   });
 
   const fetchUser = async () => {
-    setUser(await userService.me());
+    await userService.me().then(user => {
+      setUser(user);
       if (user) {
         form.setValue('username', user.username || '');
         form.setValue('dob', user.dob || '');
@@ -39,7 +40,8 @@ export function useEditProfile() {
           (user.gender as 'Male' | 'Female' | 'Other') || 'Other',
         );
         form.setValue('email', user.email || '');
-      } 
+      }
+    });
   }
 
   const handleFetch = async () => {
@@ -51,6 +53,7 @@ export function useEditProfile() {
   }
 
   useEffect(() => {
+    if (me == null) return;
     handleFetch();
   }, [me]);
 
@@ -64,9 +67,7 @@ export function useEditProfile() {
           ? await serializeImage(userValues.image) : [],
         faceEncoding: a,
         role: user!.role
-    }).then(() => {
-      fetch();
-    });
+    })
   }
 
   return { userForm: form, handleEdit: edit };

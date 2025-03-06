@@ -94,7 +94,7 @@ export function FaceRecognitionForm({ verificator }: ChildProps) {
         </Button>
       </div>
       {(
-        <p className="mt-4 text-lg font-bold text-center">{verificator.message}</p>
+        <p className="mt-4 text-lg font-bold text-center">{verificator.message?? "Please do the recognition."}</p>
       )}
     </div>
   );

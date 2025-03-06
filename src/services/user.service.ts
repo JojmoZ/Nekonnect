@@ -4,6 +4,7 @@ import { ActorSubclass, AnonymousIdentity } from "@dfinity/agent";
 import { _SERVICE as _USERSERVICE } from "@/declarations/user/user.did";
 import { User as BackendUser } from "@/declarations/user/user.did";
 import { RoleEnum } from "@/lib/enum/role-enum";
+import { Principal } from "@dfinity/principal";
 export class UserService extends BaseService {
 
 
@@ -190,6 +191,16 @@ export class UserService extends BaseService {
         try {
             const response = await this.user.getAllUsers();
             return response;
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
+    async getUserByPrincipal(principal: Principal): Promise<AppUser | null> {
+        try {
+            const response = await this.user.getUserByPrincipal(principal);
+            return response.length > 0 && response[0] !== undefined ? response[0] : null;
         } catch (error) {
             console.error(error);
             throw error;

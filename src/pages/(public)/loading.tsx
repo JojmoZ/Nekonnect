@@ -17,7 +17,7 @@ export default function LoadingScreen({text}: {text: string}) {
 
     const interval = setInterval(() => {
       setProgress((prevProgress) => {
-        const newProgress = prevProgress + Math.random() * 15
+        const newProgress = prevProgress + 20
         return newProgress > 100 ? 100 : newProgress
       })
     }, 500)

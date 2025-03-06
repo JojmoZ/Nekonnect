@@ -11,9 +11,15 @@ import { useGetLoanPosts } from '@/hooks/loan-post/use-get-loan-posts';
 import { useContext, useEffect } from 'react';
 import Footer from '@/components/layout/footer';
 import { useLayout } from '@/context/layout-context';
+import Header from '@/components/layout/header';
 
 function PostVerificationPage() {
   const { loanPosts, getLoanPostsLoading } = useGetLoanPosts(false);
+  const { setHeader } = useLayout();
+
+  useEffect(() => {
+    setHeader(false)
+  },[])
 
   return (
     <LoanPostProvider loanPosts={loanPosts}>
@@ -26,6 +32,7 @@ function PostVerificationPage() {
       >
         <PostVerificationSidebar />
         <SidebarInset>
+          <Header />
           <header className="sticky top-0 flex shrink-0 items-center gap-2 border-b bg-background p-4">
             <SidebarTrigger className="-ml-1" />
             <Separator orientation="vertical" className="mr-2 h-4" />

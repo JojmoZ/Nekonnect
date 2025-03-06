@@ -12,7 +12,8 @@ const ProtectedRoute = ({role} : IProps) => {
   const { isAuthenticated, me, loading } = useGetAuthenticated();
   const location = useLocation();
 
-  console.log("test")
+  console.log(me)
+  console.log(isAuthenticated)
   
   if (isAuthenticated === null) {
     return <LoadingScreen text='Navigating you' />;
@@ -22,8 +23,7 @@ const ProtectedRoute = ({role} : IProps) => {
     toast.error('You are not authorized to access this page.');
     return <Navigate to="/" replace />;
   }
-  // (isAuthenticated && location.pathname.includes("edit-profile")) 
-
+  // (isAuthenticated && location.pathname.includes("edit-profile"))
   if (
     (me.username == '' || me.username == null) &&
     !location.pathname.includes('edit-profile')
