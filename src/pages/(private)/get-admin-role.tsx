@@ -28,6 +28,7 @@ export const GetAdminRole = () => {
         navigate("/")
         return;
     },[me])
+    
     return (
         <LoadingScreen />
     )

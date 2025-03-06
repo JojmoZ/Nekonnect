@@ -11,13 +11,12 @@ interface IProps {
 const ProtectedRoute = ({role} : IProps) => {
   const { isAuthenticated, me } = useGetAuthenticated();
   const location = useLocation();
-  console.log(me) 
   
   if (isAuthenticated === null) {
     return <LoadingScreen />;
   }
 
-  if ((!isAuthenticated || me === null || me.role !== role)){
+  if ((!isAuthenticated || me === null || me.role !== role) && me?.role !== RoleEnum.ADMIN) {
     toast.error('You are not authorized to access this page.');
     return <Navigate to="/" replace />;
   }
