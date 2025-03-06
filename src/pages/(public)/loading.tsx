@@ -3,17 +3,17 @@
 import { useEffect, useState } from "react"
 import { Loader2 } from "lucide-react"
 import Logo from "@/components/logo"
+import { useLayout } from "@/context/layout-context";
 
-interface LoadingScreenProps {
-  style?: React.CSSProperties;
-}
-
-export default function LoadingScreen({ style }: LoadingScreenProps) {
+export default function LoadingScreen({text}: {text: string}) {
   const [progress, setProgress] = useState(0)
-  const [loadingText, setLoadingText] = useState("Initializing")
+  // const [loadingText, setLoadingText] = useState("Initializing")
+  const { setHeader, setFooter } = useLayout();
 
   useEffect(() => {
-    const loadingTexts = ["Initializing", "Loading resources", "Preparing data", "Almost there"]
+    // setHeader(false);
+    // setFooter(false);
+    // const loadingTexts = ["Initializing", "Loading resources", "Preparing data", "Almost there"]
 
     const interval = setInterval(() => {
       setProgress((prevProgress) => {
@@ -22,22 +22,24 @@ export default function LoadingScreen({ style }: LoadingScreenProps) {
       })
     }, 500)
 
-    const textInterval = setInterval(() => {
-      setLoadingText((prevText) => {
-        const currentIndex = loadingTexts.indexOf(prevText)
-        const nextIndex = (currentIndex + 1) % loadingTexts.length
-        return loadingTexts[nextIndex]
-      })
-    }, 2000)
+    // const textInterval = setInterval(() => {
+    //   setLoadingText((prevText) => {
+    //     const currentIndex = loadingTexts.indexOf(prevText)
+    //     const nextIndex = (currentIndex + 1) % loadingTexts.length
+    //     return loadingTexts[nextIndex]
+    //   })
+    // }, 2000)
 
     return () => {
       clearInterval(interval)
-      clearInterval(textInterval)
+      // clearInterval(textInterval)
+      // setHeader(true);
+      // setFooter(true);
     }
   }, [])
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-background to-muted/50 dark:from-background dark:to-background/80" style={style}>
+    <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-background to-muted/50 dark:from-background dark:to-background/80">
       <div className="flex flex-col items-center space-y-8 px-4 text-center">
         <div className="relative">
           <div className="absolute -inset-4 rounded-full bg-primary/10 blur-xl animate-pulse"></div>
@@ -47,7 +49,7 @@ export default function LoadingScreen({ style }: LoadingScreenProps) {
         <div className="space-y-6 max-w-md">
           <div className="space-y-2">
             <p className="text-xl font-medium text-foreground">
-              {loadingText}
+              {text}
               <span className="animate-pulse">...</span>
             </p>
             <p className="text-sm text-muted-foreground">

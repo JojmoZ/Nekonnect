@@ -27,8 +27,11 @@ export const EditProfilePage = () => {
     setLoading(true);
     try {
       await handleCaptureSubmit();
-      await handleEdit();
-      navigate('/home');
+      await handleEdit().finally(() => {
+        navigate('/home');
+      }
+      );
+
     } catch (err) {
       console.error('Error updating profile:', err);
     }

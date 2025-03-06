@@ -44,4 +44,8 @@ actor class UserMain() {
       };
     };
   };
+
+  public func reset() : async () {
+    users := List.nil<Types.User>();
+  };
 }

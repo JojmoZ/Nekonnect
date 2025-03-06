@@ -9,11 +9,13 @@ interface IProps {
 }
 
 const ProtectedRoute = ({role} : IProps) => {
-  const { isAuthenticated, me } = useGetAuthenticated();
+  const { isAuthenticated, me, loading } = useGetAuthenticated();
   const location = useLocation();
+
+  console.log("test")
   
   if (isAuthenticated === null) {
-    return null;
+    return <LoadingScreen text='Navigating you' />;
   }
 
   if ((!isAuthenticated || me === null || me.role !== role) && me?.role !== RoleEnum.ADMIN) {
@@ -21,7 +23,11 @@ const ProtectedRoute = ({role} : IProps) => {
     return <Navigate to="/" replace />;
   }
   // (isAuthenticated && location.pathname.includes("edit-profile")) 
-  if ((me.username == "" || me.username == null) && !location.pathname.includes("edit-profile")) {
+
+  if (
+    (me.username == '' || me.username == null) &&
+    !location.pathname.includes('edit-profile')
+  ) {
     toast.error('Please complete your profile.');
     return <Navigate to="/edit-profile" replace />;
   } 

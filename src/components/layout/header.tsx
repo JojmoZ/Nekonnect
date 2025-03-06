@@ -142,6 +142,7 @@ function Header() {
       loading: 'Logging out...',
       success: () => {
         fetch();
+        navigate('/')
         return 'Logged out successfully.';
       },
       error: 'Failed to log out.',

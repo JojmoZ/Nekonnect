@@ -70,7 +70,7 @@ export const ServiceProvider= ({ children } : { children: React.ReactNode }) => 
     }, [userService, roomUserService, roomService, loanPostService, transactionService, messageService]);
 
     if (loading) {
-        return <LoadingScreen />;
+        return <LoadingScreen text="Initializing" />;
     }
 
     return (

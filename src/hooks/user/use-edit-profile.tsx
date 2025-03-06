@@ -13,7 +13,7 @@ import { toast } from "sonner";
 export function useEditProfile({ faceEncoding }: { faceEncoding: [Float64Array] | [] }) {
 
   const { userService } = useServiceContext();
-  const { me } = useGetAuthenticated();
+  const { me, fetch } = useGetAuthenticated();
   const [user, setUser] = useState<User | null>(null);
 
   const form = useForm<z.infer<typeof userSchema>>({
@@ -64,6 +64,8 @@ export function useEditProfile({ faceEncoding }: { faceEncoding: [Float64Array] 
           ? await serializeImage(userValues.image) : [],
         faceEncoding,
         role: user!.role
+    }).then(() => {
+      fetch();
     });
   }
 

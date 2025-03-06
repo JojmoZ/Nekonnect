@@ -40,7 +40,7 @@ export const LayoutProvider = ({ children }: { children: React.ReactNode }) => {
         <LayoutContext.Provider value={value}>
             <div style={{ position: 'relative' }}>
                 {children}
-                {isLoading && <LoadingScreen style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: '100%' }} />}
+                {/* {isLoading && <LoadingScreen style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: '100%' }} />} */}
             </div>
         </LayoutContext.Provider>
     );

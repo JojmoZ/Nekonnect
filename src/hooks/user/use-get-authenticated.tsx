@@ -11,12 +11,14 @@ export const useGetAuthenticated = () => {
     const {startLoading, stopLoading} = useLayout();
 
     const fetch = async () => {
-        startLoading();
+        setLoading(true);
         await userService.me().then(user => {
             setMe(user);
             setIsAuthenticated(user != null);
-        })
-        stopLoading();
+        }).finally(() => {
+            setLoading(false);
+        }
+        );
     }
     
     useEffect(() => {
