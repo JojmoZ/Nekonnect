@@ -94,7 +94,6 @@ function LoanDetailPage() {
 
   useEffect(() => {
     getPost()
-    
   }, [])
 
   

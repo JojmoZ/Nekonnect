@@ -135,7 +135,7 @@ export default function Landing() {
               </div>
               <h1 className="mt-6 text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
                 Connecting People, Empowering Finance
-                With <span className="text-primary">Blockchain</span> & <span className="text-primary">RWA</span>
+                With <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">Blockchain</span> & <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">RWA</span>
               </h1>
               <p className="mt-6 max-w-3xl text-lg text-muted-foreground mx-auto">
                 Nekonnect isn't just about transactions—it's about meaningful financial connections. By integrating blockchain and real-world assets, we create a decentralized platform where security, transparency, and opportunity come together.
@@ -158,7 +158,7 @@ export default function Landing() {
           <div className="container">
             <div className="mx-auto max-w-2xl text-center">
               <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-                Why Choose Nekonnect?
+                Why Choose <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">Nekonnect</span>?
               </h2>
               <p className="mt-4 text-muted-foreground">
                 Nekonnect changes this by leveraging blockchain technology and real-world asset backing to create a more inclusive, efficient, and secure lending ecosystem.
@@ -185,7 +185,7 @@ export default function Landing() {
           <div className="container">
             <div className="text-center mb-16">
               <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">
-                How Nekonnect Works
+                How <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">Nekonnect</span> Works
               </h2>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
                 Our simple four-step process makes peer-to-peer lending
