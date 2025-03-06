@@ -4,6 +4,7 @@ import { ActorSubclass, AnonymousIdentity } from "@dfinity/agent";
 import { _SERVICE as _USERSERVICE } from "@/declarations/user/user.did";
 import { User as BackendUser } from "@/declarations/user/user.did";
 import { RoleEnum } from "@/lib/enum/role-enum";
+import { Principal } from "@dfinity/principal";
 export class UserService extends BaseService {
 
 
@@ -190,6 +191,20 @@ export class UserService extends BaseService {
         try {
             const response = await this.user.getAllUsers();
             return response;
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
+    async topUpBalance(user_id: Principal, amount: number): Promise<AppUser> {
+        try {
+            const response = await this.user.topUpBalance(user_id, amount);
+            if ("ok" in response) {
+                return response.ok;
+            } else {
+                throw new Error(`Error top up balance: ${response.err}`);
+            }
         } catch (error) {
             console.error(error);
             throw error;
