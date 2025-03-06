@@ -9,6 +9,7 @@ import { RouterProvider } from 'react-router';
 import router from '@/router';
 import { Toaster } from 'sonner';
 import { LayoutProvider } from './context/layout-context';
+import { ChatProvider } from './context/chat-context';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   // <React.StrictMode>
@@ -16,8 +17,8 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
       <ActorProvider idlFactory={idlFactory} canisterId={userCanisterId}>
         <ServiceProvider>
           <LayoutProvider>
-            <RouterProvider router={router} />
-            <Toaster richColors />
+              <RouterProvider router={router} />
+              <Toaster richColors />
           </LayoutProvider>
         </ServiceProvider>
       </ActorProvider>

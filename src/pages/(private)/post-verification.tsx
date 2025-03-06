@@ -50,7 +50,6 @@ const ContentArea: React.FC = () => {
       {selectedPost ? (
         <LoanDisplay loan={selectedPost} />
       ) : (
-        // Array.from({ length: 1 }).map((_, index) => (
         <>
           <div
             // key={index}
@@ -61,7 +60,6 @@ const ContentArea: React.FC = () => {
           <Footer />
         </>
           
-        // ))
       )
       }
     </div>
