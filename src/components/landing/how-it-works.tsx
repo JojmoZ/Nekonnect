@@ -1,32 +1,6 @@
 import { Check } from "lucide-react"
 
 export default function HowItWorks() {
-  const steps = [
-    {
-      number: "01",
-      title: "Register & Verify",
-      description: "Create an account and complete our streamlined KYC process to get started.",
-      checks: ["Secure identity verification", "Quick approval process", "One-time setup"],
-    },
-    {
-      number: "02",
-      title: "Connect Assets",
-      description: "Link your real-world assets that will serve as collateral for loans.",
-      checks: ["Multiple asset types supported", "Automated valuation", "Secure asset verification"],
-    },
-    {
-      number: "03",
-      title: "Borrow or Lend",
-      description: "Choose to provide funds as a lender or request a loan as a borrower.",
-      checks: ["Customizable loan terms", "Transparent fee structure", "Smart contract automation"],
-    },
-    {
-      number: "04",
-      title: "Manage & Grow",
-      description: "Track your investments or loans and watch your financial growth.",
-      checks: ["Real-time performance tracking", "Automated repayments", "Reinvestment opportunities"],
-    },
-  ]
 
   return (
     <section id="how-it-works" className="py-20">
