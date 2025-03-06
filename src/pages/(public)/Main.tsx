@@ -29,7 +29,6 @@ function App() {
             <span className="sr-only">Toggle dark mode</span>
           </Button>
         </div>
-        <Header />
         <main>
           <Hero />
           <Features />

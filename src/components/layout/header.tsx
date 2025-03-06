@@ -121,6 +121,7 @@ const for_lenders: { title: string; href: string; description: string }[] = [
     description: 'Explore available loan posts.',
   },
 ];
+
 const for_admin: { title: string; href: string; description: string }[] = [
   {
     title: 'Verify Post',
@@ -133,6 +134,7 @@ function Header() {
   const navigate = useNavigate();
   const { me, isAuthenticated, fetch } = useGetAuthenticated();
   const { userService } = useServiceContext();
+
   const logout = () => {
     toast.promise(userService.logout(), {
       loading: 'Logging out...',
@@ -198,25 +200,17 @@ function Header() {
                 links: components,
               },
             ].map((menu) => (
-              <NavigationMenu>
-                <NavigationMenuItem key={menu.label}>
-                  <NavigationMenuTrigger>{menu.label}</NavigationMenuTrigger>
-                  <NavigationMenuContent>
+              <NavigationMenuItem key={menu.label}>
+                <NavigationMenuTrigger>{menu.label}</NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
                     {menu.links.map((route) => (
-                      <a key={route.href} href={route.href}>
-                        <div>
-                          <NavigationMenuLink
-                            className={navigationMenuTriggerStyle()}
-                            style={{ width: 200 }}
-                          >
-                            {route.title}
-                          </NavigationMenuLink>
-                        </div>
-                      </a>
+                      <ListItem key={route.href} href={route.href} title={route.title}>
+                      </ListItem>
                     ))}
-                  </NavigationMenuContent>
-                </NavigationMenuItem>
-              </NavigationMenu>
+                  </ul>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
             ))}
             <NavigationMenuItem>
               {!isAuthenticated ? (
@@ -240,7 +234,10 @@ function Header() {
                       />
                     </Avatar>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="container text-left">
+                  <DropdownMenuContent
+                    align="end"
+                    className="container text-left"
+                  >
                     <DropdownMenuItem
                       onClick={() => navigate(RouteEnum.PROFILE)}
                     >
@@ -251,11 +248,7 @@ function Header() {
                     >
                       Transaction History
                     </DropdownMenuItem>
-                    <DropdownMenuItem
-                      onClick={logout}
-                    >
-                      Logout
-                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={logout}>Logout</DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               )}

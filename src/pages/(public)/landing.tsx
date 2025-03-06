@@ -25,6 +25,7 @@ import {
 import Link from 'next/link';
 import { RouteEnum } from '@/lib/enum/router-enum';
 import Logo from '@/components/logo';
+import { Globe } from '@/components/magicui/globe';
 
 export default function Landing() {
     return (
@@ -32,18 +33,18 @@ export default function Landing() {
 
           <main className="flex-1">
               {/* Hero Section */}
-              <section className="relative overflow-hidden py-20 md:py-32">
+              <section className="relative overflow-hidden py-20 md:py-32 h-[75dvh]">
                   <div className="container flex flex-col items-center text-center">
                       <div className="absolute -top-40 right-0 h-96 w-96 rounded-full bg-primary/10 blur-3xl" />
                       <div className="absolute -bottom-40 left-0 h-96 w-96 rounded-full bg-primary/10 blur-3xl" />
                       <div className="relative">
                           <div className="inline-block rounded-lg bg-primary/10 px-3 py-1 text-sm text-primary">
-                              Peer-to-Peer Lending, Simplified
+                              Peer-to-Peer Lending, Decentralized
                           </div>
                           <h1 className="mt-6 text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
-                              Connect, Lend, <span className="text-primary">Grow</span>
+                              Secure P2P Lending <br/>with <span className="text-primary">Blockchain</span> & <span className="text-primary">RWA</span>
                           </h1>
-                          <p className="mt-6 max-w-2xl text-lg text-muted-foreground">
+                          <p className="mt-6 max-w-3xl text-lg text-muted-foreground">
                               Nekonnect brings borrowers and lenders together in a secure, transparent platform. Earn better returns
                               or get flexible loans with our community-driven approach.
                           </p>
@@ -55,20 +56,7 @@ export default function Landing() {
                                   Learn More
                               </Button>
                           </div>
-                          <div className="mt-12 flex items-center justify-center">
-                              <div className="relative rounded-xl border bg-background p-2 shadow-lg">
-                                  <img
-                                    src="/placeholder.svg?height=400&width=700"
-                                    alt="Nekonnect dashboard preview"
-                                    className="rounded-lg"
-                                    width={700}
-                                    height={400}
-                                  />
-                                  <div className="absolute -right-6 -top-6 rounded-full border bg-background p-3 shadow-lg">
-                                      <PawPrint className="h-8 w-8 text-primary" />
-                                  </div>
-                              </div>
-                          </div>
+                          <Globe className="top-[90%]" />
                       </div>
                   </div>
               </section>
