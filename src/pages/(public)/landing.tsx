@@ -90,7 +90,7 @@ export default function Landing() {
     <div className="flex min-h-screen flex-col">
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="relative overflow-hidden py-20 md:py-32 h-[75dvh]">
+        <section className="relative overflow-hidden py-20 md:py-32 h-[80dvh]">
           <div className="container flex flex-col items-center text-center">
             <div className="absolute -top-40 right-0 h-96 w-96 rounded-full bg-primary/10 blur-3xl" />
             <div className="absolute -bottom-40 left-0 h-96 w-96 rounded-full bg-primary/10 blur-3xl" />
@@ -99,24 +99,21 @@ export default function Landing() {
                 Peer-to-Peer Lending, Decentralized
               </div>
               <h1 className="mt-6 text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
-                Secure P2P Lending <br />
-                with <span className="text-primary">Blockchain</span> &{' '}
-                <span className="text-primary">RWA</span>
+                Connecting People, Empowering Finance
+                With <span className="text-primary">Blockchain</span> & <span className="text-primary">RWA</span>
               </h1>
-              <p className="mt-6 max-w-3xl text-lg text-muted-foreground">
-                Nekonnect brings borrowers and lenders together in a secure,
-                transparent platform. Earn better returns or get flexible loans
-                with our community-driven approach.
+              <p className="mt-6 max-w-3xl text-lg text-muted-foreground mx-auto">
+                Nekonnect isn't just about transactions—it's about meaningful financial connections. By integrating blockchain and real-world assets, we create a decentralized platform where security, transparency, and opportunity come together.
               </p>
-              <div className="mt-8 flex flex-wrap justify-center gap-4">
-                <Button size="lg" className="gap-2">
+              <div className="mt-8 flex flex-wrap justify-center gap-4 z-10">
+                <Button size="lg" className="gap-2" onClick={}>
                   Get Started <ArrowRight className="h-4 w-4" />
                 </Button>
                 <Button size="lg" variant="outline">
                   Learn More
                 </Button>
               </div>
-              <Globe className="top-[90%]" />
+              <Globe className="top-[100%]" />
             </div>
           </div>
         </section>

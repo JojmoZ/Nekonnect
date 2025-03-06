@@ -41,7 +41,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Landing />,
+        element: <App />,
       },
       {
         path: RouteEnum.CREATE_POST,
