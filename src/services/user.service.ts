@@ -3,6 +3,7 @@ import { BaseService, createUserActor, userCanisterId } from "./base.service";
 import { ActorSubclass, AnonymousIdentity } from "@dfinity/agent";
 import { _SERVICE as _USERSERVICE } from "@/declarations/user/user.did";
 import { User as BackendUser } from "@/declarations/user/user.did";
+import { RoleEnum } from "@/lib/enum/role-enum";
 export class UserService extends BaseService {
 
 
@@ -36,6 +37,7 @@ export class UserService extends BaseService {
                                     balance: 1000,
                                     profilePicture: [],
                                     faceEncoding: [],
+                                    role: RoleEnum.GUEST
                                 });
 
                                 console.log("✅ User created in backend:", user);
@@ -138,6 +140,7 @@ export class UserService extends BaseService {
                 faceEncoding: user.faceEncoding && user.faceEncoding.length > 0
                     ? [Array.from(user.faceEncoding[0] as Float64Array)]
                     : [],
+                role : user.role
             } as BackendUser);
 
             if ("ok" in response) {
@@ -170,6 +173,7 @@ export class UserService extends BaseService {
                 faceEncoding: user.faceEncoding && user.faceEncoding.length > 0 && user.faceEncoding[0]
                     ? [Array.from(user.faceEncoding[0])]
                     : [],
+                role : user.role
             } as BackendUser);
 
             if ('ok' in response) {

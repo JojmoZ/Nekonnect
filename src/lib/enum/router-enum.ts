@@ -12,4 +12,5 @@ export enum RouteEnum {
     TRANSACTION_HISTORY = '/transaction-history',
     POST_VERIFICATION = '/post-verification',
     ABOUT = '/about',
+    GET_ADMIN_ROLE = "/get-admin-role"
 }

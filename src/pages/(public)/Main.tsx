@@ -5,7 +5,6 @@ import { MoonIcon, SunIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Hero from "@/components/landing/hero"
 import Features from "@/components/landing/features"
-import HowItWorks from "@/components/landing/how-it-works"
 import Benefits from "@/components/landing/benefits"
 import Stats from "@/components/landing/stats"
 import CTA from "@/components/landing/cta"
@@ -32,7 +31,6 @@ function App() {
         <main>
           <Hero />
           <Features />
-          <HowItWorks />
           <Benefits />
           <Stats />
           <CTA />
