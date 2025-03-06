@@ -10,7 +10,8 @@ interface IProps {
 
 const ProtectedRoute = ({role} : IProps) => {
   const { isAuthenticated, me } = useGetAuthenticated();
-  const location = useLocation(); 
+  const location = useLocation();
+  console.log(me) 
   
   if (isAuthenticated === null) {
     return <LoadingScreen />;

@@ -19,6 +19,7 @@ import ProfilePage from './pages/(private)/profile-page';
 import LoanBrowserPage from './pages/(public)/loan-browser';
 import { RouteEnum } from './lib/enum/router-enum';
 import { RoleEnum } from './lib/enum/role-enum';
+import { GetAdminRole } from './pages/(private)/get-admin-role';
 
 const router = createBrowserRouter([
   {
@@ -48,6 +49,10 @@ const router = createBrowserRouter([
           {
             path: RouteEnum.CREATE_POST,
             element: <CreateLoanPostPage />,
+          },
+          {
+            path: RouteEnum.GET_ADMIN_ROLE,
+            element: <GetAdminRole />,
           },
           {
             path: RouteEnum.EDIT_PROFILE,
