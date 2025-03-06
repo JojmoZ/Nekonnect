@@ -16,7 +16,11 @@ export function useGetLoanAssurance(assuranceId: string) {
             setAssurance(response);
             setLoading(false);
 
-            const content: any = response?.assuranceFile;
+            if (!response) {
+                return;
+            }
+
+            const content: Uint8Array | number[] = response.assuranceFile;
             if (content.length > 0) {
                 setImageUrl(deserializeImage(content));
             }
