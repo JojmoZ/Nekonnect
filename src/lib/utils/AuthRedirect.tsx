@@ -1,11 +1,11 @@
-import { useGetAuthenticated } from '@/hooks/user/use-get-authenticated';
+import { useAuth } from '@/context/auth-context';
 import LoadingScreen from '@/pages/(public)/loading';
 import { Navigate, Outlet } from 'react-router-dom';
 
 
 const AuthRedirect: React.FC = ( ) => {
 
-  const { isAuthenticated } = useGetAuthenticated(); 
+  const { isAuthenticated } = useAuth(); 
   
   if (isAuthenticated === null) {
     return <LoadingScreen text='Authenticating' />;

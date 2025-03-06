@@ -10,6 +10,7 @@ import router from '@/router';
 import { Toaster } from 'sonner';
 import { LayoutProvider } from './context/layout-context';
 import { ChatProvider } from './context/chat-context';
+import { AuthProvider } from './context/auth-context';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   // <React.StrictMode>
@@ -18,8 +19,10 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
       <LayoutProvider>
         <ServiceProvider>
           <LayoutProvider>
+            <AuthProvider>
               <RouterProvider router={router} />
               <Toaster richColors />
+            </AuthProvider>
           </LayoutProvider>
         </ServiceProvider>
       </LayoutProvider>

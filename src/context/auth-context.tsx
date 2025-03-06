@@ -1,12 +1,15 @@
 import useServiceContext from "@/hooks/use-service-context";
 import { User } from "@/lib/model/entity/user";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 import { toast } from "sonner";
+import { useLayout } from "./layout-context";
 
 interface AuthContextProps {
-    user: User | null | undefined;
-    setUser: (user: User | null | undefined) => void;
-    // login: () => Promise<void>;
+    me: User | null;
+    isAuthenticated: Boolean | null;
+    setUser: (user: User ) => void;
+    login: () => Promise<void>;
     logout: () => Promise<void>;
     fetchUser: () => Promise<void>;
   }
@@ -15,59 +18,85 @@ interface AuthProps {
   children: React.ReactNode;
 }
   
-export const AuthContext = createContext<AuthContextProps>({
-  user: undefined,
-  setUser: () => undefined,
-  // login: async () => undefined,
-  logout: async () => undefined,
-  fetchUser: async () => undefined,
-});
+export const AuthContext = createContext<AuthContextProps>({} as AuthContextProps);
 
 export function AuthProvider({ children }: AuthProps) {
-  const [user, setUser] = useState<User | undefined | null>();
+  const [user, setUser] = useState<User | null>(null);
   const { userService } = useServiceContext();
+  const [ isAuthenticated, setIsAuthenticated ] = useState<Boolean | null>(null);
+  const {startLoading, stopLoading} = useLayout();
 
-  const handleLogout = async () => {
+  const logout = async () => {
     const toastId = toast.loading('Signing you out...');
-
     try {
       await userService.logout();
-
       setUser(null);
-
-      toast.success('Signed out successfully!', { id: toastId });
+      setIsAuthenticated(false);
+      window.location.href = '/';
+      // toast.success('Signed out successfully!', { id: toastId });
     } catch (error) {
-      toast.error('Failed to sign out', { id: toastId });
+      // toast.error('Failed to sign out', { id: toastId });
     }
   };
+
+  const login = async () => {
+    try {
+      const loggedInUser = await userService.login();
+
+      if (loggedInUser) {
+        console.log('Logged in user:', loggedInUser);
+        setUser(loggedInUser);
+
+        if (!loggedInUser.username || loggedInUser.username.trim() === '') {
+          console.log('Redirecting to edit profile...');
+          window.location.href = '/edit-profile'; // No username → go to edit profile
+        } else {
+          console.log('Redirecting to home...');
+          window.location.href = '/home'; // Username exists → go to home
+        }
+      } else {
+        console.log('Failed to retrieve user information.');
+      }
+    } catch (err) {
+      console.error('Auth error:', err);
+    }
+  }
 
   const fetchUser = async () => {
-    const result = await userService.me();
-    if (!result || 'err' in result) {
-      await userService.logout();
+    startLoading();
+    const currentUser = await userService.me()
+    if (currentUser) {
+      setUser(currentUser);
+      setIsAuthenticated(true);
+    } else {
       setUser(null);
-      return;
+      setIsAuthenticated(false);
     }
-
-    setUser(result);
+    stopLoading();
   };
 
+  
+
   useEffect(() => {
-    if (user === undefined) {
-      fetchUser();
-    }
+    fetchUser();
   }, []);
 
   return (
     <AuthContext.Provider
-      value={{
-        user,
-        setUser,
-        logout: handleLogout,
-        fetchUser,
-      }}
+      value={
+        {
+          me: user,
+          setUser: setUser,
+          login: login,
+          logout: logout,
+          fetchUser: fetchUser,
+          isAuthenticated : isAuthenticated
+        }
+      }
     >
       {children}
     </AuthContext.Provider>
   );
 }
+
+export const useAuth = () => useContext(AuthContext);

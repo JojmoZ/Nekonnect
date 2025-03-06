@@ -6,14 +6,14 @@ import { Separator } from "@/components/ui/separator"
 import { Badge } from "@/components/ui/badge"
 import { useNavigate } from "react-router"
 import { RouteEnum } from "@/lib/enum/router-enum"
-import { useGetAuthenticated } from "@/hooks/user/use-get-authenticated"
 import { deserializeImage } from "@/lib/utils/Image"
 import LoadingScreen from "../(public)/loading"
+import { useAuth } from "@/context/auth-context"
 
 export default function ProfilePage() {
 
     const navigate = useNavigate();
-    const { me } = useGetAuthenticated();
+    const { me } = useAuth();
 
     return (
         me === null ? <LoadingScreen text="Fetching data" /> :

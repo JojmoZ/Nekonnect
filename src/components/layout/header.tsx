@@ -11,7 +11,6 @@ import {
 } from '@/components/ui/navigation-menu';
 import { ListItem } from '@/components/ui/list-item';
 import Link from 'next/link';
-import { useGetAuthenticated } from '@/hooks/user/use-get-authenticated';
 import useServiceContext from '@/hooks/use-service-context';
 import { useNavigate } from 'react-router';
 import { RouteEnum } from '@/lib/enum/router-enum';
@@ -24,7 +23,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu';
-import { useIILogin } from '@/hooks/user/use-ii-login';
+import { useAuth } from '@/context/auth-context';
 
 const components: { title: string; href: string; description: string }[] = [
   {
@@ -133,15 +132,13 @@ const for_admin: { title: string; href: string; description: string }[] = [
 
 function Header() {
   const navigate = useNavigate();
-  const { me, isAuthenticated, fetch } = useGetAuthenticated();
-  const { userService } = useServiceContext();
-  const { handleIILogin } = useIILogin();
+  const { me, login, fetchUser, isAuthenticated, logout } = useAuth();
 
-  const logout = () => {
-    toast.promise(userService.logout(), {
+  const handleLogout = () => {
+    toast.promise(logout(), {
       loading: 'Logging out...',
       success: () => {
-        fetch();
+        fetchUser();
         navigate('/')
         return 'Logged out successfully.';
       },
@@ -192,7 +189,7 @@ function Header() {
             ))}
             <NavigationMenuItem>
               {!isAuthenticated ? (
-                <Button variant="gradient" onClick={handleIILogin}>
+                <Button variant="gradient" onClick={login}>
                   Sign In
                 </Button>
               ) : (
@@ -226,7 +223,7 @@ function Header() {
                     >
                       Transaction History
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={logout}>Logout</DropdownMenuItem>
+                    <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               )}

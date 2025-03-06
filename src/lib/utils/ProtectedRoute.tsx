@@ -1,19 +1,17 @@
-import { useGetAuthenticated } from '@/hooks/user/use-get-authenticated';
 import LoadingScreen from '@/pages/(public)/loading';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { RoleEnum } from '../enum/role-enum';
 import { toast } from 'sonner';
+import { useAuth } from '@/context/auth-context';
 
 interface IProps {
   role : RoleEnum
 }
 
 const ProtectedRoute = ({role} : IProps) => {
-  const { isAuthenticated, me, loading } = useGetAuthenticated();
+  const { isAuthenticated, me } = useAuth();
   const location = useLocation();
 
-  console.log(me)
-  console.log(isAuthenticated)
   
   if (isAuthenticated === null) {
     return <LoadingScreen text='Navigating you' />;

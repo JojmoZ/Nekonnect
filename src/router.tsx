@@ -1,4 +1,3 @@
-import { ChatPage } from '@/pages/(private)/chat';
 import Home from '@/pages/(public)/home';
 import CreateLoanPostPage from '@/pages/(private)/create-loan-post';
 import { EditProfilePage } from '@/pages/(private)/edit-profile';
@@ -58,10 +57,6 @@ const router = createBrowserRouter([
           {
             path: RouteEnum.EDIT_PROFILE,
             element: <EditProfilePage />,
-          },
-          {
-            path: '/chat',
-            element: <ChatPage />,
           },
           {
             path: RouteEnum.POST,
