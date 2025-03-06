@@ -19,19 +19,16 @@ export const EditProfilePage = () => {
     faceEncoding,
     handleCaptureSubmit,
   } = useCaptureFace();
-  const { userForm, handleEdit } = useEditProfile({ faceEncoding });
+  const { userForm, handleEdit } = useEditProfile();
   const [loading, setLoading] = useState<boolean>(false);
   const [cameraAvailable, setCameraAvailable] = useState<boolean>(true);
 
   const handleFinalSubmit = async () => {
     setLoading(true);
     try {
-      await handleCaptureSubmit();
-      await handleEdit().finally(() => {
-        navigate('/home');
-      }
-      );
-
+      let a : any = await handleCaptureSubmit();
+      await handleEdit(a);
+      navigate('/home');
     } catch (err) {
       console.error('Error updating profile:', err);
     }

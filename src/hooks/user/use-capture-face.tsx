@@ -28,10 +28,9 @@ export function useCaptureFace() {
         const data = await response.json();
         console.log('MY FACE', data);
         if (data.success) {
-          setFaceEncoding([new Float64Array(data.encoding)]);
+          return [new Float64Array(data.encoding)]
         }
       }
-      console.log('AFTER UINT8', faceEncoding);
     } catch (err) {
       console.error('Error submitting captured face:', err);
     }
