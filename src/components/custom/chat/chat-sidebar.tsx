@@ -8,7 +8,6 @@ import {
 import { Message } from '@/lib/model/entity/message';
 import { useEffect, useState } from 'react';
 import { MessageBubble } from './message-bubble';
-import { useGetAuthenticated } from '@/hooks/user/use-get-authenticated';
 import { ChatForm } from './chat-form';
 import { useForm, UseFormReturn } from 'react-hook-form';
 import { messageDto, messageSchema } from '@/lib/model/dto/send-message.dto';
@@ -18,6 +17,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { getWebSocket } from '@/lib/config/web-socket';
 import { MessageResponse } from '@/declarations/message/message.did';
 import { useChat } from '@/context/chat-context';
+import { useAuth } from '@/context/auth-context';
 
 interface IProps {
   children : React.ReactNode
@@ -25,7 +25,7 @@ interface IProps {
 
 export function ChatAppSidebar({children} : IProps) {
 
-  const { me } = useGetAuthenticated();
+  const { me } = useAuth();
   const { messages } = useChat();
 
 

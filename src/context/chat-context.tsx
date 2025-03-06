@@ -2,7 +2,6 @@ import { MessageResponse } from "@/declarations/message/message.did";
 import { idlFactory } from "@/declarations/room";
 import { GetRoomsResponse } from "@/declarations/room/room.did";
 import useServiceContext from "@/hooks/use-service-context";
-import { useGetAuthenticated } from "@/hooks/user/use-get-authenticated";
 import { getWebSocket } from "@/lib/config/web-socket";
 import { messageDto, messageSchema } from "@/lib/model/dto/send-message.dto"
 import LoadingScreen from "@/pages/(public)/loading";
@@ -11,6 +10,7 @@ import { Principal } from "@dfinity/principal";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createContext, ReactNode, useContext, useEffect, useMemo, useState } from "react";
 import { useForm, UseFormReturn } from "react-hook-form"
+import { useAuth } from "./auth-context";
 
 interface IProps {
     form : UseFormReturn<messageDto>
@@ -30,7 +30,7 @@ export const ChatProvider= ({ children } : { children: React.ReactNode }) => {
     const [messages, setMessages] = useState<MessageResponse[]>([]);
     const [socket, setSocket] = useState<any>(null);
     const { roomService, messageService, userService } = useServiceContext();
-    const { me } = useGetAuthenticated();
+    const { me } = useAuth();
     const [loading, setLoading] = useState(true);
 
     const form = useForm<messageDto>({

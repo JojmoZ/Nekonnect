@@ -16,11 +16,11 @@ import { useGetLoanPost } from '@/hooks/loan-post/use-get-loan-post';
 import { useParams } from 'react-router';
 import { timeLeft } from '@/lib/utils/DateString';
 import { ChatAppSidebar } from '@/components/custom/chat/chat-sidebar';
-import { useGetAuthenticated } from '@/hooks/user/use-get-authenticated';
 import { ChatButton } from '@/components/custom/chat/chat-button';
 import { deserializeImage } from '@/lib/utils/Image';
 import LoadingScreen from './loading';
 import { ChatProvider, useChat } from '@/context/chat-context';
+import { useAuth } from '@/context/auth-context';
 
 const categoryIcons = {
   All: LayoutGrid,
@@ -46,7 +46,7 @@ function LoanDetailPage() {
   const { id } = useParams();
   const { loanPost, refetch } = useGetLoanPost(id ?? '');
   const [isDonationOverlayOpen, setIsDonationOverlayOpen] = useState(false);
-  const { me } = useGetAuthenticated();
+  const { me } = useAuth();
   const { form, rooms, getRoom } = useChat();
 
   const progress =

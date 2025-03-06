@@ -24,7 +24,7 @@ import { useForm } from 'react-hook-form';
 import { messageDto, messageSchema } from '@/lib/model/dto/send-message.dto';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { useGetAuthenticated } from '@/hooks/user/use-get-authenticated';
+import { useAuth } from '@/context/auth-context';
 
 
 interface IProps {}
@@ -35,7 +35,7 @@ export const ChatPage: React.FC<IProps> = () => {
   const [messages, setMessages] = useState<MessageResponse[]>([]);
   const { userService, roomService, roomUserService} = useServiceContext()
   const [socket, setSocket] = useState<any>(null);
-  const { me } = useGetAuthenticated();
+  const { me } = useAuth();
 
   const form = useForm<messageDto>({
         resolver: zodResolver(messageSchema),
