@@ -10,7 +10,7 @@ import router from '@/router';
 import { Toaster } from 'sonner';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <AgentProvider withProcessEnv>
       <ActorProvider idlFactory={idlFactory} canisterId={userCanisterId}>
         <ServiceProvider>
@@ -19,5 +19,5 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
         </ServiceProvider>
       </ActorProvider>
     </AgentProvider>
-  </React.StrictMode>,
+  // </React.StrictMode>,
 );

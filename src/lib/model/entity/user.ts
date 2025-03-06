@@ -10,4 +10,5 @@ export interface User {
   balance: number;
   profilePicture: Uint8Array<ArrayBufferLike> | number[];
   faceEncoding?: [] | [Float64Array | number[]];
+  role : string
 }
