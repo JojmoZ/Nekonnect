@@ -84,7 +84,6 @@ export class UserService extends BaseService {
             });
         } catch (err) {
             console.error("❌ Auth error:", err);
-            console.error("❌ Auth error:", err);
             throw err;
         }
     }
@@ -112,7 +111,7 @@ export class UserService extends BaseService {
             return {
                 ...users[0],
                 faceEncoding: users[0]?.faceEncoding && users[0].faceEncoding.length > 0 && users[0].faceEncoding[0]
-                    ? [new Uint8Array(users[0].faceEncoding[0])] // ✅ Convert number[] to Uint8Array
+                    ? [new Float64Array(users[0].faceEncoding[0])] // ✅ Convert number[] to Uint8Array
                     : [], // ✅ Ensure `faceEncoding` is always defined
             } as AppUser;
         } else {
@@ -126,35 +125,36 @@ export class UserService extends BaseService {
     }
     async editUser(user: AppUser): Promise<AppUser> {
         try {
-            const response = await this.user.editUserProfile({
-                internetIdentity: user.internetIdentity,
-                username: user.username,
-                dob: user.dob,
-                nationality: user.nationality,
-                gender: user.gender,
-                email: user.email,
-                balance: user.balance,
-                profilePicture: user.profilePicture,
-                faceEncoding: user.faceEncoding && user.faceEncoding.length > 0
-                    ? [Array.from(user.faceEncoding[0] as Float64Array)]
-                    : [],
-            } as BackendUser);
+        console.log('ini aku beneran bunuh diri', user.faceEncoding)
+        const response = await this.user.editUserProfile({
+            internetIdentity: user.internetIdentity,
+            username: user.username,
+            dob: user.dob,
+            nationality: user.nationality,
+            gender: user.gender,
+            email: user.email,
+            balance: user.balance,
+            profilePicture: user.profilePicture,
+            faceEncoding: user.faceEncoding && user.faceEncoding.length > 0 
+                ? [Array.from(user.faceEncoding[0] as Float64Array)]  
+                : [],  
+        } as BackendUser); 
 
-            if ("ok" in response) {
-                return {
-                    ...response.ok,
-                    faceEncoding: response.ok.faceEncoding.length > 0 && response.ok.faceEncoding[0]
-                        ? [new Uint8Array(response.ok.faceEncoding[0])]
-                        : [],
-                } as AppUser;
-            } else {
-                throw new Error(`Error editing user profile: ${response.err}`);
-            }
-        } catch (error) {
-            console.error(error);
-            throw error;
+       if ("ok" in response) {
+            return {
+                ...response.ok,
+                faceEncoding: response.ok.faceEncoding.length > 0 && response.ok.faceEncoding[0]
+                    ? [new Float64Array(response.ok.faceEncoding[0])]  
+                    : [],
+            } as AppUser;
+        } else {
+            throw new Error(`Error editing user profile: ${response.err}`);
         }
+    } catch (error) {
+        console.error(error);
+        throw error;
     }
+}
 
     async createUser(user: AppUser): Promise<AppUser> {
         try {
