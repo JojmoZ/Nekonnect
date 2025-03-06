@@ -15,7 +15,6 @@ export function useEditProfile({ faceEncoding }: { faceEncoding: [Float64Array] 
   const { userService } = useServiceContext();
   const { me } = useGetAuthenticated();
   const [user, setUser] = useState<User | null>(null);
-  const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof userSchema>>({
       resolver: zodResolver(userSchema),
@@ -52,6 +51,7 @@ export function useEditProfile({ faceEncoding }: { faceEncoding: [Float64Array] 
   }
 
   useEffect(() => {
+    if(me == null) return
     handleFetch();
   }, [me]);
 
@@ -63,7 +63,8 @@ export function useEditProfile({ faceEncoding }: { faceEncoding: [Float64Array] 
         balance: user!.balance,
         profilePicture: userValues.image
           ? await serializeImage(userValues.image) : [],
-        faceEncoding
+        faceEncoding,
+        role: user!.role
     });
   }
 
