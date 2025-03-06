@@ -9,18 +9,24 @@ import { RouterProvider } from 'react-router';
 import router from '@/router';
 import { Toaster } from 'sonner';
 import { LayoutProvider } from './context/layout-context';
+import { ChatProvider } from './context/chat-context';
+import { AuthProvider } from './context/auth-context';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   // <React.StrictMode>
-    <AgentProvider withProcessEnv>
-      <ActorProvider idlFactory={idlFactory} canisterId={userCanisterId}>
+  <AgentProvider withProcessEnv>
+    <ActorProvider idlFactory={idlFactory} canisterId={userCanisterId}>
+      <LayoutProvider>
         <ServiceProvider>
           <LayoutProvider>
-            <RouterProvider router={router} />
-            <Toaster richColors />
+            <AuthProvider>
+              <RouterProvider router={router} />
+              <Toaster richColors />
+            </AuthProvider>
           </LayoutProvider>
         </ServiceProvider>
-      </ActorProvider>
-    </AgentProvider>
+      </LayoutProvider>
+    </ActorProvider>
+  </AgentProvider>
   // </React.StrictMode>,
 );

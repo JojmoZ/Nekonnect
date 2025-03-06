@@ -5,7 +5,7 @@ import { RoomUserService } from "@/services/room-users.service";
 import { RoomService } from "@/services/room.service";
 import { TransactionService } from "@/services/transaction.service";
 import { UserService } from "@/services/user.service";
-import React, { useEffect, useMemo, useState } from "react";
+import { createContext, ReactNode, useContext, useEffect, useMemo, useState } from "react";
 interface IProps {
     userService : UserService
     roomUserService : RoomUserService
@@ -15,9 +15,9 @@ interface IProps {
     messageService : MessageService
 }
 
-export const ServiceContext = React.createContext<IProps>({} as IProps);
+export const ServiceContext = createContext<IProps>({} as IProps);
 
-export const ServiceProvider= ({ children } : { children: React.ReactNode }) => {
+export const ServiceProvider= ({ children } : { children: ReactNode }) => {
     const [userService, setUserService] = useState<UserService>(new UserService());
     const [roomUserService, setRoomUserService] = useState<RoomUserService>(new RoomUserService());
     const [roomService, setRoomService] = useState<RoomService>(new RoomService());
@@ -70,7 +70,7 @@ export const ServiceProvider= ({ children } : { children: React.ReactNode }) => 
     }, [userService, roomUserService, roomService, loanPostService, transactionService, messageService]);
 
     if (loading) {
-        return <LoadingScreen />;
+        return <LoadingScreen text="Initializing" />;
     }
 
     return (
@@ -80,4 +80,4 @@ export const ServiceProvider= ({ children } : { children: React.ReactNode }) => 
     );
 };
 
-export const useService = () => React.useContext(ServiceContext);
+export const useService = () => useContext(ServiceContext);

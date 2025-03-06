@@ -1,11 +1,14 @@
-import { useFormContext } from "react-hook-form";
+import { useFormContext, useWatch } from "react-hook-form";
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../../ui/form";
 import { Checkbox } from "../../ui/checkbox";
 
 function LoanAgreementForm() {
 
     const form = useFormContext();
-
+  const isChecked = useWatch({
+    control: form.control,
+    name: "terms",
+  });
     return <form className="space-y-6">
     <FormField
       control={form.control}

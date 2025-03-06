@@ -15,8 +15,19 @@ type LoanDisplayProps = {
 
 const LoanDisplay: React.FC<LoanDisplayProps> = ({ loan }) => {
 
-  const { loanPostService } = useServiceContext();
+  const { loanPostService, userService } = useServiceContext();
   const { assurance, imageUrl, getAssuranceLoading } = useGetLoanAssurance(loan.assuranceId);
+
+  const [username, setUsername] = React.useState<string | null>(null);
+
+  React.useEffect(() => {
+    const fetchUsername = async () => {
+      const user = await userService.getUserByPrincipal(loan.debtor);
+      setUsername(user ? user.username : null);
+    };
+
+    fetchUsername();
+  }, [loan.debtor]);
 
   const onAccept = () => {
     return loanPostService.acceptPost(loan.loanId);
@@ -93,7 +104,7 @@ const LoanDisplay: React.FC<LoanDisplayProps> = ({ loan }) => {
 
         <div>
           <Typography variant="subtitle1">Debtor</Typography>
-          <Typography variant="body1">{loan.debtor.toString()}</Typography>
+          <Typography variant="body1">{username}</Typography>
         </div>
 
         <div>
@@ -105,7 +116,7 @@ const LoanDisplay: React.FC<LoanDisplayProps> = ({ loan }) => {
           <Button onClick={handleAccept} variant="default">
             Accept
           </Button>
-          <Button onClick={handleReject} variant="destructive">
+          <Button onClick={handleReject} variant="outline">
             Reject
           </Button>
         </div>

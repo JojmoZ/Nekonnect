@@ -8,6 +8,10 @@ import { useCaptureFace } from '@/hooks/user/use-capture-face';
 import { useEditProfile } from '@/hooks/user/use-edit-profile';
 import { useState } from 'react';
 import { User } from 'lucide-react';
+import { toast } from 'sonner';
+import { string } from 'zod';
+import { useAuth } from '@/context/auth-context';
+import { useLayout } from '@/context/layout-context';
 
 export const EditProfilePage = () => {
   const navigate = useNavigate();
@@ -16,24 +20,37 @@ export const EditProfilePage = () => {
     webcamRef,
     capturedFace,
     captureFace,
-    faceEncoding,
     handleCaptureSubmit,
   } = useCaptureFace();
-  const { userForm, handleEdit } = useEditProfile({ faceEncoding });
+  const { userForm, handleEdit } = useEditProfile();
   const [loading, setLoading] = useState<boolean>(false);
   const [cameraAvailable, setCameraAvailable] = useState<boolean>(true);
+  const { fetchUser } = useAuth();
+  const { startLoading, stopLoading } = useLayout();
 
   const handleFinalSubmit = async () => {
+    startLoading()
     setLoading(true);
     try {
-      await handleCaptureSubmit();
-      await handleEdit();
-      navigate('/temp');
-    } catch (err) {
-      console.error('Error updating profile:', err);
+      let faceEncoding : Float64Array[] | undefined = await handleCaptureSubmit();
+      if (faceEncoding === undefined) {
+        toast.error('Error encoding face');
+        stopLoading()
+        setLoading(false);
+        return
+      }
+      await handleEdit(faceEncoding);
+      await fetchUser();
+      navigate('/home');
+    } catch (err : unknown) {
+      if (typeof err === 'string') toast.error(`Error updating profile: ${err}` );
+      stopLoading()
+      setLoading(false);
     }
+    stopLoading()
     setLoading(false);
   };
+
 
   const steps = [
     {

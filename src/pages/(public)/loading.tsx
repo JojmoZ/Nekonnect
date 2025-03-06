@@ -3,32 +3,38 @@
 import { useEffect, useState } from "react"
 import { Loader2 } from "lucide-react"
 import Logo from "@/components/logo"
+import { useLayout } from "@/context/layout-context";
 
-export default function LoadingScreen() {
+export default function LoadingScreen({text}: {text: string}) {
   const [progress, setProgress] = useState(0)
-  const [loadingText, setLoadingText] = useState("Initializing")
+  // const [loadingText, setLoadingText] = useState("Initializing")
+  const { setHeader, setFooter } = useLayout();
 
   useEffect(() => {
-    const loadingTexts = ["Initializing", "Loading resources", "Preparing data", "Almost there"]
+    // setHeader(false);
+    // setFooter(false);
+    // const loadingTexts = ["Initializing", "Loading resources", "Preparing data", "Almost there"]
 
     const interval = setInterval(() => {
       setProgress((prevProgress) => {
-        const newProgress = prevProgress + Math.random() * 15
+        const newProgress = prevProgress + 20
         return newProgress > 100 ? 100 : newProgress
       })
     }, 500)
 
-    const textInterval = setInterval(() => {
-      setLoadingText((prevText) => {
-        const currentIndex = loadingTexts.indexOf(prevText)
-        const nextIndex = (currentIndex + 1) % loadingTexts.length
-        return loadingTexts[nextIndex]
-      })
-    }, 2000)
+    // const textInterval = setInterval(() => {
+    //   setLoadingText((prevText) => {
+    //     const currentIndex = loadingTexts.indexOf(prevText)
+    //     const nextIndex = (currentIndex + 1) % loadingTexts.length
+    //     return loadingTexts[nextIndex]
+    //   })
+    // }, 2000)
 
     return () => {
       clearInterval(interval)
-      clearInterval(textInterval)
+      // clearInterval(textInterval)
+      // setHeader(true);
+      // setFooter(true);
     }
   }, [])
 
@@ -43,7 +49,7 @@ export default function LoadingScreen() {
         <div className="space-y-6 max-w-md">
           <div className="space-y-2">
             <p className="text-xl font-medium text-foreground">
-              {loadingText}
+              {text}
               <span className="animate-pulse">...</span>
             </p>
             <p className="text-sm text-muted-foreground">

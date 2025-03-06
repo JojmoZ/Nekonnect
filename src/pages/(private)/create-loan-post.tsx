@@ -13,25 +13,30 @@ import { useVerifyFace } from '@/hooks/user/use-verify-face';
 
 function CreateLoanPostPage() {
   const { loanPostForm, assuranceForm, agreementForm, onCreate } = useCreateLoanPost();
-  const verificator =  useVerifyFace();
+  const verificator = useVerifyFace();
   const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState(false);
 
   const navigate = useNavigate();
 
   const onSubmit = async () => {
-    toast.promise(onCreate(), {
-      loading: 'Creating loan post...',
-      success: () => {
-        setIsSuccessDialogOpen(true);
-        return 'Loan post created successfully.'
-      },
-      error: 'Failed to create loan post.',
-    });
+    const isTermsAccepted = agreementForm.watch("terms");
+    if(isTermsAccepted){
+      toast.promise(onCreate(), {
+        loading: 'Creating loan post...',
+        success: () => {
+          setIsSuccessDialogOpen(true);
+          return 'Loan post created successfully.'
+        },
+        error: 'Failed to create loan post.',
+      });
+    }else{
+      toast.promise(onCreate()) // error dialog
+    }    
   };
 
   const handleClose = () => {
     setIsSuccessDialogOpen(false);
-    navigate('/');
+    navigate('/home');
   }
 
   const steps = [
@@ -65,12 +70,11 @@ function CreateLoanPostPage() {
       title: 'Step 3: Verification',
       description: 'We should verify you before proceeding.',
       content: (
-          <FaceRecognitionForm verificator={verificator} />
+        <FaceRecognitionForm verificator={verificator} />
       ),
       onNext: async () => {
-        // Validate the face recognition result before proceeding
-        // return verificator.verificationResult;
-        return true;
+        // return verificator.verificationResult
+        return true
       }
     },
     {

@@ -7,14 +7,15 @@ import useServiceContext from "../use-service-context";
 import { User } from "@/lib/model/entity/user";
 import { useNavigate } from "react-router";
 import { serializeImage } from "@/lib/utils/Image";
-import { useGetAuthenticated } from "./use-get-authenticated";
 import { toast } from "sonner";
+import { useAuth } from "@/context/auth-context";
+import { useLayout } from "@/context/layout-context";
 
-export function useEditProfile({ faceEncoding }: { faceEncoding: [Float64Array] | [] }) {
+export function useEditProfile() {
 
   const { userService } = useServiceContext();
-  const { me } = useGetAuthenticated();
-  const [user, setUser] = useState<User | null>(null);
+  const { me } = useAuth();
+  const {startLoading, stopLoading} = useLayout();
 
   const form = useForm<z.infer<typeof userSchema>>({
       resolver: zodResolver(userSchema),
@@ -28,22 +29,21 @@ export function useEditProfile({ faceEncoding }: { faceEncoding: [Float64Array] 
       },
   });
 
-  const fetchUser = async () => {
-    setUser(await userService.me());
-      if (user) {
-        form.setValue('username', user.username || '');
-        form.setValue('dob', user.dob || '');
-        form.setValue('nationality', user.nationality || '');
+  const handleForm = async () => {
+      if (me) {
+        form.setValue('username', me.username || '');
+        form.setValue('dob', me.dob || '');
+        form.setValue('nationality', me.nationality || '');
         form.setValue(
           'gender',
-          (user.gender as 'Male' | 'Female' | 'Other') || 'Other',
+          (me.gender as 'Male' | 'Female' | 'Other') || 'Other',
         );
-        form.setValue('email', user.email || '');
+        form.setValue('email', me.email || '');
       } 
   }
 
   const handleFetch = async () => {
-    toast.promise(fetchUser(), {
+    toast.promise(handleForm(), {
       loading: 'Loading...',
       success: 'User fetched successfully',
       error: 'Failed to fetch user',
@@ -51,21 +51,23 @@ export function useEditProfile({ faceEncoding }: { faceEncoding: [Float64Array] 
   }
 
   useEffect(() => {
-    if(me == null) return
+    if (me == null) return;
     handleFetch();
   }, [me]);
 
-  const edit = async () => {
+  const edit = async (faceEncoding: [] | Float64Array[]) => {
+    startLoading();
     const userValues = form.getValues();
     await userService.editUser({
         ...userValues,
-        internetIdentity: user!.internetIdentity!,
-        balance: user!.balance,
+        internetIdentity: me!.internetIdentity!,
+        balance: me!.balance,
         profilePicture: userValues.image
           ? await serializeImage(userValues.image) : [],
-        faceEncoding,
-        role: user!.role
+        faceEncoding: faceEncoding,
+        role: me!.role
     });
+    stopLoading();
   }
 
   return { userForm: form, handleEdit: edit };

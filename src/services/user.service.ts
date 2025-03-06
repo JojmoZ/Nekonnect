@@ -4,10 +4,13 @@ import { ActorSubclass, AnonymousIdentity } from "@dfinity/agent";
 import { _SERVICE as _USERSERVICE } from "@/declarations/user/user.did";
 import { User as BackendUser } from "@/declarations/user/user.did";
 import { RoleEnum } from "@/lib/enum/role-enum";
+import { Principal } from "@dfinity/principal";
+import { Principal } from "@dfinity/principal";
 export class UserService extends BaseService {
 
 
     private II_URL = import.meta.env.VITE_II_NETWORK != "ic" ? `https://identity.ic0.app/` : `http://${process.env.CANISTER_ID_INTERNET_IDENTITY}.localhost:4943/`;
+    // private II_URL = import.meta.env.VITE_II_NETWORK == "ic" ? `https://identity.ic0.app/` : `http://${process.env.CANISTER_ID_INTERNET_IDENTITY}.localhost:4943/`;
     protected user!: ActorSubclass<_USERSERVICE>;
     constructor() {
         super();
@@ -86,7 +89,6 @@ export class UserService extends BaseService {
             });
         } catch (err) {
             console.error("❌ Auth error:", err);
-            console.error("❌ Auth error:", err);
             throw err;
         }
     }
@@ -114,7 +116,7 @@ export class UserService extends BaseService {
             return {
                 ...users[0],
                 faceEncoding: users[0]?.faceEncoding && users[0].faceEncoding.length > 0 && users[0].faceEncoding[0]
-                    ? [new Uint8Array(users[0].faceEncoding[0])] // ✅ Convert number[] to Uint8Array
+                    ? [new Float64Array(users[0].faceEncoding[0])] // ✅ Convert number[] to Uint8Array
                     : [], // ✅ Ensure `faceEncoding` is always defined
             } as AppUser;
         } else {
@@ -140,24 +142,24 @@ export class UserService extends BaseService {
                 faceEncoding: user.faceEncoding && user.faceEncoding.length > 0
                     ? [Array.from(user.faceEncoding[0] as Float64Array)]
                     : [],
-                role : user.role
+                role: user.role
             } as BackendUser);
 
-            if ("ok" in response) {
-                return {
-                    ...response.ok,
-                    faceEncoding: response.ok.faceEncoding.length > 0 && response.ok.faceEncoding[0]
-                        ? [new Uint8Array(response.ok.faceEncoding[0])]
-                        : [],
-                } as AppUser;
-            } else {
-                throw new Error(`Error editing user profile: ${response.err}`);
-            }
-        } catch (error) {
-            console.error(error);
-            throw error;
+       if ("ok" in response) {
+            return {
+                ...response.ok,
+                faceEncoding: response.ok.faceEncoding.length > 0 && response.ok.faceEncoding[0]
+                    ? [new Float64Array(response.ok.faceEncoding[0])]  
+                    : [],
+            } as AppUser;
+        } else {
+            throw new Error(`Error editing user profile: ${response.err}`);
         }
+    } catch (error) {
+        console.error(error);
+        throw error;
     }
+}
 
     async createUser(user: AppUser): Promise<AppUser> {
         try {
@@ -190,6 +192,30 @@ export class UserService extends BaseService {
         try {
             const response = await this.user.getAllUsers();
             return response;
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
+    async getUserByPrincipal(principal: Principal): Promise<AppUser | null> {
+        try {
+            const response = await this.user.getUserByPrincipal(principal);
+            return response.length > 0 && response[0] !== undefined ? response[0] : null;
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
+    async topUpBalance(user_id: Principal, amount: number): Promise<AppUser> {
+        try {
+            const response = await this.user.topUpBalance(user_id, amount);
+            if ("ok" in response) {
+                return response.ok;
+            } else {
+                throw new Error(`Error top up balance: ${response.err}`);
+            }
         } catch (error) {
             console.error(error);
             throw error;

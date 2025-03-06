@@ -1,14 +1,14 @@
 import { useEffect } from "react"
 import LoadingScreen from "../(public)/loading"
-import { useGetAuthenticated } from "@/hooks/user/use-get-authenticated";
 import useServiceContext from "@/hooks/use-service-context";
 import { RoleEnum } from "@/lib/enum/role-enum";
 import { CarTaxiFront } from "lucide-react";
 import { toast } from "sonner";
 import { useNavigate } from "react-router";
+import { useAuth } from "@/context/auth-context";
 
 export const GetAdminRole = () => {
-    const { isAuthenticated, me } = useGetAuthenticated();
+    const { isAuthenticated, me } = useAuth();
     const { userService } = useServiceContext();
     const navigate = useNavigate();
 
@@ -30,6 +30,6 @@ export const GetAdminRole = () => {
     },[me])
     
     return (
-        <LoadingScreen />
+        null
     )
 }

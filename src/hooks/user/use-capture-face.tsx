@@ -1,11 +1,13 @@
+import { useLayout } from "@/context/layout-context";
 import { useRef, useState } from "react";
 import Webcam from "react-webcam";
 
 export function useCaptureFace() {
   const webcamRef = useRef<Webcam | null>(null);
   const [capturedFace, setCapturedFace] = useState<string | null>(null);
-  const [faceEncoding, setFaceEncoding] = useState<[Float64Array] | []>([]);
-  const [loading, setLoading] = useState<boolean>(false);
+  // const [faceEncoding, setFaceEncoding] = useState<[Float64Array] | []>([]);
+    const {startLoading, stopLoading} = useLayout();
+
 
   const captureFace = async () => {
     if (webcamRef.current) {
@@ -15,7 +17,7 @@ export function useCaptureFace() {
   };
 
   const handleCaptureSubmit = async () => {
-    setLoading(true);
+    startLoading();
     try {
 
       if (capturedFace) {
@@ -26,18 +28,17 @@ export function useCaptureFace() {
         });
 
         const data = await response.json();
-        console.log('MY FACE', data);
         if (data.success) {
-          setFaceEncoding([new Float64Array(data.encoding)]);
+          return [new Float64Array(data.encoding)]
         }
       }
-      console.log('AFTER UINT8', faceEncoding);
     } catch (err) {
+      throw "Flask not running";
       console.error('Error submitting captured face:', err);
     }
-    setLoading(false);
+    stopLoading();
   }
 
 
-  return { webcamRef, capturedFace, captureFace, handleCaptureSubmit, faceEncoding, loading };
+  return { webcamRef, capturedFace, captureFace, handleCaptureSubmit };
 }

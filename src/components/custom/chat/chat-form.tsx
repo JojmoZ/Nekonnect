@@ -1,17 +1,11 @@
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import useServiceContext from "@/hooks/use-service-context";
-import { messageDto } from "@/lib/model/dto/send-message.dto";
-import { useState } from "react";
-import { useFormContext, UseFormReturn } from "react-hook-form";
+import { useChat } from "@/context/chat-context";
 
-interface IProps {
-  form: UseFormReturn<messageDto>;
-  onMessage: () => void
-}
 
-export const ChatForm = ({ form , onMessage}: IProps) => {
 
+export const ChatForm = () => {
+  const { form, onMessageSend } = useChat();
 
   return (
     <Form {...form}>
@@ -24,7 +18,7 @@ export const ChatForm = ({ form , onMessage}: IProps) => {
         className="sticky w-full bottom-0 left-0 flex items-center space-x-2 px-1 pt-2 border-t"
         onSubmit={(e) => {
           e.preventDefault();
-          onMessage();
+          onMessageSend();
         }}
       >
         <FormField 
@@ -42,14 +36,6 @@ export const ChatForm = ({ form , onMessage}: IProps) => {
             </FormItem>
           )}
         />
-        {/* <input
-          className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm flex-1"
-          id="message"
-          placeholder="Type your message..."
-          autoComplete="off"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-        /> */}
         <button
           className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-primary text-primary-foreground shadow hover:bg-primary/90 h-9 w-9"
           type="submit"

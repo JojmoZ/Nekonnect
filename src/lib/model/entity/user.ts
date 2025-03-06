@@ -8,7 +8,7 @@ export interface User {
   gender: string;
   email: string;
   balance: number;
-  profilePicture: Uint8Array<ArrayBufferLike> | number[];
-  faceEncoding?: [] | [Float64Array | number[]];
+  profilePicture: Uint8Array | number[];
+  faceEncoding?: [] | [Float64Array | number[]] | Float64Array[];
   role : string
 }

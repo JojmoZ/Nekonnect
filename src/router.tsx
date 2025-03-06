@@ -1,4 +1,3 @@
-import { ChatPage } from '@/pages/(private)/chat';
 import Home from '@/pages/(public)/home';
 import CreateLoanPostPage from '@/pages/(private)/create-loan-post';
 import { EditProfilePage } from '@/pages/(private)/edit-profile';
@@ -20,6 +19,7 @@ import LoanBrowserPage from './pages/(public)/loan-browser';
 import { RouteEnum } from './lib/enum/router-enum';
 import { RoleEnum } from './lib/enum/role-enum';
 import { GetAdminRole } from './pages/(private)/get-admin-role';
+import { ChatProvider } from './context/chat-context';
 
 const router = createBrowserRouter([
   {
@@ -59,12 +59,8 @@ const router = createBrowserRouter([
             element: <EditProfilePage />,
           },
           {
-            path: '/chat',
-            element: <ChatPage />,
-          },
-          {
             path: RouteEnum.POST,
-            element: <LoanDetailPage />,
+            element: <ChatProvider><LoanDetailPage /></ChatProvider>,
           },
           {
             path: RouteEnum.TRANSACTION_HISTORY,
