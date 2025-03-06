@@ -8,7 +8,7 @@ import {
 } from '@/components/ui/sidebar';
 import { LoanPostContext, LoanPostProvider } from '@/context/loan-post-context';
 import { useGetLoanPosts } from '@/hooks/loan-post/use-get-loan-posts';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import Footer from '@/components/layout/footer';
 import { useLayout } from '@/context/layout-context';
 import Header from '@/components/layout/header';
