@@ -8,7 +8,6 @@ import {
 import { Message } from '@/lib/model/entity/message';
 import { useEffect, useState } from 'react';
 import { MessageBubble } from './message-bubble';
-import { MessageResponse } from '@/lib/model/dto/response/get-message-response';
 import { useGetAuthenticated } from '@/hooks/user/use-get-authenticated';
 import { ChatForm } from './chat-form';
 import { useForm, UseFormReturn } from 'react-hook-form';
@@ -17,74 +16,18 @@ import { Outlet } from 'react-router';
 import useServiceContext from '@/hooks/use-service-context';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { getWebSocket } from '@/lib/config/web-socket';
+import { MessageResponse } from '@/declarations/message/message.did';
+import { useChat } from '@/context/chat-context';
 
 interface IProps {
-  form : UseFormReturn<messageDto>
   children : React.ReactNode
 }
 
-export function ChatAppSidebar({form,children} : IProps) {
+export function ChatAppSidebar({children} : IProps) {
 
   const { me } = useGetAuthenticated();
-  const [messages, setMessages] = useState<MessageResponse[]>([]);
-  const { userService, messageService } = useServiceContext()
-  const [socket, setSocket] = useState<any>(null);
+  const { messages } = useChat();
 
-  const getMessages = async () => {
-    const messages = await messageService.getMessagesByRoomId(form.getValues('room_id'));
-    console.log(messages)
-    // setMessages(messages);
-  }
-
-  const getSocket = async () => {
-      if (socket === null) {
-        const response = await getWebSocket(
-          await userService.getCallerIdentity(),
-        );
-   
-        response.onopen = () => {
-          console.log('Connected');
-        };
-  
-        response.onclose = () => {
-          console.log('Disconnected');
-        };
-  
-        response.onmessage = (event: any) => {
-          console.log('Message');
-          console.log(event.data);
-        };
-  
-        response.onerror = (error: any) => {
-          console.log(error);
-        };
-        setSocket(response);
-      }
-    };
-
-    
-  
-  const onMessage = async () => {
-    form.setValue('user_id', await userService.getCallerPrincipal());
-    console.log(form.getValues())
-    console.log(socket)
-    try {
-      if (socket && socket.readyState === WebSocket.OPEN) {
-        socket.send(form.getValues());
-        console.log('Message sent:', form.getValues());
-      } else {
-        console.error('WebSocket is not open. Cannot send message.');
-      }
-    } catch (error) {
-      console.error('Error sending message:', error);
-    }
-    // socket.send(form.getValues());
-  }
-
-  useEffect(() => {
-    getMessages();
-    getSocket();
-  }, [form.getValues('room_id')]);
 
   return (
     <SidebarProvider
@@ -129,7 +72,7 @@ export function ChatAppSidebar({form,children} : IProps) {
                 <MessageBubble message={msg} user={me} key={index}/>
               ))}
             </div>
-            <ChatForm onMessage={onMessage} form={form} />
+            <ChatForm />
           </SidebarGroup>
         </SidebarContent>
       </Sidebar>

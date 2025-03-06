@@ -20,6 +20,7 @@ import LoanBrowserPage from './pages/(public)/loan-browser';
 import { RouteEnum } from './lib/enum/router-enum';
 import { RoleEnum } from './lib/enum/role-enum';
 import { GetAdminRole } from './pages/(private)/get-admin-role';
+import { ChatProvider } from './context/chat-context';
 
 const router = createBrowserRouter([
   {
@@ -64,7 +65,7 @@ const router = createBrowserRouter([
           },
           {
             path: RouteEnum.POST,
-            element: <LoanDetailPage />,
+            element: <ChatProvider><LoanDetailPage /></ChatProvider>,
           },
           {
             path: RouteEnum.TRANSACTION_HISTORY,
