@@ -24,6 +24,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu';
+import { useIILogin } from '@/hooks/user/use-ii-login';
 
 const components: { title: string; href: string; description: string }[] = [
   {
@@ -134,6 +135,7 @@ function Header() {
   const navigate = useNavigate();
   const { me, isAuthenticated, fetch } = useGetAuthenticated();
   const { userService } = useServiceContext();
+  const { handleIILogin } = useIILogin();
 
   const logout = () => {
     toast.promise(userService.logout(), {
@@ -144,31 +146,6 @@ function Header() {
       },
       error: 'Failed to log out.',
     });
-  };
-
-  const handleIIlogin = async () => {
-    try {
-      const loggedInUser = await userService.login();
-
-      if (loggedInUser) {
-        console.log('Logged in user:', loggedInUser);
-        fetch();
-
-        if (!loggedInUser.username || loggedInUser.username.trim() === '') {
-          console.log('Redirecting to edit profile...');
-
-          navigate('/edit-profile'); // No username → go to edit profile
-        } else {
-          console.log('Redirecting to temp...');
-          navigate('/home'); // Username exists → go to temp
-        }
-      } else {
-        console.log('Failed to retrieve user information.');
-      }
-    } catch (err) {
-      console.error('Auth error:', err);
-      console.log('Something went wrong. Try again.');
-    }
   };
 
   return (
@@ -214,7 +191,7 @@ function Header() {
             ))}
             <NavigationMenuItem>
               {!isAuthenticated ? (
-                <Button variant="gradient" onClick={handleIIlogin}>
+                <Button variant="gradient" onClick={handleIILogin}>
                   Sign In
                 </Button>
               ) : (

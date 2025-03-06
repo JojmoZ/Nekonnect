@@ -3,13 +3,7 @@
 import { useState } from "react"
 import { MoonIcon, SunIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import Hero from "@/components/landing/hero"
-import Features from "@/components/landing/features"
-import Benefits from "@/components/landing/benefits"
-import Stats from "@/components/landing/stats"
 import CTA from "@/components/landing/cta"
-import Footer from "@/components/layout/footer"
-import Header from "@/components/landing/header"
 
 function App() {
   const [isDarkMode, setIsDarkMode] = useState(false)
@@ -29,10 +23,6 @@ function App() {
           </Button>
         </div>
         <main>
-          <Hero />
-          <Features />
-          <Benefits />
-          <Stats />
           <CTA />
         </main>
       </div>

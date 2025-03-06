@@ -28,7 +28,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <App />,
+        element: <Landing/>
       },
       {
         element: <ProtectedRoute role={RoleEnum.ADMIN} />,
