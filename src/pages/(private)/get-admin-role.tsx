@@ -30,6 +30,6 @@ export const GetAdminRole = () => {
     },[me])
     
     return (
-        <LoadingScreen />
+        null
     )
 }

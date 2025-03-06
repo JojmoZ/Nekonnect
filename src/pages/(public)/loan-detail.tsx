@@ -71,7 +71,7 @@ function LoanDetailPage() {
   return (
     <div className="container py-8 space-y-6">
       {!loanPost ? (
-        <LoadingScreen />
+        null
       ) : (
         
         <ChatAppSidebar>

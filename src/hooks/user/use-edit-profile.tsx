@@ -10,7 +10,7 @@ import { serializeImage } from "@/lib/utils/Image";
 import { useGetAuthenticated } from "./use-get-authenticated";
 import { toast } from "sonner";
 
-export function useEditProfile({ faceEncoding }: { faceEncoding: [Float64Array] | [] }) {
+export function useEditProfile() {
 
   const { userService } = useServiceContext();
   const { me } = useGetAuthenticated();
@@ -51,11 +51,10 @@ export function useEditProfile({ faceEncoding }: { faceEncoding: [Float64Array] 
   }
 
   useEffect(() => {
-    if(me == null) return
     handleFetch();
   }, [me]);
 
-  const edit = async () => {
+  const edit = async (a: [] | [Float64Array]) => {
     const userValues = form.getValues();
     await userService.editUser({
         ...userValues,
@@ -63,7 +62,7 @@ export function useEditProfile({ faceEncoding }: { faceEncoding: [Float64Array] 
         balance: user!.balance,
         profilePicture: userValues.image
           ? await serializeImage(userValues.image) : [],
-        faceEncoding,
+        faceEncoding: a,
         role: user!.role
     });
   }

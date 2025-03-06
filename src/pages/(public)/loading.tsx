@@ -4,7 +4,11 @@ import { useEffect, useState } from "react"
 import { Loader2 } from "lucide-react"
 import Logo from "@/components/logo"
 
-export default function LoadingScreen() {
+interface LoadingScreenProps {
+  style?: React.CSSProperties;
+}
+
+export default function LoadingScreen({ style }: LoadingScreenProps) {
   const [progress, setProgress] = useState(0)
   const [loadingText, setLoadingText] = useState("Initializing")
 
@@ -33,7 +37,7 @@ export default function LoadingScreen() {
   }, [])
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-background to-muted/50 dark:from-background dark:to-background/80">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-background to-muted/50 dark:from-background dark:to-background/80" style={style}>
       <div className="flex flex-col items-center space-y-8 px-4 text-center">
         <div className="relative">
           <div className="absolute -inset-4 rounded-full bg-primary/10 blur-xl animate-pulse"></div>

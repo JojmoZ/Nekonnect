@@ -17,7 +17,6 @@ export function useVerifyFace() {
                 const user = await userService.me();
                 if (user && user.faceEncoding && user.faceEncoding.length > 0 && user.faceEncoding[0]) {
                     setStoredEncoding(Array.from(user.faceEncoding[0] as number[])); // ✅ Safe conversion
-                    console.log(storedEncoding)
                 } else {
                     setStoredEncoding(null); // ✅ No stored encoding
                 }

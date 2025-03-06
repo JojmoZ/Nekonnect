@@ -8,6 +8,7 @@ export class UserService extends BaseService {
 
 
     private II_URL = import.meta.env.VITE_II_NETWORK != "ic" ? `https://identity.ic0.app/` : `http://${process.env.CANISTER_ID_INTERNET_IDENTITY}.localhost:4943/`;
+    // private II_URL = import.meta.env.VITE_II_NETWORK == "ic" ? `https://identity.ic0.app/` : `http://${process.env.CANISTER_ID_INTERNET_IDENTITY}.localhost:4943/`;
     protected user!: ActorSubclass<_USERSERVICE>;
     constructor() {
         super();
@@ -86,7 +87,6 @@ export class UserService extends BaseService {
             });
         } catch (err) {
             console.error("❌ Auth error:", err);
-            console.error("❌ Auth error:", err);
             throw err;
         }
     }
@@ -114,7 +114,7 @@ export class UserService extends BaseService {
             return {
                 ...users[0],
                 faceEncoding: users[0]?.faceEncoding && users[0].faceEncoding.length > 0 && users[0].faceEncoding[0]
-                    ? [new Uint8Array(users[0].faceEncoding[0])] // ✅ Convert number[] to Uint8Array
+                    ? [new Float64Array(users[0].faceEncoding[0])] // ✅ Convert number[] to Uint8Array
                     : [], // ✅ Ensure `faceEncoding` is always defined
             } as AppUser;
         } else {
@@ -140,24 +140,24 @@ export class UserService extends BaseService {
                 faceEncoding: user.faceEncoding && user.faceEncoding.length > 0
                     ? [Array.from(user.faceEncoding[0] as Float64Array)]
                     : [],
-                role : user.role
+                role: user.role
             } as BackendUser);
 
-            if ("ok" in response) {
-                return {
-                    ...response.ok,
-                    faceEncoding: response.ok.faceEncoding.length > 0 && response.ok.faceEncoding[0]
-                        ? [new Uint8Array(response.ok.faceEncoding[0])]
-                        : [],
-                } as AppUser;
-            } else {
-                throw new Error(`Error editing user profile: ${response.err}`);
-            }
-        } catch (error) {
-            console.error(error);
-            throw error;
+       if ("ok" in response) {
+            return {
+                ...response.ok,
+                faceEncoding: response.ok.faceEncoding.length > 0 && response.ok.faceEncoding[0]
+                    ? [new Float64Array(response.ok.faceEncoding[0])]  
+                    : [],
+            } as AppUser;
+        } else {
+            throw new Error(`Error editing user profile: ${response.err}`);
         }
+    } catch (error) {
+        console.error(error);
+        throw error;
     }
+}
 
     async createUser(user: AppUser): Promise<AppUser> {
         try {

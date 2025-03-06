@@ -8,7 +8,7 @@ const AuthRedirect: React.FC = ( ) => {
   const { isAuthenticated } = useGetAuthenticated(); 
   
   if (isAuthenticated === null) {
-    return <LoadingScreen />;
+    return null;
   }
   
   return isAuthenticated ? <Navigate to="/" replace /> : <Outlet />;
