@@ -51,7 +51,6 @@ export function useEditProfile({ faceEncoding }: { faceEncoding: [Float64Array] 
   }
 
   useEffect(() => {
-    if(me == null) return
     handleFetch();
   }, [me]);
 

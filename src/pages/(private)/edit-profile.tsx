@@ -28,7 +28,7 @@ export const EditProfilePage = () => {
     try {
       await handleCaptureSubmit();
       await handleEdit();
-      navigate('/temp');
+      navigate('/home');
     } catch (err) {
       console.error('Error updating profile:', err);
     }

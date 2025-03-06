@@ -13,7 +13,7 @@ const ProtectedRoute = ({role} : IProps) => {
   const location = useLocation();
   
   if (isAuthenticated === null) {
-    return <LoadingScreen />;
+    return null;
   }
 
   if ((!isAuthenticated || me === null || me.role !== role) && me?.role !== RoleEnum.ADMIN) {

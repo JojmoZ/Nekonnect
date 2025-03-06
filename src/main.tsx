@@ -12,15 +12,15 @@ import { LayoutProvider } from './context/layout-context';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   // <React.StrictMode>
-    <AgentProvider withProcessEnv>
-      <ActorProvider idlFactory={idlFactory} canisterId={userCanisterId}>
+  <AgentProvider withProcessEnv>
+    <ActorProvider idlFactory={idlFactory} canisterId={userCanisterId}>
+      <LayoutProvider>
         <ServiceProvider>
-          <LayoutProvider>
-            <RouterProvider router={router} />
-            <Toaster richColors />
-          </LayoutProvider>
+          <RouterProvider router={router} />
+          <Toaster richColors />
         </ServiceProvider>
-      </ActorProvider>
-    </AgentProvider>
+      </LayoutProvider>
+    </ActorProvider>
+  </AgentProvider>
   // </React.StrictMode>,
 );
