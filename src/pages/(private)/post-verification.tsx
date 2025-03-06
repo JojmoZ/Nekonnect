@@ -8,7 +8,9 @@ import {
 } from '@/components/ui/sidebar';
 import { LoanPostContext, LoanPostProvider } from '@/context/loan-post-context';
 import { useGetLoanPosts } from '@/hooks/loan-post/use-get-loan-posts';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
+import Footer from '@/components/layout/footer';
+import { useLayout } from '@/context/layout-context';
 
 function PostVerificationPage() {
   const { loanPosts, getLoanPostsLoading } = useGetLoanPosts(false);
@@ -37,19 +39,31 @@ function PostVerificationPage() {
 
 const ContentArea: React.FC = () => {
   const { selectedPost } = useContext(LoanPostContext)!;
+  const { setFooter } = useLayout();
+  
+  useEffect(() => {
+    setFooter(false)
+  },[])
 
   return (
     <div className="flex flex-1 flex-col gap-4 p-4">
       {selectedPost ? (
         <LoanDisplay loan={selectedPost} />
       ) : (
-        Array.from({ length: 1 }).map((_, index) => (
+        // Array.from({ length: 1 }).map((_, index) => (
+        <>
           <div
-            key={index}
-            className="aspect-video h-12 w-full rounded-lg bg-muted/50"
-          />
-        ))
-      )}
+            // key={index}
+            className="aspect-video flex items-center justify-center w-full rounded-lg bg-muted/50"
+          >
+              There is no loan selected
+          </div>
+          <Footer />
+        </>
+          
+        // ))
+      )
+      }
     </div>
   );
 };

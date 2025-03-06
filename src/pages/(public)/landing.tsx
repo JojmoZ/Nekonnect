@@ -11,14 +11,14 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
 import { Input } from '@/components/ui/input';
 import {
-  ArrowRight,
+  ArrowRight, BarChart3,
   Cat,
-  Check,
+  Check, Coins,
   CreditCard,
-  DollarSign,
+  DollarSign, FileCheck,
   Github,
   Instagram,
-  LineChart,
+  LineChart, Link,
   Linkedin,
   Lock,
   PawPrint,
@@ -33,10 +33,10 @@ import {
   NavigationMenuList,
   navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu';
-import Link from 'next/link';
 import { RouteEnum } from '@/lib/enum/router-enum';
 import Logo from '@/components/logo';
 import { Globe } from '@/components/magicui/globe';
+import { useIILogin } from '@/hooks/user/use-ii-login';
 
 const steps = [
   {
@@ -85,12 +85,47 @@ const steps = [
   },
 ];
 
+const features = [
+  {
+    icon: <Shield className="h-6 w-6 text-primary" />,
+    title: "Real-World Asset Backing",
+    description: "Loans secured by tangible assets providing safety and confidence for lenders.",
+  },
+  {
+    icon: <Link className="h-6 w-6 text-primary" />,
+    title: "Blockchain Technology",
+    description: "Transparent, immutable records of all transactions ensuring trust and security.",
+  },
+  {
+    icon: <BarChart3 className="h-6 w-6 text-primary" />,
+    title: "Flexible Loans",
+    description: "Access competitive loan rates with flexible terms tailored to your needs.",
+  },
+  {
+    icon: <Coins className="h-6 w-6 text-primary" />,
+    title: "Competitive Returns",
+    description: "Higher interest rates for lenders and lower fees for borrowers than traditional banks.",
+  },
+  {
+    icon: <FileCheck className="h-6 w-6 text-primary" />,
+    title: "Transparent Fees",
+    description: "No hidden charges. We maintain complete transparency in all our operations.",
+  },
+  {
+    icon: <Users className="h-6 w-6 text-primary" />,
+    title: "Global Accessibility",
+    description: "Connect with lenders and borrowers worldwide, expanding financial opportunities.",
+  },
+];
+
 export default function Landing() {
+  const { handleIILogin } = useIILogin();
+
   return (
     <div className="flex min-h-screen flex-col">
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="relative overflow-hidden py-20 md:py-32 h-[75dvh]">
+        <section className="relative overflow-hidden py-20 md:py-32 h-[80dvh]">
           <div className="container flex flex-col items-center text-center">
             <div className="absolute -top-40 right-0 h-96 w-96 rounded-full bg-primary/10 blur-3xl" />
             <div className="absolute -bottom-40 left-0 h-96 w-96 rounded-full bg-primary/10 blur-3xl" />
@@ -99,151 +134,54 @@ export default function Landing() {
                 Peer-to-Peer Lending, Decentralized
               </div>
               <h1 className="mt-6 text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
-                Secure P2P Lending <br />
-                with <span className="text-primary">Blockchain</span> &{' '}
-                <span className="text-primary">RWA</span>
+                Connecting People, Empowering Finance
+                With <span className="text-primary">Blockchain</span> & <span className="text-primary">RWA</span>
               </h1>
-              <p className="mt-6 max-w-3xl text-lg text-muted-foreground">
-                Nekonnect brings borrowers and lenders together in a secure,
-                transparent platform. Earn better returns or get flexible loans
-                with our community-driven approach.
+              <p className="mt-6 max-w-3xl text-lg text-muted-foreground mx-auto">
+                Nekonnect isn't just about transactions—it's about meaningful financial connections. By integrating blockchain and real-world assets, we create a decentralized platform where security, transparency, and opportunity come together.
               </p>
-              <div className="mt-8 flex flex-wrap justify-center gap-4">
-                <Button size="lg" className="gap-2">
+              <div className="mt-8 flex flex-wrap justify-center gap-4 z-10">
+                <Button size="lg" className="gap-2" onClick={handleIILogin}>
                   Get Started <ArrowRight className="h-4 w-4" />
                 </Button>
                 <Button size="lg" variant="outline">
                   Learn More
                 </Button>
               </div>
-              <Globe className="top-[90%]" />
-            </div>
-          </div>
-        </section>
-
-        {/* Stats Section */}
-        <section className="border-t border-b bg-muted/50 py-12">
-          <div className="container">
-            <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
-              <div className="flex flex-col items-center">
-                <span className="text-3xl font-bold">$24M+</span>
-                <span className="text-sm text-muted-foreground">
-                  Loans Funded
-                </span>
-              </div>
-              <div className="flex flex-col items-center">
-                <span className="text-3xl font-bold">15K+</span>
-                <span className="text-sm text-muted-foreground">
-                  Active Users
-                </span>
-              </div>
-              <div className="flex flex-col items-center">
-                <span className="text-3xl font-bold">8.5%</span>
-                <span className="text-sm text-muted-foreground">
-                  Avg. Return Rate
-                </span>
-              </div>
-              <div className="flex flex-col items-center">
-                <span className="text-3xl font-bold">99.1%</span>
-                <span className="text-sm text-muted-foreground">
-                  Repayment Rate
-                </span>
-              </div>
+              <Globe className="top-[100%]" />
             </div>
           </div>
         </section>
 
         {/* Features Section */}
-        <section id="features" className="py-20">
+        <section id="features" className="py-20 bg-muted/50 border-t border-b">
           <div className="container">
             <div className="mx-auto max-w-2xl text-center">
               <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
                 Why Choose Nekonnect?
               </h2>
               <p className="mt-4 text-muted-foreground">
-                Our platform offers unique advantages for both lenders and
-                borrowers.
+                Nekonnect changes this by leveraging blockchain technology and real-world asset backing to create a more inclusive, efficient, and secure lending ecosystem.
               </p>
             </div>
             <div className="mt-16 grid gap-8 md:grid-cols-3">
-              <Card>
-                <CardHeader>
-                  <div className="mb-2 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
-                    <LineChart className="h-6 w-6 text-primary" />
-                  </div>
-                  <CardTitle>Higher Returns</CardTitle>
-                  <CardDescription>
-                    Earn competitive interest rates by lending directly to
-                    borrowers without intermediaries.
-                  </CardDescription>
-                </CardHeader>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <div className="mb-2 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
-                    <Shield className="h-6 w-6 text-primary" />
-                  </div>
-                  <CardTitle>Advanced Security</CardTitle>
-                  <CardDescription>
-                    Your investments and personal data are protected with
-                    bank-level encryption and security.
-                  </CardDescription>
-                </CardHeader>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <div className="mb-2 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
-                    <CreditCard className="h-6 w-6 text-primary" />
-                  </div>
-                  <CardTitle>Flexible Loans</CardTitle>
-                  <CardDescription>
-                    Access competitive loan rates with flexible terms tailored
-                    to your needs.
-                  </CardDescription>
-                </CardHeader>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <div className="mb-2 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
-                    <Users className="h-6 w-6 text-primary" />
-                  </div>
-                  <CardTitle>Community Driven</CardTitle>
-                  <CardDescription>
-                    Join a community that believes in financial empowerment and
-                    mutual growth.
-                  </CardDescription>
-                </CardHeader>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <div className="mb-2 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
-                    <DollarSign className="h-6 w-6 text-primary" />
-                  </div>
-                  <CardTitle>Transparent Fees</CardTitle>
-                  <CardDescription>
-                    No hidden charges. We maintain complete transparency in all
-                    our operations.
-                  </CardDescription>
-                </CardHeader>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <div className="mb-2 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
-                    <Lock className="h-6 w-6 text-primary" />
-                  </div>
-                  <CardTitle>Risk Management</CardTitle>
-                  <CardDescription>
-                    Advanced risk assessment tools to help you make informed
-                    lending decisions.
-                  </CardDescription>
-                </CardHeader>
-              </Card>
+              {features.map((feature, index) => (
+                <Card key={index} className="hover:shadow-md transition-all">
+                  <CardHeader>
+                    <div className="mb-2 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+                      {feature.icon}
+                    </div>
+                    <CardTitle>{feature.title}</CardTitle>
+                    <CardDescription>{feature.description}</CardDescription>
+                  </CardHeader>
+                </Card>
+              ))}
             </div>
           </div>
         </section>
 
         {/* How It Works Section */}
-        <section id="how-it-works" className="border-t py-20 bg-muted/30">
+        <section id="how-it-works" className="py-20">
           <div className="container">
             <div className="text-center mb-16">
               <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">
@@ -276,8 +214,11 @@ export default function Landing() {
                     ))}
                   </ul>
 
-                  {index < steps.length && (
-                    <div className="hidden lg:block absolute top-7 right-[5%] w-[calc(100%+2.5rem)] h-0.5 bg-primary/20 z-0"></div>
+                  {index < steps.length - 1 ? (
+                    <div className="hidden lg:block absolute top-7 left-[0%] w-[calc(100%+2.5rem)] h-0.5 bg-primary/20 z-0"></div>
+                  ) : (
+
+                    <div className="hidden lg:block absolute top-7 left-[0%] w-[calc(90%)] h-0.5 bg-primary/20 z-0"></div>
                   )}
                 </div>
               ))}
@@ -286,7 +227,7 @@ export default function Landing() {
         </section>
 
         {/* Testimonials Section */}
-        <section id="testimonials" className="border-t py-20">
+        <section id="testimonials" className="border-t py-20 bg-muted/50">
           <div className="container">
             <div className="mx-auto max-w-2xl text-center">
               <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
@@ -433,37 +374,6 @@ export default function Landing() {
           </div>
         </section>
 
-        {/* CTA Section */}
-        <section className="border-t py-20 bg-primary text-primary-foreground">
-          <div className="container">
-            <div className="mx-auto max-w-3xl text-center">
-              <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-                Ready to Get Started?
-              </h2>
-              <p className="mt-4">
-                Join thousands of users who are already benefiting from our
-                peer-to-peer lending platform.
-              </p>
-              <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
-                <Button
-                  size="lg"
-                  variant="secondary"
-                  className="w-full sm:w-auto"
-                >
-                  Create Account
-                </Button>
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="w-full sm:w-auto border-primary-foreground hover:bg-primary-foreground hover:text-primary"
-                >
-                  Learn More
-                </Button>
-              </div>
-            </div>
-          </div>
-        </section>
-
         {/* FAQ Section */}
         <section id="faq" className="border-t py-20">
           <div className="container">
@@ -536,24 +446,32 @@ export default function Landing() {
         </section>
 
         {/* Newsletter Section */}
-        <section className="border-t py-20 bg-muted/30">
+        <section className="py-20 bg-primary text-primary-foreground">
           <div className="container">
-            <div className="mx-auto max-w-2xl text-center">
-              <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-                Stay Updated
+            <div className="mx-auto max-w-3xl text-center">
+              <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">
+                Ready to Transform Your Financial Future?
               </h2>
-              <p className="mt-4 text-muted-foreground">
-                Subscribe to our newsletter for the latest updates, tips, and
-                special offers.
+              <p className="text-lg mb-8 text-primary-foreground/80">
+                Join thousands of users already benefiting from decentralized peer-to-peer lending. Get early access to our
+                platform and be part of the financial revolution.
               </p>
-              <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
+
+              <form className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
                 <Input
                   type="email"
                   placeholder="Enter your email"
-                  className="max-w-sm"
+                  className="bg-primary-foreground/10 border-primary-foreground/20 text-primary-foreground placeholder:text-primary-foreground/50"
                 />
-                <Button>Subscribe</Button>
-              </div>
+                <Button variant="secondary" className="gap-2">
+                  Get Early Access
+                  <ArrowRight className="h-4 w-4" />
+                </Button>
+              </form>
+
+              <p className="mt-4 text-sm text-primary-foreground/70">
+                By signing up, you agree to our Terms of Service and Privacy Policy.
+              </p>
             </div>
           </div>
         </section>

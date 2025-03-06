@@ -15,7 +15,6 @@ export function useEditProfile() {
   const { userService } = useServiceContext();
   const { me } = useGetAuthenticated();
   const [user, setUser] = useState<User | null>(null);
-  const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof userSchema>>({
       resolver: zodResolver(userSchema),
@@ -63,7 +62,8 @@ export function useEditProfile() {
         balance: user!.balance,
         profilePicture: userValues.image
           ? await serializeImage(userValues.image) : [],
-        faceEncoding: a
+        faceEncoding: a,
+        role: user!.role
     });
   }
 

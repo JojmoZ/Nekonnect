@@ -8,16 +8,19 @@ import { ServiceProvider } from './context/service-context';
 import { RouterProvider } from 'react-router';
 import router from '@/router';
 import { Toaster } from 'sonner';
+import { LayoutProvider } from './context/layout-context';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  <React.StrictMode>
-    <AgentProvider withProcessEnv>
-      <ActorProvider idlFactory={idlFactory} canisterId={userCanisterId}>
+  // <React.StrictMode>
+  <AgentProvider withProcessEnv>
+    <ActorProvider idlFactory={idlFactory} canisterId={userCanisterId}>
+      <LayoutProvider>
         <ServiceProvider>
           <RouterProvider router={router} />
           <Toaster richColors />
         </ServiceProvider>
-      </ActorProvider>
-    </AgentProvider>
-  </React.StrictMode>,
+      </LayoutProvider>
+    </ActorProvider>
+  </AgentProvider>
+  // </React.StrictMode>,
 );

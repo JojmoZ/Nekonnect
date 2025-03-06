@@ -17,7 +17,6 @@ interface IProps {
 
 export const ServiceContext = React.createContext<IProps>({} as IProps);
 
-
 export const ServiceProvider= ({ children } : { children: React.ReactNode }) => {
     const [userService, setUserService] = useState<UserService>(new UserService());
     const [roomUserService, setRoomUserService] = useState<RoomUserService>(new RoomUserService());
