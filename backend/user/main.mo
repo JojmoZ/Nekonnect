@@ -48,7 +48,26 @@ actor class UserMain() {
   public func reset() : async () {
     users := List.nil<Types.User>();
   };
-
+  
+  public func reduceBalance(user_id : Principal, amount: Float) : async Result.Result<Types.User, Text>{
+    let user = await getUserByPrincipal(user_id);
+    switch (user){
+      case (null){
+      return #err("User Not Found");
+      };
+      case(?user){
+        let updatedUser = {
+          user with
+          balance = user.balance - amount;
+        };
+        users := List.filter<Types.User>(users, func (u: Types.User): Bool { 
+          u.internetIdentity != user.internetIdentity 
+        });
+        users := List.push(updatedUser, users);
+        return #ok(updatedUser);
+      }
+    }
+  };
   public func topUpBalance(user_id : Principal, amount : Float) : async Result.Result<Types.User, Text> {
     let existingUser = await getUserByPrincipal(user_id);
     switch (existingUser) {

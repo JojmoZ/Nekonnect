@@ -51,7 +51,6 @@ export function AuthProvider({ children }: AuthProps) {
   const loginProcess = async () => {
     try {
       const loggedInUser = await userService.login();
-
       if (loggedInUser) {
         console.log('Logged in user:', loggedInUser);
         setUser(loggedInUser);

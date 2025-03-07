@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { CreditCard, Wallet } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -10,10 +10,17 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter }
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { useLayout } from "@/context/layout-context"
 
 export default function TopUpPage() {
   const [amount, setAmount] = useState<string>("")
   const [paymentMethod, setPaymentMethod] = useState<string>("card")
+  const { setHeader, setFooter } = useLayout();
+
+  useEffect(() => {
+    setHeader(true)
+    setFooter(true)
+  }, [])
 
   const predefinedAmounts = ["5", "10", "20", "50", "100"]
 

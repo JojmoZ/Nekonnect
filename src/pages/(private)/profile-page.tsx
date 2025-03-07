@@ -12,12 +12,20 @@ import { useAuth } from "@/context/auth-context"
 import { useGetUserTransactions } from "@/hooks/transaction/use-get-user-transactions"
 import { timeToDateString } from "@/lib/utils/DateString"
 import { Transaction } from "@/lib/model/entity/transaction"
+import { useLayout } from "@/context/layout-context"
+import { useEffect } from "react"
 
 export default function ProfilePage() {
 
     const navigate = useNavigate();
     const { me } = useAuth();
     const { transactions } = useGetUserTransactions(); 
+    const { setHeader, setFooter } = useLayout();
+
+    useEffect(() => {
+        setHeader(true)
+        setFooter(true)
+    }, [])
 
     const calculateTotalLent = (transactions: Transaction[]) => {
         return transactions.reduce((acc, transaction) => acc + transaction.amount, 0);

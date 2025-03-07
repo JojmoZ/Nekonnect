@@ -187,7 +187,15 @@ function Header() {
                 </NavigationMenuContent>
               </NavigationMenuItem>
             ))}
-            <NavigationMenuItem className="">
+            <NavigationMenuItem>
+              <a
+                className={"block select-none rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-foreground/5 hover:text-accent-foreground focus:bg-foreground/5 focus:text-accent-foreground"}
+                href={RouteEnum.HOME}
+              >
+                <div className="text-sm font-medium leading-none">Home</div>
+              </a>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
               {!isAuthenticated ? (
                 <Button onClick={login} className="ml-3" variant="outline">
                   Sign In
@@ -219,6 +227,11 @@ function Header() {
                     >
                       Transaction History
                     </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() => navigate(RouteEnum.MY_LOANS)}
+                    >
+                      My Loans
+                    </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => navigate(RouteEnum.TOP_UP)}>Top Up</DropdownMenuItem>
                     <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
                   </DropdownMenuContent>
@@ -226,6 +239,11 @@ function Header() {
               )}
             </NavigationMenuItem>
           </NavigationMenuList>
+          {!isAuthenticated ? (
+            <div></div>
+          ) : (
+            `$ ${me?.balance}`
+          )}
         </NavigationMenu>
       </div>
     </header>

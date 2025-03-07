@@ -3,8 +3,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import useServiceContext from "../use-service-context";
+import { UserService } from "@/services/user.service";
 
 export function useCreateTransaction(loanId: string) {
+  const user = new UserService()
     const transactionForm = useForm<z.infer<typeof transactionSchema>>({
       resolver: zodResolver(transactionSchema),
       defaultValues: {
@@ -26,11 +28,15 @@ export function useCreateTransaction(loanId: string) {
     
     const handleCreate = async () => {
       const { amount, type } = transactionForm.getValues();
-
+      
       try {
-        const response = await transactionService.createTransaction(loanId, Number(amount), type);
+        let foundUser = await user.me()
+        if(!foundUser){
+          return;
+        }
+        let userId = foundUser.internetIdentity 
+        const response = await transactionService.createTransaction(loanId, Number(amount), type, userId );
         const validation = validateResponse(response);
-  
         if (validation.success) {
           return validation.message;
         } else {
