@@ -169,9 +169,9 @@ export default function ProfilePage() {
                                               When you make your first transaction, it will appear here.
                                           </p>
                                           <div className="flex flex-col sm:flex-row gap-3 w-full max-w-xs">
-                                              <Button className="flex items-center gap-2" onClick={() => navigate(RouteEnum.CREATE_POST)}>
+                                              <Button className="flex items-center gap-2" onClick={() => navigate(RouteEnum.BROWSE)}>
                                                   <PlusCircle className="h-4 w-4" />
-                                                  New Transaction
+                                                  Explore Loans
                                               </Button>
                                               <Button
                                                 variant="outline"

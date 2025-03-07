@@ -26,7 +26,8 @@ export function LoanHistoryCard({
         <span className="font-bold text-xl">
           ${loanPost.goal.toFixed(2)}
         </span>
-        <span className="text-gray-500 text-sm">{loanPost.status != "Verifying" && timeLeft(loanPost.verifiedAt, loanPost.postDuration)}</span>
+        <span className="text-gray-500 text-sm">{loanPost.status == "Funding" && timeLeft(loanPost.verifiedAt, loanPost.postDuration)}</span>
+        <span className="text-gray-500 text-sm">{loanPost.status == "Repaying" && timeLeft(loanPost.verifiedAt, loanPost.postDuration+loanPost.loanDuration)}</span>
       </div>
     </Card>
   );
