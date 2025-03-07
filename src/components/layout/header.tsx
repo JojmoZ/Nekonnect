@@ -24,6 +24,10 @@ import {
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu';
 import { useAuth } from '@/context/auth-context';
+import { useState } from 'react';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Menu, Wallet } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
 
 const components: { title: string; href: string; description: string }[] = [
   {
@@ -130,9 +134,27 @@ const for_admin: { title: string; href: string; description: string }[] = [
   },
 ];
 
+const menuItems = [
+  { label: "For Borrowers", links: for_borrowers },
+  { label: "For Lenders", links: for_lenders },
+  { label: "Admin", links: for_admin },
+  { label: "For All", links: for_all },
+  { label: "All LINKS Available", links: components },
+]
+
 function Header() {
   const navigate = useNavigate();
   const { me, login, fetchUser, isAuthenticated, logout } = useAuth();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+
+  const formatCurrency = (amount: number | undefined) => {
+    if (amount === undefined || amount === null) return '$0.00';
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 2,
+    }).format(amount);
+  };
 
   const handleLogout = () => {
     toast.promise(logout(), {
@@ -148,98 +170,254 @@ function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-20 items-center">
-        <Logo className="h-12" />
+      <div className="container flex h-20 items-center justify-between">
+        <div className="flex items-center">
+          <Logo className="h-12" />
+        </div>
 
-        <NavigationMenu className="ml-auto hidden gap-6 md:flex">
-          <NavigationMenuList>
-            {[
-              {
-                label: 'For Borrowers',
-                links: for_borrowers,
-              },
-              {
-                label: 'For Lenders',
-                links: for_lenders,
-              },
-              {
-                label: 'Admin',
-                links: for_admin,
-              },
-              {
-                label: 'For All',
-                links: for_all,
-              },
-              {
-                label: 'All LINKS Available',
-                links: components,
-              },
-            ].map((menu) => (
-              <NavigationMenuItem key={menu.label}>
-                <NavigationMenuTrigger>{menu.label}</NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
-                    {menu.links.map((route) => (
-                      <ListItem key={route.href} href={route.href} title={route.title}>
-                      </ListItem>
-                    ))}
-                  </ul>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
-            ))}
-            <NavigationMenuItem>
-              <a
-                className={"block select-none rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-foreground/5 hover:text-accent-foreground focus:bg-foreground/5 focus:text-accent-foreground"}
-                href={RouteEnum.HOME}
-              >
-                <div className="text-sm font-medium leading-none">Home</div>
-              </a>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              {!isAuthenticated ? (
-                <Button variant="gradient" onClick={login}>
-                  Sign In
+        {/* Mobile Menu Button */}
+        <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
+          <SheetTrigger asChild className="md:hidden">
+            <Button variant="ghost" size="icon" aria-label="Menu">
+              <Menu className="h-6 w-6" />
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="right" className="w-[300px] sm:w-[400px]">
+            <div className="flex flex-col h-full py-6">
+              <div className="flex-1 space-y-4">
+                {menuItems.map((menu) => (
+                  <div key={menu.label} className="space-y-2">
+                    <h4 className="font-medium text-sm">{menu.label}</h4>
+                    <div className="pl-4 border-l space-y-2">
+                      {menu.links.map((route) => (
+                        <Button
+                          key={route.href}
+                          variant="ghost"
+                          className="w-full justify-start"
+                          onClick={() => {
+                            navigate(route.href);
+                            setIsMobileMenuOpen(false);
+                          }}
+                        >
+                          {route.title}
+                        </Button>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+                <Button
+                  variant="ghost"
+                  className="w-full justify-start"
+                  onClick={() => {
+                    navigate(RouteEnum.HOME);
+                    setIsMobileMenuOpen(false);
+                  }}
+                >
+                  Home
                 </Button>
-              ) : (
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Avatar className="h-12 w-12 md:h-12 md:w-12 border-4 cursor-pointer hover:scale-105 transition-all duration-200">
-                      <AvatarFallback className="bg-primary text-md">
-                        {me?.username.substring(0, 2).toUpperCase()}
-                      </AvatarFallback>
-                      <AvatarImage
-                        src={deserializeImage(me?.profilePicture ?? [])}
-                        alt={me?.username || 'User'}
-                      />
-                    </Avatar>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent
-                    align="end"
-                    className="container text-left"
-                  >
-                    <DropdownMenuItem
-                      onClick={() => navigate(RouteEnum.PROFILE)}
+              </div>
+
+              {isAuthenticated && (
+                <div className="pt-6 border-t mt-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-3">
+                      <Avatar className="h-10 w-10 border-2">
+                        <AvatarFallback className="bg-primary text-primary-foreground">
+                          {me?.username?.substring(0, 2).toUpperCase()}
+                        </AvatarFallback>
+                        <AvatarImage
+                          src={deserializeImage(me?.profilePicture ?? [])}
+                          alt={me?.username || 'User'}
+                        />
+                      </Avatar>
+                      <div>
+                        <p className="font-medium">{me?.username}</p>
+                        <p className="text-sm text-muted-foreground">
+                          Account Balance
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-1 bg-primary/10 text-primary font-medium px-3 py-1.5 rounded-md">
+                      <Wallet className="h-4 w-4" />
+                      <span>{formatCurrency(me?.balance)}</span>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Button
+                      variant="ghost"
+                      className="w-full justify-start"
+                      onClick={() => {
+                        navigate(RouteEnum.PROFILE);
+                        setIsMobileMenuOpen(false);
+                      }}
                     >
                       Profile
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      onClick={() => navigate(RouteEnum.TRANSACTION_HISTORY)}
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      className="w-full justify-start"
+                      onClick={() => {
+                        navigate(RouteEnum.TRANSACTION_HISTORY);
+                        setIsMobileMenuOpen(false);
+                      }}
                     >
                       Transaction History
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      onClick={() => navigate(RouteEnum.MY_LOANS)}
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      className="w-full justify-start"
+                      onClick={() => {
+                        navigate(RouteEnum.MY_LOANS);
+                        setIsMobileMenuOpen(false);
+                      }}
                     >
                       My Loans
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => navigate(RouteEnum.TOP_UP)}>Top Up</DropdownMenuItem>
-                    <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      className="w-full justify-start"
+                      onClick={() => {
+                        navigate(RouteEnum.TOP_UP);
+                        setIsMobileMenuOpen(false);
+                      }}
+                    >
+                      Top Up
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      className="w-full justify-start text-destructive hover:text-destructive"
+                      onClick={() => {
+                        handleLogout();
+                        setIsMobileMenuOpen(false);
+                      }}
+                    >
+                      Logout
+                    </Button>
+                  </div>
+                </div>
               )}
-            </NavigationMenuItem>
-          </NavigationMenuList>
-        </NavigationMenu>
+
+              {!isAuthenticated && (
+                <div className="pt-6 border-t mt-6">
+                  <Button
+                    className="w-full"
+                    onClick={() => {
+                      login();
+                      setIsMobileMenuOpen(false);
+                    }}
+                  >
+                    Sign In
+                  </Button>
+                </div>
+              )}
+            </div>
+          </SheetContent>
+        </Sheet>
+
+        {/* Desktop Navigation */}
+        <div className="hidden md:flex items-center gap-4">
+          <NavigationMenu>
+            <NavigationMenuList>
+              {menuItems.map((menu) => (
+                <NavigationMenuItem key={menu.label}>
+                  <NavigationMenuTrigger>{menu.label}</NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
+                      {menu.links.map((route) => (
+                        <ListItem
+                          key={route.href}
+                          href={route.href}
+                          title={route.title}
+                        />
+                      ))}
+                    </ul>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+              ))}
+              <NavigationMenuItem>
+                <a
+                  className="block select-none rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-foreground/5 hover:text-accent-foreground focus:bg-foreground/5 focus:text-accent-foreground"
+                  href={RouteEnum.HOME}
+                >
+                  <div className="text-sm font-medium leading-none">Home</div>
+                </a>
+              </NavigationMenuItem>
+            </NavigationMenuList>
+          </NavigationMenu>
+
+          {/* Balance Display for Authenticated Users */}
+          {isAuthenticated && (
+            <div className="flex items-center gap-4">
+              <Card className="bg-primary/5 border-none shadow-none">
+                <CardContent className="flex items-center gap-2 py-2 px-4">
+                  <Wallet className="h-4 w-4 text-primary" />
+                  <span className="font-medium text-primary">
+                    {formatCurrency(me?.balance)}
+                  </span>
+                  {/*<Button*/}
+                  {/*  variant="ghost"*/}
+                  {/*  size="icon"*/}
+                  {/*  className="h-6 w-6 rounded-full bg-primary/10 hover:bg-primary/20 p-1"*/}
+                  {/*  onClick={() => navigate(RouteEnum.TOP_UP)}*/}
+                  {/*>*/}
+                  {/*  <span className="sr-only">Top up</span>*/}
+                  {/*  <span className="text-xs font-bold text-primary">+</span>*/}
+                  {/*</Button>*/}
+                </CardContent>
+              </Card>
+
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Avatar className="h-12 w-12 border-4 cursor-pointer hover:scale-105 transition-all duration-200">
+                    <AvatarFallback className="bg-primary text-primary-foreground text-md">
+                      {me?.username?.substring(0, 2).toUpperCase()}
+                    </AvatarFallback>
+                    <AvatarImage
+                      src={deserializeImage(me?.profilePicture ?? [])}
+                      alt={me?.username || 'User'}
+                    />
+                  </Avatar>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56">
+                  <div className="flex flex-col space-y-1 p-2 border-b">
+                    <p className="font-medium">{me?.username}</p>
+                    <p className="text-xs text-muted-foreground">Logged in</p>
+                  </div>
+                  <DropdownMenuItem onClick={() => navigate(RouteEnum.PROFILE)}>
+                    Profile
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => navigate(RouteEnum.TRANSACTION_HISTORY)}
+                  >
+                    Transaction History
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => navigate(RouteEnum.MY_LOANS)}
+                  >
+                    My Loans
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate(RouteEnum.TOP_UP)}>
+                    Top Up
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    className="text-destructive hover:text-destructive"
+                    onClick={handleLogout}
+                  >
+                    Logout
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          )}
+
+          {/* Sign In Button for Non-Authenticated Users */}
+          {!isAuthenticated && (
+            <Button onClick={login} variant="default">
+              Sign In
+            </Button>
+          )}
+        </div>
       </div>
     </header>
   );

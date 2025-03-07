@@ -48,7 +48,7 @@ function LoanDetailPage() {
   const { id } = useParams();
   const { loanPost, refetch } = useGetLoanPost(id ?? '');
   const [isDonationOverlayOpen, setIsDonationOverlayOpen] = useState(false);
-  const { me } = useAuth();
+  const { me , fetchUser } = useAuth();
   const { form, rooms, getRoom } = useChat();
   const { user } = useGetUser(loanPost?.debtor!);
 
@@ -58,6 +58,7 @@ function LoanDetailPage() {
 
   const handleDonationSuccess = () => {
     refetch();
+    fetchUser();
     setIsDonationOverlayOpen(false); 
   };
 
@@ -66,7 +67,6 @@ function LoanDetailPage() {
       return;
     }
     getRoom(id)
-    
   }, [])
 
   
@@ -115,24 +115,29 @@ function LoanDetailPage() {
                 </CardContent>
               </Card>
               <Card>
-                {/* TODO: Reminder for borrower */}
                 <CardContent className="pt-6">
-                  {
-                    me?.internetIdentity.toString() == loanPost.debtor.toString()? (
-                      <div className='flex justify-between items-center'>
-                        <CardTitle>Status</CardTitle>
-                        {loanPost.status}
-                      </div>
-                    ) :
-                    <Button
-                      size="lg"
-                      className="w-full"
-                      onClick={() => setIsDonationOverlayOpen(true)}
-                      disabled={loanPost.status != 'Funding'}
-                    >
-                      Support This Project
-                    </Button>
-                  }
+                {
+                  me?.internetIdentity.toString() === loanPost.debtor.toString() ? (
+                    <div className="flex justify-between items-center">
+                      <CardTitle>Status</CardTitle>
+                      {loanPost.status}
+                    </div>
+                  ) : (
+                    timeLeft(loanPost.verifiedAt, loanPost.postDuration) === "Expired" ? (
+                      <Button size="lg" className="w-full">
+                        This Project is Expired :(
+                      </Button>
+                    ) : (
+                      <Button
+                        size="lg"
+                        className="w-full"
+                        onClick={() => setIsDonationOverlayOpen(true)}
+                      >
+                        Support This Project
+                      </Button>
+                    )
+                  )
+                }
 
                 </CardContent>
               </Card>

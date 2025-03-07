@@ -2,8 +2,12 @@ import Types "types";
 import Text "mo:base/Text";
 import Time "mo:base/Time";
 import List "mo:base/List";
+import Error "mo:base/Error";
+import Principal "mo:base/Principal";
+import Debug "mo:base/Debug";
 import Utils "../utils";
 import LoanPostModule "../loanPost/interface";
+import UserActor "canister:user";
 
 actor class TransactionMain() {
 
@@ -26,10 +30,9 @@ actor class TransactionMain() {
         );
     };
 
-    public shared ({ caller }) func createTransaction(loanId : Text, amount : Float, method : Text, loanPostCanisterId : Text) : async Text {
+    public shared ({ caller }) func createTransaction(loanId : Text, amount : Float, method : Text, loanPostCanisterId : Text, userId : Principal) : async Text {
 
         let transactionId = await Utils.generateUUID();
-
         let transaction = {
             transactionId = transactionId;
             loanId = loanId;
@@ -37,11 +40,9 @@ actor class TransactionMain() {
             date = Time.now();
             method = method;
             status = "Ongoing";
-            lender = caller;
+            lender = userId;
         };
-
-        // TODO: Update user balance
-
+        let _ = await UserActor.reduceBalance(userId,amount);
         let loanPostActor = actor (loanPostCanisterId) : LoanPostModule.LoanPostActor;
         let update = await loanPostActor.updateRaisedAmount(loanId, amount);
 

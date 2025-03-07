@@ -2,6 +2,7 @@ import { _SERVICE as _TRANSACTIONSERVICE } from "@/declarations/transaction/tran
 import { ActorSubclass } from "@dfinity/agent";
 import { BaseService, createTransactionActor, transactionCanisterId, loanPostCanisterId } from "./base.service";
 import { Transaction } from "@/lib/model/entity/transaction";
+import { Principal } from "@dfinity/principal";
 
 export class TransactionService extends BaseService {
 
@@ -13,8 +14,8 @@ export class TransactionService extends BaseService {
         this.initialized = this.initialization();
     }
 
-    async createTransaction(loanId: string, amount: number, method: string) {
-        return await this.transaction.createTransaction(loanId, amount, method, loanPostCanisterId);
+    async createTransaction(loanId: string, amount: number, method: string, userId: Principal) {
+        return await this.transaction.createTransaction(loanId, amount, method, loanPostCanisterId,userId);
     }
 
     async getUserTransactions(): Promise<Transaction[]> {

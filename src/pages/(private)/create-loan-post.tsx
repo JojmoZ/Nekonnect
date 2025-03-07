@@ -15,21 +15,25 @@ function CreateLoanPostPage() {
   const { loanPostForm, assuranceForm, agreementForm, onCreate } = useCreateLoanPost();
   const verificator = useVerifyFace();
   const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
   const onSubmit = async () => {
+    setLoading(true);
     const isTermsAccepted = agreementForm.watch("terms");
     if(isTermsAccepted){
       toast.promise(onCreate(), {
         loading: 'Creating loan post...',
         success: () => {
+          setLoading(false);
           setIsSuccessDialogOpen(true);
           return 'Loan post created successfully.'
         },
         error: 'Failed to create loan post.',
       });
     }else{
+      setLoading(false);
       toast.promise(onCreate()) // error dialog
     }    
   };
@@ -93,7 +97,7 @@ function CreateLoanPostPage() {
       <h1 className="text-3xl font-bold mb-8 text-center">
         Apply for Loan
       </h1>
-      <Stepper steps={steps} onSubmit={onSubmit} showProgress={true} />
+      <Stepper steps={steps} onSubmit={onSubmit} showProgress={true} loading={loading} />
       <SuccessDialog
         isOpen={isSuccessDialogOpen}
         onClose={handleClose}

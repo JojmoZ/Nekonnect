@@ -1,4 +1,3 @@
-import { useAuth } from '@/context/auth-context';
 import { useEffect, useState } from 'react';
 
 const Logo = ({ className }: { className?: string }) => {
