@@ -188,6 +188,14 @@ function Header() {
               </NavigationMenuItem>
             ))}
             <NavigationMenuItem>
+              <a
+                className={"block select-none rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-foreground/5 hover:text-accent-foreground focus:bg-foreground/5 focus:text-accent-foreground"}
+                href={RouteEnum.LANDING}
+              >
+                <div className="text-sm font-medium leading-none">About Us</div>
+              </a>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
               {!isAuthenticated ? (
                 <Button variant="gradient" onClick={login}>
                   Sign In

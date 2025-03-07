@@ -4,7 +4,7 @@ import { useLayout } from "@/context/layout-context";
 import { useGetMyLoanPosts } from "@/hooks/loan-post/use-get-my-loan-posts";
 import { useEffect } from "react";
 
-const status = ["Verifying", "Funding", "Repaying", "Repaid"]
+const status = ["Verifying", "Funding", "Repaying", "Repaid", "Refunded"]
 
 function UserLoansPage() {
     const { setHeader, setFooter } = useLayout();
