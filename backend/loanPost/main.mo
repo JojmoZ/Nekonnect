@@ -36,7 +36,7 @@ actor class LoanPostMain() {
         List.find<Types.LoanAssurance>(assurances, func(assurance: Types.LoanAssurance): Bool = assurance.assuranceId == assuranceId);
     };
 
-    public shared ({ caller }) func createPost(
+    public func createPost(
         title: Text,
         description: Text,
         image: [Nat8],
@@ -205,7 +205,8 @@ actor class LoanPostMain() {
 
                 // Update transaction status for each transaction
                 for (transaction in transactions.vals()) {
-                    let updateResult = await transactionActor.updateTransactionStatus(transaction.transactionId, transactionStatus);
+                    ignore await transactionActor.updateTransactionStatus(transaction.transactionId, transactionStatus);
+
                 };
 
             };

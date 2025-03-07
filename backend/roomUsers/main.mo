@@ -2,7 +2,6 @@ import List "mo:base/List";
 import Principal "mo:base/Principal";
 import Result "mo:base/Result";
 import Iter "mo:base/Iter";
-import Buffer "mo:base/Buffer";
 import Types "types";
 
 actor RoomUsersManager {
