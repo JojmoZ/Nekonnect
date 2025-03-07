@@ -52,14 +52,10 @@ export default function Home() {
                 className={`w-5 h-5`}
               />
             </div>
-            <div
-              className={`text-sm`}
-            >
-            </div>
           </CardHeader>
           <CardFooter className="flex justify-between items-center">
             <Button onClick={() => { navigate(RouteEnum.CREATE_POST) }}>
-              Support
+              Create Project
             </Button>
           </CardFooter>
         </Card>
