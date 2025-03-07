@@ -188,27 +188,15 @@ function Header() {
               </NavigationMenuItem>
             ))}
             <NavigationMenuItem>
-              <a
-                className={"block select-none rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-foreground/5 hover:text-accent-foreground focus:bg-foreground/5 focus:text-accent-foreground"}
-                href={RouteEnum.LANDING}
-              >
-                <div className="text-sm font-medium leading-none">About Us</div>
-              </a>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
               {!isAuthenticated ? (
                 <Button variant="gradient" onClick={login}>
                   Sign In
                 </Button>
               ) : (
-                // <Button variant="gradient" onClick={logout}>
-                //   Log out
-                // </Button>
-
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Avatar className="h-12 w-12 md:h-12 md:w-12 border-4 border-background shadow-xl cursor-pointer">
-                      <AvatarFallback className="bg-primary text-sm">
+                    <Avatar className="h-12 w-12 md:h-12 md:w-12 border-4 cursor-pointer hover:scale-105 transition-all duration-200">
+                      <AvatarFallback className="bg-primary text-md">
                         {me?.username.substring(0, 2).toUpperCase()}
                       </AvatarFallback>
                       <AvatarImage

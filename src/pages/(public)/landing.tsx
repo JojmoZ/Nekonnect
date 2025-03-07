@@ -8,7 +8,6 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Separator } from '@/components/ui/separator';
 import { Input } from '@/components/ui/input';
 import {
   ArrowRight, BarChart3,
@@ -16,25 +15,12 @@ import {
   Check, Coins,
   CreditCard,
   DollarSign, FileCheck,
-  Github,
-  Instagram,
-  LineChart, Link,
-  Linkedin,
+  Link,
   Lock,
   PawPrint,
   Shield,
-  Twitter,
   Users,
 } from 'lucide-react';
-import {
-  NavigationMenu,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  navigationMenuTriggerStyle,
-} from '@/components/ui/navigation-menu';
-import { RouteEnum } from '@/lib/enum/router-enum';
-import Logo from '@/components/logo';
 import { Globe } from '@/components/magicui/globe';
 import { useAuth } from '@/context/auth-context';
 
@@ -221,7 +207,6 @@ export default function Landing() {
                   {index < steps.length - 1 ? (
                     <div className="hidden lg:block absolute top-7 left-[0%] w-[calc(100%+2.5rem)] h-0.5 bg-primary/20 z-0"></div>
                   ) : (
-
                     <div className="hidden lg:block absolute top-7 left-[0%] w-[calc(90%)] h-0.5 bg-primary/20 z-0"></div>
                   )}
                 </div>
