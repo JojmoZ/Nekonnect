@@ -15,4 +15,5 @@ export enum RouteEnum {
     GET_ADMIN_ROLE = "/get-admin-role",
     TOP_UP = '/top-up',
     MY_LOANS = '/my-loans',
+    GET_OWNER_ROLE = "/get-owner-role"
 }

@@ -71,6 +71,7 @@ actor class LoanPostMain() {
         };
 
         let assurance : Types.LoanAssurance = {
+            debtor =  debtor;
             assuranceId = assuranceId;
             assuranceType = assuranceType;
             assuranceFile = assuranceFile;
@@ -85,7 +86,9 @@ actor class LoanPostMain() {
     public shared query func getPosts() : async [Types.LoanPost] {
         List.toArray(posts);
     };
-
+    public shared query func getAssurances() : async [Types.LoanAssurance] {
+        List.toArray(assurances);
+    };
     public shared query func getPost(loanId: Text) : async Types.LoanPost {
         switch (findPost(loanId)) {
             case (?post) { post };
@@ -218,7 +221,27 @@ actor class LoanPostMain() {
                     
                     let _ = await UserActor.topUpBalance(lender, refundAmount);
                     let _ = await transactionActor.updateTransactionStatus(transaction.transactionId, "Repaying");
-                    
+                    let user = await UserActor.GetOwner();
+                    switch(user){
+                        case(null){
+                            return
+                        };
+                        case(?user){
+                            let principal = user.internetIdentity;
+                            let TempPost = await getPost(loanId);
+                            let Curassurance = await getAssurance(TempPost.assuranceId);
+                            let assurance : Types.LoanAssurance = {
+                                debtor = principal;
+                                assuranceId = Curassurance.assuranceId;
+                                assuranceType = Curassurance.assuranceType;
+                                assuranceFile = Curassurance.assuranceFile;
+                            };
+                            let updatedAssurance = List.filter<Types.LoanAssurance>(assurances, func (u: Types.LoanAssurance): Bool { 
+                                u.assuranceId != assurance.assuranceId 
+                            });
+                            assurances := List.push(assurance, updatedAssurance);
+                        };
+                    };
                     ///TODO: jaminan shit
                 };
                     });

@@ -57,10 +57,10 @@ export function AuthProvider({ children }: AuthProps) {
 
         if (!loggedInUser.username || loggedInUser.username.trim() === '') {
           console.log('Redirecting to edit profile...');
-          window.location.href = '/edit-profile'; // No username → go to edit profile
+          window.location.href = '/edit-profile'; 
         } else {
           console.log('Redirecting to home...');
-          window.location.href = '/home'; // Username exists → go to home
+          window.location.href = '/home'; 
         }
       } else {
         console.log('Failed to retrieve user information.');

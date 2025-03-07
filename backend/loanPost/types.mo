@@ -28,6 +28,7 @@ module {
     };
 
     public type LoanAssurance = {
+        debtor: Principal;
         assuranceId: Text;
         assuranceType: Text;
         assuranceFile: [Nat8];
