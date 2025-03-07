@@ -26,6 +26,7 @@ import { Separator } from '@/components/ui/separator';
 import Footer from '@/components/layout/footer';
 import { useLayout } from '@/context/layout-context';
 import { ChatButton } from '@/components/custom/chat/chat-button';
+import Header from '@/components/layout/header';
 
 const categoryIcons = {
   All: LayoutGrid,
@@ -54,7 +55,7 @@ function LoanDetailPage() {
   const { me , fetchUser } = useAuth();
   const { form, rooms, getRoom } = useChat();
   const { user } = useGetUser(loanPost?.debtor!);
-  const { setFooter } = useLayout();
+  const { setFooter, setHeader } = useLayout();
 
   const progress =
     ((loanPost?.raised ?? 0) / (loanPost?.goal ?? 0)) * 100;
@@ -116,7 +117,7 @@ function LoanDetailPage() {
                   <img
                     src={deserializeImage(loanPost.image)}
                     alt={loanPost.title}
-                    className="w-full h-64 object-cover rounded-lg mt-6" />
+                    className="w-full h-full object-cover rounded-lg mt-6" />
                 </CardContent>
               </Card>
               <Card>
@@ -187,6 +188,9 @@ function LoanDetailPage() {
                         {rooms.map((room,index) => (
                           <ChatCard key={index} room={room} />
                         ))}
+                        {rooms.length === 0 && (
+                          <p className='px-6 pb-4 text-muted-foreground'>There are no messages</p>
+                        )}
                       </ul>
                     </CardContent>
                   </Card>
