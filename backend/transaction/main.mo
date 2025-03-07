@@ -2,7 +2,6 @@ import Types "types";
 import Text "mo:base/Text";
 import Time "mo:base/Time";
 import List "mo:base/List";
-import Error "mo:base/Error";
 import Utils "../utils";
 import LoanPostModule "../loanPost/interface";
 
