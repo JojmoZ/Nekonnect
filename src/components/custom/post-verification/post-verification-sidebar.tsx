@@ -49,7 +49,7 @@ export function PostVerificationSidebar({
                 >
                   <div className="flex w-full items-center gap-2">
                     <span>
-                      {usernames[post.debtor.toText()] ?? post.debtor.toText()}
+                      {usernames[post.debtor.toText()] ?? "..."}
                     </span>
                     <span className="ml-auto text-xs">
                       {timeToDateString(post.createdAt)}

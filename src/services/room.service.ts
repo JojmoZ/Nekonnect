@@ -4,7 +4,6 @@ import { Room } from "@/lib/model/entity/room";
 import { Principal } from "@dfinity/principal";
 import { _SERVICE as _ROOMSERVICE, GetRoomsResponse } from "@/declarations/room/room.did";
 import { ActorSubclass } from "@dfinity/agent";
-import { GetRoomByPostIdResponse } from "@/lib/model/dto/response/get-room-by-post-id-response";
 
 export class RoomService extends BaseService {
 

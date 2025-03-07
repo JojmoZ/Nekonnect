@@ -19,6 +19,9 @@ export class TransactionService extends BaseService {
     }
 
     async getUserTransactions(): Promise<Transaction[]> {
-        return await this.transaction.getUserTransactions();
+        const transactions = await this.transaction.getTransactions()
+        const caller = await this.getCallerPrincipal();
+        const filtered_transactions = transactions.filter(transaction => transaction.lender.toString() === caller.toString());
+        return filtered_transactions;
     }
 }

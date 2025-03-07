@@ -16,13 +16,17 @@ import { useGetLoanPost } from '@/hooks/loan-post/use-get-loan-post';
 import { useParams } from 'react-router';
 import { timeLeft } from '@/lib/utils/DateString';
 import { ChatAppSidebar } from '@/components/custom/chat/chat-sidebar';
-import { ChatButton } from '@/components/custom/chat/chat-button';
+import { ChatCard } from '@/components/custom/chat/chat-card';
 import { deserializeImage } from '@/lib/utils/Image';
 import LoadingScreen from './loading';
 import { ChatProvider, useChat } from '@/context/chat-context';
 import { useAuth } from '@/context/auth-context';
 import { useGetUser } from '@/hooks/user/use-get-user';
 import { Separator } from '@/components/ui/separator';
+import Footer from '@/components/layout/footer';
+import { useLayout } from '@/context/layout-context';
+import { ChatButton } from '@/components/custom/chat/chat-button';
+import Header from '@/components/layout/header';
 
 const categoryIcons = {
   All: LayoutGrid,
@@ -51,6 +55,7 @@ function LoanDetailPage() {
   const { me , fetchUser } = useAuth();
   const { form, rooms, getRoom } = useChat();
   const { user } = useGetUser(loanPost?.debtor!);
+  const { setFooter, setHeader } = useLayout();
 
   const progress =
     ((loanPost?.raised ?? 0) / (loanPost?.goal ?? 0)) * 100;
@@ -66,6 +71,7 @@ function LoanDetailPage() {
     if (!id) {
       return;
     }
+    setFooter(false)
     getRoom(id)
   }, [])
 
@@ -111,7 +117,7 @@ function LoanDetailPage() {
                   <img
                     src={deserializeImage(loanPost.image)}
                     alt={loanPost.title}
-                    className="w-full h-64 object-cover rounded-lg mt-6" />
+                    className="w-full h-full object-cover rounded-lg mt-6" />
                 </CardContent>
               </Card>
               <Card>
@@ -170,16 +176,25 @@ function LoanDetailPage() {
                   </div>
                 </CardContent>
               </Card>
+              
               {
                 me?.internetIdentity.toString() == loanPost.debtor.toString() && (
-                  <Card>
-                    <CardHeader >
-                        <CardTitle>User Chat</CardTitle>
+                  <Card className="w-full">
+                    <CardHeader>
+                      <CardTitle>People Who Messaged You</CardTitle>
                     </CardHeader>
-                    {rooms.map((room,index) => (
-                      <ChatButton key={index} receiver_id={room.room_user.at(0)?.user_id!} post_id={id} />
-                    ))}
+                    <CardContent className="p-0">
+                      <ul className="divide-y">
+                        {rooms.map((room,index) => (
+                          <ChatCard key={index} room={room} />
+                        ))}
+                        {rooms.length === 0 && (
+                          <p className='px-6 pb-4 text-muted-foreground'>There are no messages</p>
+                        )}
+                      </ul>
+                    </CardContent>
                   </Card>
+
                 )
               }
 
@@ -190,6 +205,7 @@ function LoanDetailPage() {
                 loanId={loanPost.loanId}
                 onDonationSuccess={handleDonationSuccess}
               />
+              <Footer />
           </main>
         </ChatAppSidebar>
       )}
