@@ -42,7 +42,6 @@ actor class TransactionMain() {
             status = "Ongoing";
             lender = userId;
         };
-        let _ = await UserActor.reduceBalance(userId,amount);
         let loanPostActor = actor (loanPostCanisterId) : LoanPostModule.LoanPostActor;
         let update = await loanPostActor.updateRaisedAmount(loanId, amount);
 
@@ -50,6 +49,7 @@ actor class TransactionMain() {
             return update;
         };
 
+        let _ = await UserActor.reduceBalance(userId,amount);
         transactions := List.push<Types.Transaction>(transaction, transactions);
 
         return "Transaction created successfully!";

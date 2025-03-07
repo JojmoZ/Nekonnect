@@ -34,9 +34,9 @@ export function useCaptureFace() {
       }
     } catch (err) {
       throw "Flask not running";
-      console.error('Error submitting captured face:', err);
     }
     stopLoading();
+    return [];
   }
 
 

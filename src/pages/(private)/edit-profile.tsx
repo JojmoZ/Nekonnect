@@ -9,7 +9,6 @@ import { useEditProfile } from '@/hooks/user/use-edit-profile';
 import { useState } from 'react';
 import { User } from 'lucide-react';
 import { toast } from 'sonner';
-import { string } from 'zod';
 import { useAuth } from '@/context/auth-context';
 import { useLayout } from '@/context/layout-context';
 
@@ -31,19 +30,21 @@ export const EditProfilePage = () => {
   const handleFinalSubmit = async () => {
     startLoading()
     setLoading(true);
+    const toastId = toast.loading('Updating profile...');
     try {
       let faceEncoding : Float64Array[] | undefined = await handleCaptureSubmit();
       if (faceEncoding === undefined) {
-        toast.error('Error encoding face');
+        toast.error('Error encoding face', { id: toastId});
         stopLoading()
         setLoading(false);
-        // return
+        return
       }
       await handleEdit(faceEncoding ?? []);
       await fetchUser();
+      toast.success('Profile updated successfully', { id: toastId });
       navigate('/home');
     } catch (err : unknown) {
-      if (typeof err === 'string') toast.error(`Error updating profile: ${err}` );
+      if (typeof err === 'string') toast.error(`Error updating profile: ${err}`, { id: toastId } );
       stopLoading()
       setLoading(false);
     }
@@ -110,10 +111,14 @@ export const EditProfilePage = () => {
               <img
                 src={capturedFace}
                 alt="Captured Face"
-                className='w-full rounded-lg'
+                className="w-full rounded-lg"
               />
             </div>
           )}
+
+          <p className="text-foreground text-sm mt-4">
+            NOTE: Face recognition is required when you want to post a loan. This process can be done later if you are not ready.
+          </p>  
         </div>
       ),
     },
