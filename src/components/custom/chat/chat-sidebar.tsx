@@ -59,8 +59,8 @@ export function ChatAppSidebar({ user, children }: IProps) {
           <SidebarHeader className="sticky top-0 bg-secondary p-3 shadow-md z-10 rounded-t-md">
             <div className="flex items-center space-x-4 p-1">
               <Avatar className="h-14 w-14 md:h-14 md:w-14 border-4 border-background shadow-md">
-                <AvatarFallback className="bg-primary text-sm">{me?.username.substring(0, 2).toUpperCase()}</AvatarFallback>
-                <AvatarImage src={deserializeImage(me?.profilePicture ?? [])} alt={me?.username} />
+                <AvatarFallback className="bg-primary text-sm">{user?.username.substring(0, 2).toUpperCase()}</AvatarFallback>
+                <AvatarImage src={deserializeImage(user?.profilePicture ?? [])} alt={user?.username} />
               </Avatar>
               <div>
                 <h2 className="text-foreground font-semibold text-lg">{user?.username}</h2>

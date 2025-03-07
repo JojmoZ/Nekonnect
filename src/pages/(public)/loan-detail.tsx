@@ -50,7 +50,7 @@ function LoanDetailPage() {
   const [isDonationOverlayOpen, setIsDonationOverlayOpen] = useState(false);
   const { me } = useAuth();
   const { form, rooms, getRoom } = useChat();
-  const { user } = useGetUser(me?.internetIdentity!);
+  const { user } = useGetUser(loanPost?.debtor!);
 
   const progress =
     ((loanPost?.raised ?? 0) / (loanPost?.goal ?? 0)) * 100;
@@ -115,14 +115,24 @@ function LoanDetailPage() {
                 </CardContent>
               </Card>
               <Card>
+                {/* TODO: Reminder for borrower */}
                 <CardContent className="pt-6">
-                  <Button
-                    size="lg"
-                    className="w-full"
-                    onClick={() => setIsDonationOverlayOpen(true)}
-                  >
-                    Support This Project
-                  </Button>
+                  {
+                    me?.internetIdentity.toString() == loanPost.debtor.toString()? (
+                      <div className='flex justify-between items-center'>
+                        <CardTitle>Status</CardTitle>
+                        {loanPost.status}
+                      </div>
+                    ) :
+                    <Button
+                      size="lg"
+                      className="w-full"
+                      onClick={() => setIsDonationOverlayOpen(true)}
+                    >
+                      Support This Project
+                    </Button>
+                  }
+
                 </CardContent>
               </Card>
               <Card>
