@@ -231,6 +231,11 @@ function Header() {
                     >
                       Transaction History
                     </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() => navigate(RouteEnum.MY_LOANS)}
+                    >
+                      My Loans
+                    </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => navigate(RouteEnum.TOP_UP)}>Top Up</DropdownMenuItem>
                     <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
                   </DropdownMenuContent>

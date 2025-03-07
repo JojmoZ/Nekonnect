@@ -26,6 +26,16 @@ export class LoanPostService extends BaseService {
         return await this.loanPost.getPost(loanId);
     }
 
+    async getMyLoanPosts(): Promise<LoanPost[]> {
+        const posts = await this.loanPost.getPosts();
+        console.log(posts)
+        const caller = await this.getCallerPrincipal();
+        console.log(caller)
+        const filteredPosts = posts.filter(post => post.debtor.toString() === caller.toString());
+        console.log(filteredPosts)
+        return filteredPosts;
+    }
+
     async getActivePosts(): Promise<LoanPost[]> {
         const posts = await this.loanPost.getPosts();
         return posts.filter(post => post.status === 'Funding');

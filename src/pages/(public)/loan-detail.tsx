@@ -128,6 +128,7 @@ function LoanDetailPage() {
                       size="lg"
                       className="w-full"
                       onClick={() => setIsDonationOverlayOpen(true)}
+                      disabled={loanPost.status != 'Funding'}
                     >
                       Support This Project
                     </Button>
