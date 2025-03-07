@@ -39,6 +39,7 @@ export function useEditProfile() {
           (me.gender as 'Male' | 'Female' | 'Other') || 'Other',
         );
         form.setValue('email', me.email || '');
+        form.setValue('image', new File([new Uint8Array(me.profilePicture)], "profilePicture.png"));
       } 
   }
 
