@@ -76,8 +76,8 @@ export function ProjectCard({ project }: { project: LoanPost }) {
         </p>
         <Progress value={progress} className="mb-2" />
         <div className="flex justify-between text-sm">
-          <span>${project.raised.toLocaleString()} raised</span>
-          <span>${project.goal.toLocaleString()} goal</span>
+          <span>${project.raised.toFixed(2).toLocaleString()} raised</span>
+          <span>${project.goal.toFixed(2).toLocaleString()} goal</span>
         </div>
       </CardContent>
       <CardFooter className="flex justify-between items-center">

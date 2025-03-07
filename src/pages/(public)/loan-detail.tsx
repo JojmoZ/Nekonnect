@@ -101,8 +101,8 @@ function LoanDetailPage() {
                   <div className="space-y-4">
                     <Progress value={progress} className="h-4" />
                     <div className="flex justify-between text-lg">
-                      <span>${loanPost.raised.toLocaleString()} raised</span>
-                      <span>${loanPost.goal.toLocaleString()} goal</span>
+                      <span>${loanPost.raised.toFixed(2).toLocaleString()} raised</span>
+                      <span>${loanPost.goal.toFixed(2).toLocaleString()} goal</span>
                     </div>
                     <p className="text-muted-foreground">
                       {timeLeft(loanPost.verifiedAt, loanPost.postDuration)}
