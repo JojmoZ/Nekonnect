@@ -11,11 +11,17 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { useLayout } from "@/context/layout-context"
+import useServiceContext from "@/hooks/use-service-context"
+import { useAuth } from "@/context/auth-context"
+import { METHODS } from "http"
+import { toast } from "sonner"
 
 export default function TopUpPage() {
   const [amount, setAmount] = useState<string>("")
   const [paymentMethod, setPaymentMethod] = useState<string>("card")
-  const { setHeader, setFooter } = useLayout();
+  const { setHeader, setFooter, startLoading, stopLoading } = useLayout();
+  const { userService  } = useServiceContext();
+  const { me, fetchUser } = useAuth()
 
   useEffect(() => {
     setHeader(true)
@@ -35,10 +41,27 @@ export default function TopUpPage() {
     }
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const topUpBalance = async () => {
+    if (!me?.internetIdentity) {
+      alert("You must be logged in to top up your balance")
+      return
+    }
+    const response = await userService.topUpBalance(me.internetIdentity, parseFloat(amount))
+    await fetchUser()
+    return response
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // Process payment here
-    alert(`Processing payment of $${amount} using ${paymentMethod}`)
+    startLoading()
+    toast.promise(topUpBalance(), {
+      loading: 'Processing...', 
+      success: () => {
+        return `Balance toped up successfully!`;
+      },
+      error: 'Failed to top up balance',
+    })
+    stopLoading()
   }
 
   return (

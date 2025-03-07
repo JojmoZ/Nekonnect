@@ -4,14 +4,13 @@ import Result "mo:base/Result";
 import Time "mo:base/Time";
 import Iter "mo:base/Iter";
 import Array "mo:base/Array";
-import UserModule "../user/interface";
 import Types "types";
 import UserActor "canister:user";
 
 actor class MessageManager() {
     stable var roomMessages: List.List<Types.Message> = List.nil();
 
-    public func getMessagesByRoomId(room_id: Text, userCanisterId: Text) : async [Types.MessageResponse] {
+    public func getMessagesByRoomId(room_id: Text) : async [Types.MessageResponse] {
         let filteredMessages = List.filter<Types.Message>(
             roomMessages,
             func (msg) = msg.room_id == room_id
@@ -19,7 +18,6 @@ actor class MessageManager() {
 
         var messageResponses: [Types.MessageResponse] = [];
         for (message in Iter.fromList(filteredMessages)) {
-            // let userActor = actor (userCanisterId) : UserModule.UserActor;
             let user = await UserActor.getUserByPrincipal(message.user_id);
             let username = switch (user) {
                     case (?u) u.username;
@@ -27,7 +25,6 @@ actor class MessageManager() {
                 };
             let messageResponse: Types.MessageResponse = {
                 message = message.message;
-                // user = user;
                 room_id = message.room_id;
                 created_at = message.created_at;
                 username = username;

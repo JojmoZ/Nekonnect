@@ -19,14 +19,14 @@ export function LoanHistoryCard({
         <p className="text-foreground text-sm">Loan #{loanPost.loanId}</p>
         <p className="text-foreground font-semibold text-lg">{loanPost?.title}</p>
         <p className="text-gray-500 text-sm">
-          {timeToDateString(loanPost.verifiedAt)}
+          {loanPost.status != "Verifying" && timeToDateString(loanPost.verifiedAt)}
         </p>
       </div>
       <div className="flex flex-col items-end gap-y-1">
         <span className="font-bold text-xl">
           ${loanPost.goal.toFixed(2)}
         </span>
-        <span className="text-gray-500 text-sm">{timeLeft(loanPost.verifiedAt, loanPost.postDuration)}</span>
+        <span className="text-gray-500 text-sm">{loanPost.status != "Verifying" && timeLeft(loanPost.verifiedAt, loanPost.postDuration)}</span>
       </div>
     </Card>
   );

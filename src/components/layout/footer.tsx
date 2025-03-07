@@ -4,7 +4,7 @@ import Logo from '@/components/logo';
 
 function Footer() {
   return (
-    <footer className="border-t py-12 md:py-16">
+    <footer className="border-t py-10 md:py-14">
       <div className="container">
         <div className="flex flex-col items-center justify-between gap-8 md:flex-row">
           <div className="flex flex-col items-center gap-2 md:items-start">

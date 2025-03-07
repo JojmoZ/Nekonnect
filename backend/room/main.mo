@@ -1,4 +1,3 @@
-import HashMap "mo:base/HashMap";
 import Text "mo:base/Text";
 import Result "mo:base/Result";
 import Iter "mo:base/Iter";
@@ -26,7 +25,7 @@ actor RoomManager {
     let ws_state = IcWebSocketCdkState.IcWebSocketState(params);
 
 
-    func send_message(principal: IcWebSocketCdk.ClientPrincipal, msg: MessageTypes.MessageResponse): async () {
+    func send_message(_: IcWebSocketCdk.ClientPrincipal, msg: MessageTypes.MessageResponse): async () {
         Debug.print("Sending message: " # debug_show(msg));
         let participants = await RoomUsersActor.getAllUsersByRoomId(msg.room_id);
         Debug.print("Participants: " # debug_show(participants));
