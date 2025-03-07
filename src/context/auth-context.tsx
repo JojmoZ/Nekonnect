@@ -39,7 +39,7 @@ export function AuthProvider({ children }: AuthProps) {
     }
   };
 
-  const login = async () => {
+  const loginProcess = async () => {
     try {
       const loggedInUser = await userService.login();
 
@@ -60,6 +60,14 @@ export function AuthProvider({ children }: AuthProps) {
     } catch (err) {
       console.error('Auth error:', err);
     }
+  };
+
+  const login = async () => {
+    toast.promise(loginProcess(), {
+      loading: 'Logging in...',
+      success: 'Logged in successfully',
+      error: 'Failed to log in',
+    });
   }
 
   const fetchUser = async () => {

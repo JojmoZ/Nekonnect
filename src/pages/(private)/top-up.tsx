@@ -35,7 +35,7 @@ export default function TopUpPage() {
   }
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-indigo-950 p-8">
+    <div className="flex justify-center items-center min-h-screen bg-gradient-to-br p-8">
       <Card className="w-full max-w-md shadow-xl">
         <CardHeader className="space-y-2">
           <CardTitle className="text-3xl font-bold text-center">Top Up Balance</CardTitle>

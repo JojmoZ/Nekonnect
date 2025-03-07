@@ -119,7 +119,7 @@ const features = [
 ];
 
 export default function Landing() {
-  const { login } = useAuth();
+  const { me, login } = useAuth();
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -141,10 +141,14 @@ export default function Landing() {
                 Nekonnect isn't just about transactions—it's about meaningful financial connections. By integrating blockchain and real-world assets, we create a decentralized platform where security, transparency, and opportunity come together.
               </p>
               <div className="mt-8 flex flex-wrap justify-center gap-4 z-10">
-                <Button size="lg" className="gap-2" onClick={login}>
-                  Get Started <ArrowRight className="h-4 w-4" />
-                </Button>
-                <Button size="lg" variant="outline">
+                {
+                  me ? null : (
+                    <Button size="lg" className="gap-2" onClick={login}>
+                      Get Started <ArrowRight className="h-4 w-4" />
+                    </Button>)
+                }
+                
+                <Button size="lg" variant="outline" onClick={() => window.scrollBy({ top: 850, behavior: "smooth" })}>
                   Learn More
                 </Button>
               </div>

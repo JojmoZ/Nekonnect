@@ -13,20 +13,20 @@ import Logo from '@/components/logo';
 const faqData = [
   {
     id: 'item-1',
-    question: 'Is it accessible?',
-    answer: 'Yes. It adheres to the WAI-ARIA design pattern.',
+    question: 'What is the process for borrowing a loan on nekonnect?',
+    answer: 'To borrow a loan, simply create an account, complete your profile verification, and apply for a loan by selecting your desired amount and term. Once approved, funds will be disbursed directly to your account.',
   },
   {
     id: 'item-2',
-    question: 'Is it styled?',
+    question: 'What types of loans do nekonnect offer?',
     answer:
-      "Yes. It comes with default styles that match the other components' aesthetic.",
+      "We offer flexible loans backed by real-world assets. These loans are designed to provide competitive rates with terms that match your financial needs.",
   },
   {
     id: 'item-3',
-    question: 'Is it animated?',
+    question: 'How is my loan backed by assets?',
     answer:
-      "Yes. It's animated by default, but you can disable it if you prefer.",
+      "All loans are secured with tangible assets that act as collateral, providing safety for lenders and better rates for borrowers.",
   },
 ];
 
@@ -35,7 +35,7 @@ export function CreateLoanLanding() {
     <div className="flex flex-col items-center">
       <div className="relative w-full h-96 overflow-hidden">
         <img
-          src="https://vetmed.tamu.edu/news/wp-content/uploads/sites/9/2023/05/AdobeStock_472713009.jpeg"
+          src="./assets/borrower_landing.jpeg"
           alt="Loan Image"
           className="w-full h-full object-cover"
         />
