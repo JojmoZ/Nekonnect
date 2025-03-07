@@ -6,6 +6,8 @@ import Float "mo:base/Float";
 import Error "mo:base/Error";
 import Timer "mo:base/Timer";
 import Nat8 "mo:base/Nat8";
+import Debug "mo:base/Debug";
+import Principal "mo:base/Principal";
 import Types "types";
 import Utils "../utils";
 import TransactionModule "../transaction/interface";
@@ -111,8 +113,8 @@ actor class LoanPostMain() {
                 posts := updatePost(loanId, func(_) = updatedPost);
 
                 // Update post status after 30 days
-                // let delay = 1_000_000_000 * 30 * 60 * 60 * 24;
-                let delay = 1_000_000_000 * 60 * 5; // 1 minute in nanoseconds
+                let delay = 1_000_000_000 * 30 * 60 * 60 * 24;
+                // let delay = 1_000_000_000 * 60 * 1; // 1 minute in nanoseconds
                 let timer = Timer.setTimer(#nanoseconds (delay), func (): async () {
                     ignore checkPostGoal(loanId, transactionCanisterId);
                 });
@@ -176,21 +178,50 @@ actor class LoanPostMain() {
 
     // Not fulfilled post, update status
     public func checkPostGoal(loanId: Text, transactionCanisterId: Text): async () {
+        Debug.print("Masuk 1: "); 
 
         switch(findPost(loanId)) {
             case(null) { 
+            Debug.print("Masuk 2: null?" ); 
                 return;
              };
             case(?post) { 
+            Debug.print("Masuk 2: ketemu" # post.status ); 
                 var loanStatus = post.status;
                 var transactionStatus = "";
+                let transactionActor = actor(transactionCanisterId) : TransactionModule.TransactionActor;
+                let transactions = await transactionActor.getLoanPostTransactions(post.loanId);
                 if (post.raised < post.goal) {
+                    Debug.print("Masuk 3: ");
                     loanStatus := "Not Fulfilled";
                     transactionStatus := "Not Fulfilled";
-                    let _  = await UserActor.topUpBalance()
+                    for (transaction in transactions.vals()) {
+                    let refundAmount = transaction.amount;
+                    let lender = transaction.lender;
+                    Debug.print("Lender: " # Principal.toText(lender)); 
+                    Debug.print("refundAmount: " # Float.toText(refundAmount)); 
+                    let _ = await UserActor.topUpBalance(lender, refundAmount);
+                    let _ = await transactionActor.updateTransactionStatus(transaction.transactionId, "Refunded");
+                    
+                    // if (refundResult) {
+                    // };
+                };
                 } else {
                     loanStatus := "Repaying";
                     transactionStatus := "Repaying";
+                    // let delay = 1_000_000_000 *  post.loanDuration *  60 * 1;
+                    let delay = 1_000_000_000 *  post.loanDuration * 60 * 60 * 24;
+                    let timer = Timer.setTimer(#nanoseconds (Nat64.toNat(delay)), func (): async () {
+                         for (transaction in transactions.vals()) {
+                    let refundAmount = transaction.amount;
+                    let lender = transaction.lender;
+                    
+                    let _ = await UserActor.topUpBalance(lender, refundAmount);
+                    let _ = await transactionActor.updateTransactionStatus(transaction.transactionId, "Repaying");
+                    
+                    ///TODO: jaminan shit
+                };
+                    });
                 };
 
                 let updatedPost : Types.LoanPost = {
@@ -200,8 +231,6 @@ actor class LoanPostMain() {
                 posts := updatePost(post.loanId, func(_) = updatedPost);
 
                 // Get post transactions
-                let transactionActor = actor(transactionCanisterId) : TransactionModule.TransactionActor;
-                let transactions = await transactionActor.getLoanPostTransactions(post.loanId);
 
                 // Update transaction status for each transaction
                 for (transaction in transactions.vals()) {
