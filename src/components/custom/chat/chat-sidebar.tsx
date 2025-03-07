@@ -18,12 +18,16 @@ import { getWebSocket } from '@/lib/config/web-socket';
 import { MessageResponse } from '@/declarations/message/message.did';
 import { useChat } from '@/context/chat-context';
 import { useAuth } from '@/context/auth-context';
+import { User } from '@/lib/model/entity/user';
+import { deserializeImage } from '@/lib/utils/Image';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 interface IProps {
-  children : React.ReactNode
+  user: User | null;
+  children: React.ReactNode
 }
 
-export function ChatAppSidebar({children} : IProps) {
+export function ChatAppSidebar({ user, children }: IProps) {
 
   const { me } = useAuth();
   const { messages } = useChat();
@@ -43,33 +47,30 @@ export function ChatAppSidebar({children} : IProps) {
         style={
           {
             '--sidebar-overflow-y': 'hidden',
+            'padding-top': '112px',
           } as React.CSSProperties
         }
         side='right'
+        variant='floating'
       >
         <SidebarContent
-          style={
-            {
-              backgroundColor: 'white',
-            } as React.CSSProperties
-          }
+          className='bg-background rounded-md'
         >
-          <SidebarHeader className="sticky top-0 bg-gray-700 p-3 shadow-md z-10">
+          <SidebarHeader className="sticky top-0 bg-secondary p-3 shadow-md z-10 rounded-t-md">
             <div className="flex items-center space-x-4 p-1">
-              <img
-                className="w-14 h-14 rounded-full border-4 border-white shadow-lg ml-2"
-                src="https://jagadtani.com/uploads/gallery/2023/09/merawat-anak-bebek-agar-2caf76baf1.jpg"
-                alt="Profile"
-              />
+              <Avatar className="h-14 w-14 md:h-14 md:w-14 border-4 border-background shadow-md">
+                <AvatarFallback className="bg-primary text-sm">{me?.username.substring(0, 2).toUpperCase()}</AvatarFallback>
+                <AvatarImage src={deserializeImage(me?.profilePicture ?? [])} alt={me?.username} />
+              </Avatar>
               <div>
-                <h2 className="text-white font-semibold text-lg">John Doe</h2>
+                <h2 className="text-foreground font-semibold text-lg">{user?.username}</h2>
               </div>
             </div>
           </SidebarHeader>
           <SidebarGroup className=" h-screen flex flex-col flex-1 overflow-y-auto ">
             <div className="flex-1 p-4 space-y-2 flex flex-col-reverse overflow-y-auto scrollbar-hidden">
               {messages.map((msg, index) => (
-                <MessageBubble message={msg} user={me} key={index}/>
+                <MessageBubble message={msg} user={me} key={index} />
               ))}
             </div>
             <ChatForm />
