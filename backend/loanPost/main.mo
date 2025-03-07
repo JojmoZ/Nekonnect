@@ -9,6 +9,7 @@ import Nat8 "mo:base/Nat8";
 import Types "types";
 import Utils "../utils";
 import TransactionModule "../transaction/interface";
+import UserActor "canister:user";
 
 actor class LoanPostMain() {
     stable var posts: List.List<Types.LoanPost> = List.nil<Types.LoanPost>();
@@ -110,7 +111,8 @@ actor class LoanPostMain() {
                 posts := updatePost(loanId, func(_) = updatedPost);
 
                 // Update post status after 30 days
-                let delay = 1_000_000_000 * 30 * 60 * 60 * 24;
+                // let delay = 1_000_000_000 * 30 * 60 * 60 * 24;
+                let delay = 1_000_000_000 * 60 * 5; // 1 minute in nanoseconds
                 let timer = Timer.setTimer(#nanoseconds (delay), func (): async () {
                     ignore checkPostGoal(loanId, transactionCanisterId);
                 });
@@ -185,10 +187,10 @@ actor class LoanPostMain() {
                 if (post.raised < post.goal) {
                     loanStatus := "Not Fulfilled";
                     transactionStatus := "Not Fulfilled";
+                    let _  = await UserActor.topUpBalance()
                 } else {
                     loanStatus := "Repaying";
                     transactionStatus := "Repaying";
-                    // TODO: Refund transactions
                 };
 
                 let updatedPost : Types.LoanPost = {

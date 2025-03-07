@@ -46,7 +46,7 @@ function LoanDetailPage() {
   const { id } = useParams();
   const { loanPost, refetch } = useGetLoanPost(id ?? '');
   const [isDonationOverlayOpen, setIsDonationOverlayOpen] = useState(false);
-  const { me } = useAuth();
+  const { me , fetchUser } = useAuth();
   const { form, rooms, getRoom } = useChat();
 
   const progress =
@@ -55,6 +55,7 @@ function LoanDetailPage() {
 
   const handleDonationSuccess = () => {
     refetch();
+    fetchUser();
     setIsDonationOverlayOpen(false); 
   };
 
@@ -63,7 +64,6 @@ function LoanDetailPage() {
       return;
     }
     getRoom(id)
-    
   }, [])
 
   
@@ -113,13 +113,24 @@ function LoanDetailPage() {
               </Card>
               <Card>
                 <CardContent className="pt-6">
+                {timeLeft(loanPost.verifiedAt, loanPost.postDuration) == 'Expired' ? (
                   <Button
                     size="lg"
                     className="w-full"
-                    onClick={() => setIsDonationOverlayOpen(true)}
                   >
-                    Support This Project
+                    This Project is Expired :(
                   </Button>
+                ) : 
+                (
+                    <Button
+                    size = "lg"
+                    className = "w-full"
+                    onClick = { () => setIsDonationOverlayOpen(true) }
+                    >
+                    Support This Project
+              </Button>
+                )}
+                 
                 </CardContent>
               </Card>
               <Card>

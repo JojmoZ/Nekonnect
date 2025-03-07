@@ -229,6 +229,11 @@ function Header() {
               )}
             </NavigationMenuItem>
           </NavigationMenuList>
+          {!isAuthenticated ? (
+            <div></div>
+          ) : (
+            `$ ${me?.balance}`
+          )}
         </NavigationMenu>
       </div>
     </header>

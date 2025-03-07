@@ -84,9 +84,16 @@ export function ProjectCard({ project }: { project: LoanPost }) {
         <span className="text-sm text-muted-foreground">
           {timeLeft(project.verifiedAt, project.postDuration)}
         </span>
-        <Button asChild>
-          <Link to={`/post/${project.loanId}`}>Support</Link>
-        </Button>
+        {timeLeft(project.verifiedAt, project.postDuration) === 'Expired' ? (
+          <Button asChild disabled >
+            <p>Expired</p>
+          </Button>
+        ) : (
+          <Button asChild>
+            <Link to={`/post/${project.loanId}`}>Support</Link>
+          </Button>
+        )}
+       
       </CardFooter>
     </Card>
   );

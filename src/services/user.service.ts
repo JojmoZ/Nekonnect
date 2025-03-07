@@ -5,7 +5,6 @@ import { _SERVICE as _USERSERVICE } from "@/declarations/user/user.did";
 import { User as BackendUser } from "@/declarations/user/user.did";
 import { RoleEnum } from "@/lib/enum/role-enum";
 import { Principal } from "@dfinity/principal";
-import { Principal } from "@dfinity/principal";
 export class UserService extends BaseService {
 
 

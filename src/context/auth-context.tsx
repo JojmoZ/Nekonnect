@@ -40,9 +40,9 @@ export function AuthProvider({ children }: AuthProps) {
   };
 
   const login = async () => {
+    startLoading()
     try {
       const loggedInUser = await userService.login();
-
       if (loggedInUser) {
         console.log('Logged in user:', loggedInUser);
         setUser(loggedInUser);
@@ -60,6 +60,7 @@ export function AuthProvider({ children }: AuthProps) {
     } catch (err) {
       console.error('Auth error:', err);
     }
+    stopLoading()
   }
 
   const fetchUser = async () => {
