@@ -119,7 +119,7 @@ export const ChatProvider= ({ children } : { children: React.ReactNode }) => {
       };
 
     if (loading) {
-        return <LoadingScreen />;
+        return <LoadingScreen text="Chat"/>;
     }
 
     return (

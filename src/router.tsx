@@ -20,6 +20,7 @@ import { RouteEnum } from './lib/enum/router-enum';
 import { RoleEnum } from './lib/enum/role-enum';
 import { GetAdminRole } from './pages/(private)/get-admin-role';
 import { ChatProvider } from './context/chat-context';
+import TopUpPage from './pages/(private)/top-up';
 
 const router = createBrowserRouter([
   {
@@ -89,6 +90,10 @@ const router = createBrowserRouter([
           {
             path: RouteEnum.HOME,
             element: <Home />,
+          }, 
+          {
+            path: RouteEnum.TOP_UP,
+            element: <TopUpPage />,
           }
         ]
       },
