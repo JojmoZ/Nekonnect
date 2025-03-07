@@ -47,7 +47,7 @@ actor class TransactionMain() {
 
         if (update != "Raised amount updated successfully!") {
             return update;
-        }
+        };
 
         let _ = await UserActor.reduceBalance(userId,amount);
         transactions := List.push<Types.Transaction>(transaction, transactions);
