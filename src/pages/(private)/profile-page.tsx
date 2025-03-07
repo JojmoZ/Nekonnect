@@ -1,7 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Mail, MapPin, Calendar, CreditCard, User2, Edit, Settings } from "lucide-react"
+import { Mail, MapPin, Calendar, CreditCard, User2, Edit, Settings, PlusCircle, ArrowRight } from 'lucide-react';
 import { Separator } from "@/components/ui/separator"
 import { Badge } from "@/components/ui/badge"
 import { useNavigate } from "react-router"
@@ -43,12 +43,9 @@ export default function ProfilePage() {
                                 <AvatarImage src={deserializeImage(me?.profilePicture ?? [])} alt={me?.username} />
                             </Avatar>
                         </div>
-                        <div className="absolute bottom-4 right-4 md:bottom-8 md:right-8 flex gap-2">
-                            <Button size="sm" variant="outline" className="bg-background backdrop-blur-sm text-foreground hover:bg-background/80" onClick={() => navigate(RouteEnum.EDIT_PROFILE)}>
-                                <Edit className="h-4 w-4 mr-2" /> Edit Profile
-                            </Button>
-                            <Button size="sm" variant="outline" className="bg-background backdrop-blur-sm text-foreground hover:bg-background/80">
-                                <Settings className="h-4 w-4" />
+                        <div className="absolute bottom-4 right-4 flex gap-2">
+                            <Button variant="outline" className="bg-background backdrop-blur-sm text-foreground hover:bg-background/80" onClick={() => navigate(RouteEnum.EDIT_PROFILE)}>
+                                <Edit className="h-8 w-8 mr-2" /> Edit Profile
                             </Button>
                         </div>
                     </div>
@@ -120,8 +117,8 @@ export default function ProfilePage() {
                                         <Separator className="my-4 bg-white/20" />
                                         <div className="flex justify-between">
                                             <div>
-                                                <p className="text-white/80 text-sm">Total amount lent</p>
-                                                <p className="font-medium">${calculateTotalLent(transactions).toFixed(2)}</p>
+                                                <p className="text-white/80 text-sm">Total Amount Lent</p>
+                                                <p className="font-medium font-mono">${calculateTotalLent(transactions).toFixed(2)}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -139,28 +136,54 @@ export default function ProfilePage() {
                                     <CardTitle>Recent Activity</CardTitle>
                                     <CardDescription>Your latest account activity</CardDescription>
                                 </CardHeader>
-                                <CardContent>
-                                    <div className="space-y-4">
-                                        {transactions?.map((transaction, index) => (
+                                <CardContent className="h-[80%] flex flex-col">
+                                    {transactions && transactions.length > 0 ? (
+                                      <div className="space-y-4">
+                                          {transactions.map((transaction, index) => (
                                             <div key={transaction.transactionId} className="flex items-center justify-between pb-4 border-b">
                                                 <div className="flex items-center gap-3">
                                                     <div className="bg-muted p-2 rounded-full">
                                                         <CreditCard className="h-5 w-5" />
                                                     </div>
                                                     <div>
-                                                        <p className="font-medium">Transaction #{index+1}</p>
-                                                        <p className="text-sm text-muted-foreground">
-                                                            {timeToDateString(transaction.date)}
-                                                        </p>
+                                                        <p className="font-medium">Transaction #{index + 1}</p>
+                                                        <p className="text-sm text-muted-foreground">{timeToDateString(transaction.date)}</p>
                                                     </div>
                                                 </div>
                                                 <Badge>{transaction.status}</Badge>
                                             </div>
-                                        ))}
-                                        <div className="flex justify-center w-full">
-                                            <Button variant="outline" className="w-full" onClick={() => navigate(RouteEnum.TRANSACTION_HISTORY)}>View All</Button>
-                                        </div>
-                                    </div>
+                                          ))}
+                                          <div className="flex justify-center w-full">
+                                              <Button variant="outline" className="w-full" onClick={() => navigate(RouteEnum.TRANSACTION_HISTORY)}>
+                                                  View All
+                                              </Button>
+                                          </div>
+                                      </div>
+                                    ) : (
+                                      <div className="flex flex-col items-center justify-center h-full text-center">
+                                          <div className="bg-primary/10 p-4 rounded-full mb-4">
+                                              <CreditCard className="h-8 w-8 text-primary" />
+                                          </div>
+                                          <h3 className="text-lg font-medium mb-2">No transactions yet</h3>
+                                          <p className="text-muted-foreground mb-6 max-w-xs">
+                                              When you make your first transaction, it will appear here.
+                                          </p>
+                                          <div className="flex flex-col sm:flex-row gap-3 w-full max-w-xs">
+                                              <Button className="flex items-center gap-2" onClick={() => navigate(RouteEnum.CREATE_POST)}>
+                                                  <PlusCircle className="h-4 w-4" />
+                                                  New Transaction
+                                              </Button>
+                                              <Button
+                                                variant="outline"
+                                                className="flex items-center gap-2"
+                                                onClick={() => navigate(RouteEnum.TRANSACTION_HISTORY)}
+                                              >
+                                                  Explore History
+                                                  <ArrowRight className="h-4 w-4" />
+                                              </Button>
+                                          </div>
+                                      </div>
+                                    )}
                                 </CardContent>
                             </Card>
                         </div>
