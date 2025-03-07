@@ -1,7 +1,9 @@
+import { useAuth } from '@/context/auth-context';
 import { useEffect, useState } from 'react';
 
 const Logo = ({ className }: { className?: string }) => {
   const [isDark, setIsDark] = useState(false);
+  const {me} = useAuth();
 
   useEffect(() => {
     const mediaQueryList = window.matchMedia('(prefers-color-scheme: dark)');
@@ -19,7 +21,7 @@ const Logo = ({ className }: { className?: string }) => {
   }, []);
 
   return (
-    <a href="/">
+    <a href={me ? '/home' : '/'}>
       <img
         src={isDark ? './assets/logo-white.png' : './assets/logo-black.png'}
         alt="NeKonnect Logo"

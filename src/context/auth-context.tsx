@@ -26,20 +26,29 @@ export function AuthProvider({ children }: AuthProps) {
   const [ isAuthenticated, setIsAuthenticated ] = useState<Boolean | null>(null);
   const {startLoading, stopLoading} = useLayout();
 
-  const logout = async () => {
-    const toastId = toast.loading('Signing you out...');
+  const logoutProcess = async () => {
     try {
       await userService.logout();
-      setUser(null);
-      setIsAuthenticated(false);
-      window.location.href = '/';
-      // toast.success('Signed out successfully!', { id: toastId });
-    } catch (error) {
-      // toast.error('Failed to sign out', { id: toastId });
+
+    } catch (err) {
+      console.error('Failed to logout:', err);
     }
+  }
+
+  const logout = async () => {
+    toast.promise(logoutProcess(), {
+      loading: 'Logging out...',
+      success: () => {
+        setUser(null);
+        setIsAuthenticated(false);
+        window.location.href = '/';
+        return 'Logged out successfully';
+      },
+      error: 'Failed to log out',
+    });
   };
 
-  const login = async () => {
+  const loginProcess = async () => {
     try {
       const loggedInUser = await userService.login();
 
@@ -60,6 +69,14 @@ export function AuthProvider({ children }: AuthProps) {
     } catch (err) {
       console.error('Auth error:', err);
     }
+  };
+
+  const login = async () => {
+    toast.promise(loginProcess(), {
+      loading: 'Logging in...',
+      success: 'Logged in successfully',
+      error: 'Failed to log in',
+    });
   }
 
   const fetchUser = async () => {

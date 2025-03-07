@@ -9,11 +9,19 @@ import { RouteEnum } from "@/lib/enum/router-enum"
 import { deserializeImage } from "@/lib/utils/Image"
 import LoadingScreen from "../(public)/loading"
 import { useAuth } from "@/context/auth-context"
+import { useGetUserTransactions } from "@/hooks/transaction/use-get-user-transactions"
+import { timeToDateString } from "@/lib/utils/DateString"
+import { Transaction } from "@/lib/model/entity/transaction"
 
 export default function ProfilePage() {
 
     const navigate = useNavigate();
     const { me } = useAuth();
+    const { transactions } = useGetUserTransactions(); 
+
+    const calculateTotalLent = (transactions: Transaction[]) => {
+        return transactions.reduce((acc, transaction) => acc + transaction.amount, 0);
+    }
 
     return (
         me === null ? <LoadingScreen text="Fetching data" /> :
@@ -100,16 +108,12 @@ export default function ProfilePage() {
                                 <CardContent>
                                     <div className="bg-primary-to-accent-hover rounded-xl p-6 text-white">
                                         <p className="text-white/80 mb-1">Available to Lend</p>
-                                        <p className="text-3xl font-bold font-mono">${me?.balance}</p>
+                                        <p className="text-3xl font-bold font-mono">${me?.balance.toFixed(2)}</p>
                                         <Separator className="my-4 bg-white/20" />
                                         <div className="flex justify-between">
                                             <div>
                                                 <p className="text-white/80 text-sm">Total amount lent</p>
-                                                <p className="font-medium">$3,240.00</p>
-                                            </div>
-                                            <div>
-                                                <p className="text-white/80 text-sm">Loans made</p>
-                                                <p className="font-medium">5</p>
+                                                <p className="font-medium">${calculateTotalLent(transactions).toFixed(2)}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -129,20 +133,20 @@ export default function ProfilePage() {
                                 </CardHeader>
                                 <CardContent>
                                     <div className="space-y-4">
-                                        {[1, 2, 3, 4, 5].map((item) => (
-                                            <div key={item} className="flex items-center justify-between pb-4 border-b">
+                                        {transactions?.map((transaction, index) => (
+                                            <div key={transaction.transactionId} className="flex items-center justify-between pb-4 border-b">
                                                 <div className="flex items-center gap-3">
                                                     <div className="bg-muted p-2 rounded-full">
                                                         <CreditCard className="h-5 w-5" />
                                                     </div>
                                                     <div>
-                                                        <p className="font-medium">Transaction #{item}</p>
+                                                        <p className="font-medium">Transaction #{index+1}</p>
                                                         <p className="text-sm text-muted-foreground">
-                                                            {new Date(Date.now() - item * 86400000).toLocaleDateString()}
+                                                            {timeToDateString(transaction.date)}
                                                         </p>
                                                     </div>
                                                 </div>
-                                                <Badge variant={item % 2 ? "default" : "secondary"}>{item % 2 ? "Completed" : "Pending"}</Badge>
+                                                <Badge>{transaction.status}</Badge>
                                             </div>
                                         ))}
                                         <div className="flex justify-center w-full">
