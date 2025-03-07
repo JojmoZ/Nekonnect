@@ -48,6 +48,8 @@ export function ChatAppSidebar({ user, children }: IProps) {
           {
             '--sidebar-overflow-y': 'hidden',
             'paddingTop': '112px',
+            'paddingBottom' : '20px',
+            'paddingRight': '20px'
           } as React.CSSProperties
         }
         side='right'
