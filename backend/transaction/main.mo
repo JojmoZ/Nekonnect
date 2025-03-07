@@ -48,7 +48,8 @@ actor class TransactionMain() {
         if (update != "Raised amount updated successfully!") {
             return update;
         };
-
+        let loan = await loanPostActor.getPost(loanId);
+        let _ = await UserActor.topUpBalance(loan.debtor,amount);
         let _ = await UserActor.reduceBalance(userId,amount);
         transactions := List.push<Types.Transaction>(transaction, transactions);
 

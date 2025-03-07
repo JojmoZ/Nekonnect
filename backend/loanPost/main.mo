@@ -205,7 +205,7 @@ actor class LoanPostMain() {
                     Debug.print("refundAmount: " # Float.toText(refundAmount)); 
                     let _ = await UserActor.topUpBalance(lender, refundAmount);
                     let _ = await transactionActor.updateTransactionStatus(transaction.transactionId, "Refunded");
-                    
+                    let _ = await UserActor.reduceBalance(post.debtor,refundAmount);
                     // if (refundResult) {
                     // };
                 };
@@ -221,12 +221,14 @@ actor class LoanPostMain() {
                     
                     let _ = await UserActor.topUpBalance(lender, refundAmount);
                     let _ = await transactionActor.updateTransactionStatus(transaction.transactionId, "Repaying");
+                    
                     let user = await UserActor.GetOwner();
                     switch(user){
                         case(null){
                             return
                         };
                         case(?user){
+                            if(user.balance < post.raised){
                             let principal = user.internetIdentity;
                             let TempPost = await getPost(loanId);
                             let Curassurance = await getAssurance(TempPost.assuranceId);
@@ -240,6 +242,10 @@ actor class LoanPostMain() {
                                 u.assuranceId != assurance.assuranceId 
                             });
                             assurances := List.push(assurance, updatedAssurance);
+                            }
+                            else{
+                                let _ = await UserActor.reduceBalance(user.internetIdentity,post.raised)
+                            };
                         };
                     };
                     ///TODO: jaminan shit
