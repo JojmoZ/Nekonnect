@@ -199,7 +199,7 @@ function Header() {
 
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Avatar className="h-14 w-14 md:h-14 md:w-14 border-4 border-background shadow-xl cursor-pointer">
+                    <Avatar className="h-12 w-12 md:h-12 md:w-12 border-4 border-background shadow-xl cursor-pointer">
                       <AvatarFallback className="bg-primary text-md">
                         {me?.username.substring(0, 2).toUpperCase()}
                       </AvatarFallback>
