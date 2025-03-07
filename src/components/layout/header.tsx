@@ -187,16 +187,16 @@ function Header() {
                 </NavigationMenuContent>
               </NavigationMenuItem>
             ))}
-            <NavigationMenuItem>
+            <NavigationMenuItem className="">
               {!isAuthenticated ? (
-                <Button variant="gradient" onClick={login}>
+                <Button onClick={login} className="ml-3" variant="outline">
                   Sign In
                 </Button>
               ) : (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Avatar className="h-12 w-12 md:h-12 md:w-12 border-4 cursor-pointer hover:scale-105 transition-all duration-200">
-                      <AvatarFallback className="bg-primary text-md">
+                    <Avatar className="h-12 w-12 md:h-12 md:w-12 border-4 cursor-pointer hover:scale-105 transition-all duration-200 ml-3">
+                      <AvatarFallback className="bg-primary-to-accent text-md">
                         {me?.username.substring(0, 2).toUpperCase()}
                       </AvatarFallback>
                       <AvatarImage

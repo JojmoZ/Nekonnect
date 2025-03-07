@@ -111,7 +111,7 @@ export default function Landing() {
     <div className="flex min-h-screen flex-col">
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="relative overflow-hidden py-20 md:py-32 h-[80dvh]">
+        <section className="relative overflow-hidden py-16 md:py-24 h-[72dvh]">
           <div className="container flex flex-col items-center text-center">
             <div className="absolute -top-40 right-0 h-96 w-96 rounded-full bg-primary/10 blur-3xl" />
             <div className="absolute -bottom-40 left-0 h-96 w-96 rounded-full bg-primary/10 blur-3xl" />

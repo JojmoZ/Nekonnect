@@ -21,7 +21,7 @@ const Logo = ({ className }: { className?: string }) => {
   }, []);
 
   return (
-    <a href={me ? '/home' : '/'}>
+    <a href={me ? '/home' : '/'} className="flex-shrink-0">
       <img
         src={isDark ? './assets/logo-white.png' : './assets/logo-black.png'}
         alt="NeKonnect Logo"
