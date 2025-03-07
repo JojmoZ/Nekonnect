@@ -1,32 +1,32 @@
 import { Card } from '@/components/ui/card';
 import { useGetLoanPost } from '@/hooks/loan-post/use-get-loan-post';
+import { LoanPost } from '@/lib/model/entity/loan-post';
 import { Transaction } from '@/lib/model/entity/transaction';
-import { timeToDateString } from '@/lib/utils/DateString';
+import { timeLeft, timeToDateString } from '@/lib/utils/DateString';
 import { useNavigate } from 'react-router';
 
-export function TransactionHistoryCard({
-  transaction,
+export function LoanHistoryCard({
+  loanPost,
 }: {
-  transaction: Transaction;
+  loanPost: LoanPost;
 }) {
 
-  const { loanPost } = useGetLoanPost(transaction.loanId);
   const navigate = useNavigate();
 
   return (
-    <Card className="p-4 w-full shadow-lg rounded-lg overflow-hidden flex justify-between items-center" onClick={() => navigate('/post/' + transaction.loanId)}>
+    <Card className="p-4 w-full shadow-lg rounded-lg overflow-hidden flex justify-between items-center" onClick={() => navigate('/post/' + loanPost.loanId)}>
       <div className="flex flex-col gap-y-1">
-        <p className="text-foreground text-sm">Loan #{transaction.loanId}</p>
+        <p className="text-foreground text-sm">Loan #{loanPost.loanId}</p>
         <p className="text-foreground font-semibold text-lg">{loanPost?.title}</p>
         <p className="text-gray-500 text-sm">
-          {timeToDateString(transaction.date)}
+          {timeToDateString(loanPost.verifiedAt)}
         </p>
       </div>
       <div className="flex flex-col items-end gap-y-1">
         <span className="font-bold text-xl">
-          ${transaction.amount.toFixed(2)}
+          ${loanPost.goal.toFixed(2)}
         </span>
-        <span className="text-gray-500 text-sm">{transaction.method}</span>
+        <span className="text-gray-500 text-sm">{timeLeft(loanPost.verifiedAt, loanPost.postDuration)}</span>
       </div>
     </Card>
   );

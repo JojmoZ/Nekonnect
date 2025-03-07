@@ -1,3 +1,4 @@
+import { useAuth } from '@/context/auth-context';
 import { useEffect, useState } from 'react';
 
 const Logo = ({ className }: { className?: string }) => {
@@ -19,7 +20,7 @@ const Logo = ({ className }: { className?: string }) => {
   }, []);
 
   return (
-    <a href="/">
+    <a href={'/'}>
       <img
         src={isDark ? './assets/logo-white.png' : './assets/logo-black.png'}
         alt="NeKonnect Logo"

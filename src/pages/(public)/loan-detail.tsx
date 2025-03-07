@@ -21,6 +21,8 @@ import { deserializeImage } from '@/lib/utils/Image';
 import LoadingScreen from './loading';
 import { ChatProvider, useChat } from '@/context/chat-context';
 import { useAuth } from '@/context/auth-context';
+import { useGetUser } from '@/hooks/user/use-get-user';
+import { Separator } from '@/components/ui/separator';
 
 const categoryIcons = {
   All: LayoutGrid,
@@ -48,6 +50,7 @@ function LoanDetailPage() {
   const [isDonationOverlayOpen, setIsDonationOverlayOpen] = useState(false);
   const { me , fetchUser } = useAuth();
   const { form, rooms, getRoom } = useChat();
+  const { user } = useGetUser(loanPost?.debtor!);
 
   const progress =
     ((loanPost?.raised ?? 0) / (loanPost?.goal ?? 0)) * 100;
@@ -69,10 +72,10 @@ function LoanDetailPage() {
   
 
   return (
-    <div className="container py-8 space-y-6">
+    <div className="container py-8">
       {!loanPost ? null : (
-        <ChatAppSidebar>
-          <main className='space-y-4'>
+        <ChatAppSidebar user={user!}>
+          <main className='space-y-4 w-full'>
               <Card>
                 <CardHeader>
                   <div className="flex items-center justify-between">
@@ -94,12 +97,12 @@ function LoanDetailPage() {
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-xl mb-6">{loanPost.description}</p>
+                  {/* <p className="text-xl mb-6">{loanPost.description}</p> */}
                   <div className="space-y-4">
                     <Progress value={progress} className="h-4" />
                     <div className="flex justify-between text-lg">
-                      <span>${loanPost.raised.toLocaleString()} raised</span>
-                      <span>${loanPost.goal.toLocaleString()} goal</span>
+                      <span>${loanPost.raised.toFixed(2).toLocaleString()} raised</span>
+                      <span>${loanPost.goal.toFixed(2).toLocaleString()} goal</span>
                     </div>
                     <p className="text-muted-foreground">
                       {timeLeft(loanPost.verifiedAt, loanPost.postDuration)}
@@ -112,24 +115,35 @@ function LoanDetailPage() {
                 </CardContent>
               </Card>
               <Card>
+                {/* TODO: Reminder for borrower */}
                 <CardContent className="pt-6">
-                {timeLeft(loanPost.verifiedAt, loanPost.postDuration) == 'Expired' ? (
-                  <Button
-                    size="lg"
-                    className="w-full"
-                  >
-                    This Project is Expired :(
-                  </Button>
-                ) : 
+                  {
+                    me?.internetIdentity.toString() == loanPost.debtor.toString()? (
+                      <div className='flex justify-between items-center'>
+                        <CardTitle>Status</CardTitle>
+                        {loanPost.status}
+                      </div>
+                    ) :
+                    { timeLeft(loanPost.verifiedAt, loanPost.postDuration) == 'Expired' ? (
+                <Button
+                  size="lg"
+                  className="w-full"
+                >
+                  This Project is Expired :(
+                </Button>
+                ) :
                 (
-                    <Button
-                    size = "lg"
-                    className = "w-full"
-                    onClick = { () => setIsDonationOverlayOpen(true) }
-                    >
-                    Support This Project
-              </Button>
+                <Button
+                  size="lg"
+                  className="w-full"
+                  onClick={() => setIsDonationOverlayOpen(true)}
+                >
+                  Support This Project
+                </Button>
                 )}
+                  }
+
+               
                  
                 </CardContent>
               </Card>
@@ -142,12 +156,24 @@ function LoanDetailPage() {
                 </CardHeader>
                 <CardContent>
                   <p>{loanPost.description}</p>
-                  <p className="mt-4">
+                  {/* <p className="mt-4">
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
                     eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
                     enim ad minim veniam, quis nostrud exercitation ullamco laboris
                     nisi ut aliquip ex ea commodo consequat.
-                  </p>
+                  </p> */}
+                  <Separator className='mt-4' />
+                  {/* Loan interest, etc */}
+                  <div className="grid grid-cols-2 gap-4 mt-4">
+                    <div>
+                      <h3 className="text-lg font-semibold">Loan Interest</h3>
+                      <p>{99.99}%</p>
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-semibold">Loan Duration</h3>
+                      <p>{loanPost.loanDuration.toString()} day(s)</p>
+                    </div>
+                  </div>
                 </CardContent>
               </Card>
               {

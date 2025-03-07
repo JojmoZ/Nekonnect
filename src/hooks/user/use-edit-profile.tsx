@@ -30,7 +30,7 @@ export function useEditProfile() {
   });
 
   const handleForm = async () => {
-      if (me) {
+      if (me && me.username != '') {
         form.setValue('username', me.username || '');
         form.setValue('dob', me.dob || '');
         form.setValue('nationality', me.nationality || '');

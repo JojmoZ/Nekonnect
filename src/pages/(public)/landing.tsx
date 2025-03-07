@@ -8,7 +8,6 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Separator } from '@/components/ui/separator';
 import { Input } from '@/components/ui/input';
 import {
   ArrowRight, BarChart3,
@@ -16,25 +15,12 @@ import {
   Check, Coins,
   CreditCard,
   DollarSign, FileCheck,
-  Github,
-  Instagram,
-  LineChart, Link,
-  Linkedin,
+  Link,
   Lock,
   PawPrint,
   Shield,
-  Twitter,
   Users,
 } from 'lucide-react';
-import {
-  NavigationMenu,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  navigationMenuTriggerStyle,
-} from '@/components/ui/navigation-menu';
-import { RouteEnum } from '@/lib/enum/router-enum';
-import Logo from '@/components/logo';
 import { Globe } from '@/components/magicui/globe';
 import { useAuth } from '@/context/auth-context';
 
@@ -119,7 +105,7 @@ const features = [
 ];
 
 export default function Landing() {
-  const { login } = useAuth();
+  const { me, login } = useAuth();
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -141,10 +127,14 @@ export default function Landing() {
                 Nekonnect isn't just about transactions—it's about meaningful financial connections. By integrating blockchain and real-world assets, we create a decentralized platform where security, transparency, and opportunity come together.
               </p>
               <div className="mt-8 flex flex-wrap justify-center gap-4 z-10">
-                <Button size="lg" className="gap-2" onClick={login}>
-                  Get Started <ArrowRight className="h-4 w-4" />
-                </Button>
-                <Button size="lg" variant="outline">
+                {
+                  me ? null : (
+                    <Button size="lg" className="gap-2" onClick={login}>
+                      Get Started <ArrowRight className="h-4 w-4" />
+                    </Button>)
+                }
+                
+                <Button size="lg" variant="outline" onClick={() => window.scrollBy({ top: 850, behavior: "smooth" })}>
                   Learn More
                 </Button>
               </div>
@@ -217,7 +207,6 @@ export default function Landing() {
                   {index < steps.length - 1 ? (
                     <div className="hidden lg:block absolute top-7 left-[0%] w-[calc(100%+2.5rem)] h-0.5 bg-primary/20 z-0"></div>
                   ) : (
-
                     <div className="hidden lg:block absolute top-7 left-[0%] w-[calc(90%)] h-0.5 bg-primary/20 z-0"></div>
                   )}
                 </div>

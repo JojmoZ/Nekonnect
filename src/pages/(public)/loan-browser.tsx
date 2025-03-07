@@ -10,9 +10,11 @@ import { ProjectCard } from "@/components/project-card"
 import { useGetLoanPosts } from "@/hooks/loan-post/use-get-loan-posts"
 import { timeLeftMs } from "@/lib/utils/DateString"
 
+const categories = ["Education", "Community", "Technology", "Environment", "Arts & Culture", "Wellness"]
+
 export default function LoanBrowserPage() {
   const [searchQuery, setSearchQuery] = useState("")
-  const [categoryFilter, setCategoryFilter] = useState("all")
+  const [categoryFilter, setCategoryFilter] = useState("All")
   const [sortBy, setSortBy] = useState("newest")
   const { loanPosts } = useGetLoanPosts(true);
 
@@ -22,7 +24,7 @@ export default function LoanBrowserPage() {
       project.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       project.description.toLowerCase().includes(searchQuery.toLowerCase())
     const matchesCategory =
-      categoryFilter === "all" || project.category.toLowerCase().includes(categoryFilter.toLowerCase())
+      categoryFilter === "All" || project.category.includes(categoryFilter)
 
     return matchesSearch && matchesCategory
   })
@@ -58,15 +60,18 @@ export default function LoanBrowserPage() {
         </div>
 
         <div className="flex gap-2 flex-wrap">
-          <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+          <Select value={categoryFilter} defaultValue="All" onValueChange={setCategoryFilter}>
             <SelectTrigger className="w-[180px]">
               <Filter className="h-4 w-4 mr-2" />
               <SelectValue placeholder="Category" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Categories</SelectItem>
-              <SelectItem value="arts">Arts & Culture</SelectItem>
-              <SelectItem value="environment">Environment</SelectItem>
+              <SelectItem value="All">All Categories</SelectItem>
+              {
+                categories.map((category) => (
+                  <SelectItem value={category}>{category}</SelectItem>
+                ))
+              }
             </SelectContent>
           </Select>
 
