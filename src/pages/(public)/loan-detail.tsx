@@ -115,36 +115,30 @@ function LoanDetailPage() {
                 </CardContent>
               </Card>
               <Card>
-                {/* TODO: Reminder for borrower */}
                 <CardContent className="pt-6">
-                  {
-                    me?.internetIdentity.toString() == loanPost.debtor.toString()? (
-                      <div className='flex justify-between items-center'>
-                        <CardTitle>Status</CardTitle>
-                        {loanPost.status}
-                      </div>
-                    ) :
-                    { timeLeft(loanPost.verifiedAt, loanPost.postDuration) == 'Expired' ? (
-                <Button
-                  size="lg"
-                  className="w-full"
-                >
-                  This Project is Expired :(
-                </Button>
-                ) :
-                (
-                <Button
-                  size="lg"
-                  className="w-full"
-                  onClick={() => setIsDonationOverlayOpen(true)}
-                >
-                  Support This Project
-                </Button>
-                )}
-                  }
+                {
+                  me?.internetIdentity.toString() === loanPost.debtor.toString() ? (
+                    <div className="flex justify-between items-center">
+                      <CardTitle>Status</CardTitle>
+                      {loanPost.status}
+                    </div>
+                  ) : (
+                    timeLeft(loanPost.verifiedAt, loanPost.postDuration) === "Expired" ? (
+                      <Button size="lg" className="w-full">
+                        This Project is Expired :(
+                      </Button>
+                    ) : (
+                      <Button
+                        size="lg"
+                        className="w-full"
+                        onClick={() => setIsDonationOverlayOpen(true)}
+                      >
+                        Support This Project
+                      </Button>
+                    )
+                  )
+                }
 
-               
-                 
                 </CardContent>
               </Card>
               <Card>
