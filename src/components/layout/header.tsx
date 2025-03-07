@@ -193,13 +193,9 @@ function Header() {
                   Sign In
                 </Button>
               ) : (
-                // <Button variant="gradient" onClick={logout}>
-                //   Log out
-                // </Button>
-
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Avatar className="h-12 w-12 md:h-12 md:w-12 border-4 border-background shadow-xl cursor-pointer">
+                    <Avatar className="h-12 w-12 md:h-12 md:w-12 border-4 cursor-pointer hover:scale-105 transition-all duration-200">
                       <AvatarFallback className="bg-primary text-md">
                         {me?.username.substring(0, 2).toUpperCase()}
                       </AvatarFallback>

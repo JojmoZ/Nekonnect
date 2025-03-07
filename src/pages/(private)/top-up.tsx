@@ -77,7 +77,7 @@ export default function TopUpPage() {
                   <RadioGroupItem value="card" id="card" className="peer sr-only" />
                   <Label
                     htmlFor="card"
-                    className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-6 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
+                    className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-6 hover:bg-foreground/5 hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
                   >
                     <CreditCard className="mb-3 h-8 w-8" />
                     <span className="text-lg">Card</span>
@@ -87,7 +87,7 @@ export default function TopUpPage() {
                   <RadioGroupItem value="wallet" id="wallet" className="peer sr-only" />
                   <Label
                     htmlFor="wallet"
-                    className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-6 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
+                    className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-6 hover:bg-foreground/5 hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
                   >
                     <Wallet className="mb-3 h-8 w-8" />
                     <span className="text-lg">Wallet</span>
