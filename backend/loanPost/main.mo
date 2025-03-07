@@ -187,7 +187,7 @@ actor class LoanPostMain() {
                 if (post.raised < post.goal) {
                     loanStatus := "Not Fulfilled";
                     transactionStatus := "Not Fulfilled";
-                    let _  = await UserActor.topUpBalance()
+                    let _  = await UserActor.topUpBalance(post.debtor, post.raised);
                 } else {
                     loanStatus := "Repaying";
                     transactionStatus := "Repaying";

@@ -30,19 +30,29 @@ export class BaseService {
                 }
             });
         }
+
         if (!BaseService.agent) {
-            BaseService.agent = new HttpAgent({host : "http://127.0.0.1:4943"});
-            if (process.env.NODE_ENV === "development") {
+            // if (await BaseService.authClient.isAuthenticated()) {
+                // BaseService.agent = new HttpAgent({host: "http://127.0.0.1:4943",identity : await BaseService.authClient.getIdentity()});
+            // } else {
+            // console.log(await BaseService.authClient.getIdentity())
+                BaseService.agent = new HttpAgent({host : "http://127.0.0.1:4943"});
+            // }
+            // if (process.env.NODE_ENV === "development") {
                 await BaseService.agent.fetchRootKey();
-            }
+            // }
         }
-        }
+        
+    }
 
     async getCallerPrincipal () : Promise<Principal> { 
+        await BaseService.agent.fetchRootKey();
         return BaseService.authClient.getIdentity().getPrincipal();
     }
 
     async getCallerIdentity () : Promise<SignIdentity> { 
+        await BaseService.agent.fetchRootKey();
+
         const identity = BaseService.authClient.getIdentity();
         if (identity instanceof AnonymousIdentity) {
             throw new Error("User is not authenticated");

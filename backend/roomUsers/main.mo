@@ -2,7 +2,11 @@ import List "mo:base/List";
 import Principal "mo:base/Principal";
 import Result "mo:base/Result";
 import Iter "mo:base/Iter";
+import Nat8 "mo:base/Nat8";
+import Array "mo:base/Array";
+import Blob "mo:base/Blob";
 import Types "types";
+import UserActor "canister:user";
 
 actor RoomUsersManager {
     stable var roomUsers : List.List<Types.RoomUser> = List.nil<Types.RoomUser>();
@@ -61,6 +65,38 @@ actor RoomUsersManager {
     };
 
     public func getAllUsersByRoomId(room_id: Text) : async [Types.RoomUser] {
+        
         List.toArray<Types.RoomUser>(List.filter<Types.RoomUser>(roomUsers, func(user) = user.room_id == room_id));
+    };
+
+     public func getAllUsersResponseByRoomId(room_id: Text) : async [Types.RoomUserResponse] {
+        let filtered_users = List.filter<Types.RoomUser>(
+            roomUsers,
+            func(user) { user.room_id == room_id }
+        );
+
+        var response : [Types.RoomUserResponse] = [];
+        
+        for (room_user in Iter.fromList(filtered_users)) {
+            let user = await UserActor.getUserByPrincipal(room_user.user_id);
+            let username = switch (user) {
+                case (?u) u.username;
+                case (null) "Unknown";
+            };
+            let profile : Blob = switch (user) {
+                case (?u) u.profilePicture;
+                // case (null) Blob.fromBytes([]);
+            };
+            
+            let newResponse : Types.RoomUserResponse= { 
+                username = username;
+                profilePicture = profile;
+                room_id = room_id;
+                user_id = room_user.user_id;
+            };
+            response := Array.append(response, [newResponse]);
+        };
+
+        return response;
     };
 }

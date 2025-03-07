@@ -176,7 +176,7 @@ actor RoomManager {
         let results = Buffer.Buffer<Types.GetRoomsResponse>(Array.size(roomsArray));
 
         for (room in roomsArray.vals()) {
-            let users = await RoomUsersActor.getAllUsersByRoomId(room.room_id);
+            let users = await RoomUsersActor.getAllUsersResponseByRoomId(room.room_id);
             results.add({
                 room_id = room.room_id;
                 post_id = room.post_id;
