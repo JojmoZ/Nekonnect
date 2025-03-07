@@ -15,7 +15,7 @@ module {
         room_name : Text;
         room_type : Text;
         post_id : Text;
-        room_user : [RoomUserTypes.RoomUser];
+        room_user : [RoomUserTypes.RoomUserResponse];
     };
 
     public type WebSocketRequest = {

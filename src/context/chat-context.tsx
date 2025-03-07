@@ -12,6 +12,7 @@ import { createContext, ReactNode, useContext, useEffect, useMemo, useState } fr
 import { useForm, UseFormReturn } from "react-hook-form"
 import { useAuth } from "./auth-context";
 import IcWebSocket from "ic-websocket-js";
+import { toast } from "sonner";
 
 interface IProps {
     form : UseFormReturn<messageDto>
@@ -47,12 +48,21 @@ export const ChatProvider= ({ children } : { children: React.ReactNode }) => {
 
     const getRoom = async (id : string) => {
         const response = await roomService.getRoomByPostId(id)
+        console.log(response)
         setRooms(response)
     }
 
     const getMessages = async (room_id : string) => {
-        const messages = await messageService.getMessagesByRoomId(form.getValues('room_id'));
+        const messages = await messageService.getMessagesByRoomId(room_id);
         setMessages(messages)
+    }
+
+    const toastGetMessages = async (room_id : string) => {
+      toast.promise(messageService.getMessagesByRoomId(room_id), {
+        loading: 'Loading messages',
+        success: 'Messages loaded successfully',
+        error: 'Error loading messages',
+      })
     }
 
     const onOpenChat = async (user_id : Principal, post_id : string) => {
@@ -98,6 +108,7 @@ export const ChatProvider= ({ children } : { children: React.ReactNode }) => {
             console.error('WebSocket is not open. Cannot send message.');
           }
         } catch (error) {
+          toast.error('Error sending message to WebSocket',{position: 'top-right'});
           console.error('Error sending message:', error);
         }
       }
@@ -113,7 +124,7 @@ export const ChatProvider= ({ children } : { children: React.ReactNode }) => {
           children : children,
           messages : messages,
           getRoom : getRoom,
-          getMessages : getMessages,
+          getMessages : toastGetMessages,
           onMessageSend : onMessageSend,
           onOpenChat : onOpenChat
       };
