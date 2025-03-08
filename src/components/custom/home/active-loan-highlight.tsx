@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { useGetMyLoanPosts } from "@/hooks/loan-post/use-get-my-loan-posts";
 import { RouteEnum } from "@/lib/enum/router-enum";
+import { formatCurrency } from "@/lib/utils/Currency";
 import { CheckCircle } from "lucide-react"
 import { useNavigate } from "react-router"
 
@@ -21,7 +22,7 @@ export function ActiveLoanHighlight() {
           <div>
             <h2 className="text-xl font-bold">You Have Active Loan</h2>
             <p className="text-sm">
-              You have active loan of <span className="font-semibold">${totalLoanAmount.toFixed(2)}</span>.
+              You have active loan of <span className="font-semibold">{formatCurrency(totalLoanAmount)}</span>.
             </p>
             <p className="text-sm">
               Latest Repayment Status: <span className="font-semibold">{latestActiveLoan?.status}</span>

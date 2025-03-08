@@ -35,6 +35,7 @@ import { ChatButton } from '@/components/custom/chat/chat-button';
 import Header from '@/components/layout/header';
 import { useGetLoanAssurance } from '@/hooks/loan-post/use-get-loan-assurance';
 import { Badge } from '@/components/ui/badge';
+import { formatCurrency } from '@/lib/utils/Currency';
 
 const categoryIcons = {
   All: LayoutGrid,
@@ -122,10 +123,10 @@ function LoanDetailPage() {
                   <Progress value={progress} className="h-4" />
                   <div className="flex justify-between text-lg">
                     <span>
-                      ${loanPost.raised.toFixed(2).toLocaleString()} raised
+                      {formatCurrency(loanPost.raised)} raised
                     </span>
                     <span>
-                      ${loanPost.goal.toFixed(2).toLocaleString()} goal
+                      {formatCurrency(loanPost.goal)} goal
                     </span>
                   </div>
                   <p className="text-muted-foreground">
@@ -201,7 +202,7 @@ function LoanDetailPage() {
                         <span className="font-medium">Repayment Total</span>
                       </div>
                       <span className="font-mono font-semibold text-foreground">
-                        ${(loanPost?.goal * loanPost.multiplier)?.toFixed(2)}
+                        {formatCurrency((loanPost?.goal * loanPost.multiplier) || 0)}
                         {/* Assuming 5% interest if not specified */}
                       </span>
                     </div>

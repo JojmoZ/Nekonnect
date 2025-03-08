@@ -20,6 +20,7 @@ import { LoanPost } from '@/lib/model/entity/loan-post';
 import { Link } from 'react-router';
 import { timeLeft } from '@/lib/utils/DateString';
 import { deserializeImage } from '@/lib/utils/Image';
+import { formatCurrency } from '@/lib/utils/Currency';
 
 const categoryIcons = {
   All: LayoutGrid,
@@ -76,8 +77,8 @@ export function ProjectCard({ project }: { project: LoanPost }) {
         </p>
         <Progress value={progress} className="mb-2" />
         <div className="flex justify-between text-sm">
-          <span>${project.raised.toFixed(2).toLocaleString()} raised</span>
-          <span>${project.goal.toFixed(2).toLocaleString()} goal</span>
+          <span>{formatCurrency(project.raised)} raised</span>
+          <span>{formatCurrency(project.goal)} goal</span>
         </div>
       </CardContent>
       <CardFooter className="flex justify-between items-center">
