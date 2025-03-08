@@ -12,6 +12,6 @@ module {
         room_id : Text;
         user_id : Principal;
         username : Text;
-        profilePicture: [Nat8];
+        profilePicture: Blob;
     };
 }

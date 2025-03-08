@@ -39,16 +39,6 @@ function TransactionHistoryPage() {
     }
   };
 
-  const getActionRoute = (statusType: string) => {
-    switch (statusType) {
-      // case 'Ongoing':
-      // case 'Not Fulfilled':
-      //   return RouteEnum.CREATE_POST;
-      default:
-        return RouteEnum.BROWSE;
-    }
-  };
-
   return (
     <div className="container py-8 mx-auto">
       <div className="flex items-center mb-8">
@@ -83,7 +73,7 @@ function TransactionHistoryPage() {
                   <h3 className="text-lg font-medium mb-2">No {s} Transactions</h3>
                   <p className="text-muted-foreground mb-6 max-w-md">{getStatusMessage(s)}</p>
                   <div className="flex flex-col sm:flex-row gap-3">
-                    <Button className="flex items-center gap-2" onClick={() => navigate(getActionRoute(s))}>
+                    <Button className="flex items-center gap-2" onClick={() => navigate(RouteEnum.BROWSE)}>
                       <PlusCircle className="h-4 w-4" />
                       Explore Lending Options
                     </Button>
