@@ -1,4 +1,14 @@
 # Step 1: Move to parent directory
+
+sudo fuser -k 5000/tcp
+sudo fuser -k 4943/tcp
+sudo fuser -k 8080/tcp
+
+# Ensure all processes using these ports are killed
+sudo lsof -t -i:5000 | xargs sudo kill -9 2>/dev/null
+sudo lsof -t -i:4943 | xargs sudo kill -9 2>/dev/null
+sudo lsof -t -i:8080 | xargs sudo kill -9 2>/dev/null
+
 dfx stop
 dfx start --clean --background
 
@@ -80,4 +90,17 @@ else
     echo "No supported terminal found. Running in background..."
     cd ocr_backend && python3 -m venv .venv && source ./.venv/bin/activate && pip install -r requirements.txt && python3 app.py &
 fi
+
+npm i
+dfx canister create --all 
+dfx deps pull
+dfx deps init rdmx6-jaaaa-aaaaa-aaadq-cai --argument null
+dfx deps deploy 
+
+dfx generate
+dfx deploy
+dfx generate
+dfx deploy 
+chmod +x ./env_generator.sh 
+./env_generator.sh 
 

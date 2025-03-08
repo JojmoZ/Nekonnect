@@ -4,6 +4,6 @@ module {
 
     public type LoanPostActor = actor {
         getPost: (loanId: Text) -> async LoanPost;
-        updateRaisedAmount: (loanId: Text, amount: Float) -> async Text;
+        updateRaisedAmount: (loanId: Text, amount: Float, transactionCanisterId: Text) -> async Text;
     }
 }

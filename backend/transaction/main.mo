@@ -30,7 +30,18 @@ actor class TransactionMain() {
         );
     };
 
-    public shared ({ caller }) func createTransaction(loanId : Text, amount : Float, method : Text, loanPostCanisterId : Text, userId : Principal) : async Text {
+    public shared ({ caller }) func createTransaction(loanId : Text, amount : Float, method : Text, loanPostCanisterId : Text, userId : Principal, transactionCanisterId : Text) : async Text {
+
+        let lender = await UserActor.getUserByPrincipal(userId);
+
+        switch (lender) {
+            case (null) { return "User not found!"; };
+            case (?user) {
+                if (user.balance < amount) {
+                    return "Insufficient balance!";
+                };
+            };
+        };
 
         let transactionId = await Utils.generateUUID();
         let transaction = {
@@ -43,15 +54,16 @@ actor class TransactionMain() {
             lender = userId;
         };
         let loanPostActor = actor (loanPostCanisterId) : LoanPostModule.LoanPostActor;
-        let update = await loanPostActor.updateRaisedAmount(loanId, amount);
+        transactions := List.push<Types.Transaction>(transaction, transactions);
+        let update = await loanPostActor.updateRaisedAmount(loanId, amount, transactionCanisterId);
 
         if (update != "Raised amount updated successfully!") {
+            // Delete transaction
+            transactions := List.filter<Types.Transaction>(transactions, func (t: Types.Transaction): Bool = t.transactionId != transactionId);
             return update;
         };
         let loan = await loanPostActor.getPost(loanId);
-        let _ = await UserActor.topUpBalance(loan.debtor,amount);
         let _ = await UserActor.reduceBalance(userId,amount);
-        transactions := List.push<Types.Transaction>(transaction, transactions);
 
         return "Transaction created successfully!";
     };
