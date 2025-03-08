@@ -1,5 +1,5 @@
 import { LoanPost } from "@/lib/model/entity/loan-post";
-import { BaseService, createLoanPostActor, loanPostCanisterId, transactionCanisterId } from "./base.service";
+import { BaseService, createLoanPostActor, loanPostCanisterId, transactionCanisterId, userCanisterId } from "./base.service";
 import { ActorSubclass } from "@dfinity/agent";
 import { _SERVICE as _LOANPOSTSERVICE } from "@/declarations/loan_post/loan_post.did";
 import { LoanAssurance } from "@/lib/model/entity/loan-assurance";
@@ -47,7 +47,7 @@ export class LoanPostService extends BaseService {
     }
 
     async acceptPost(loanId: string): Promise<String> {
-        return await this.loanPost.acceptPost(loanId, transactionCanisterId);
+        return await this.loanPost.acceptPost(loanId, transactionCanisterId, userCanisterId);
     }
 
     async rejectPost(loanId: string): Promise<String> {
@@ -57,5 +57,7 @@ export class LoanPostService extends BaseService {
     async getAssurance(assuranceId: string): Promise<LoanAssurance | undefined> {
         return await this.loanPost.getAssurance(assuranceId);
     }
-
+    async getAssurances(): Promise<LoanAssurance[]> {
+        return  await this.loanPost.getAssurances();
+    }
 }

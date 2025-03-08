@@ -4,7 +4,7 @@ import { useState } from "react"
 import { Search, Filter, ArrowUpDown } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { AssuranceCard } from "@/components/assurance-card"
+import { AssuranceCard, LoanAssurance } from "@/components/assurance-card"
 import { useGetAssurances } from "@/hooks/assurance/use-get-assurances"
 import { assuranceTypes } from '@/components/custom/create-post/assurance-form';
 
@@ -13,9 +13,9 @@ export default function AssuranceBrowserPage() {
   const [typeFilter, setTypeFilter] = useState("All")
   const [sortBy, setSortBy] = useState("newest")
   const { assurances } = useGetAssurances(true)
-
+  console.log(assurances)
   // Filter assurances based on search query and type
-  const filteredAssurances = assurances.filter((assurance) => {
+  const filteredAssurances = assurances.filter((assurance: LoanAssurance) => {
     const matchesSearch =
       assurance.assuranceId.toLowerCase().includes(searchQuery.toLowerCase()) ||
       assurance.assuranceType.toLowerCase().includes(searchQuery.toLowerCase())
@@ -24,7 +24,6 @@ export default function AssuranceBrowserPage() {
     return matchesSearch && matchesType
   })
 
-  // Sort assurances based on selected sort option
   const sortedAssurances = [...filteredAssurances].sort((a, b) => {
     switch (sortBy) {
       case "newest":

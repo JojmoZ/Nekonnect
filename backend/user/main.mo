@@ -3,7 +3,6 @@ import Principal "mo:base/Principal";
 import Result "mo:base/Result";
 import Types "types";
 
-
 actor class UserMain() {
 
   stable var users: List.List<Types.User> = List.nil<Types.User>();

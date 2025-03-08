@@ -2,7 +2,7 @@ export enum RouteEnum {
     ALL = '*',
     LOGIN = '/login',
     LANDING = '/',
-    HOME = '/home',
+    HOME = '/featured',
     BROWSE = '/browse',
     CREATE_POST = '/create-post',
     POST = '/post/:id',
@@ -15,5 +15,6 @@ export enum RouteEnum {
     GET_ADMIN_ROLE = "/get-admin-role",
     TOP_UP = '/top-up',
     MY_LOANS = '/my-loans',
-    GET_OWNER_ROLE = "/get-owner-role"
+    GET_OWNER_ROLE = "/get-owner-role",
+    ASSURANCES = "/assurances",
 }

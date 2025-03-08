@@ -21,6 +21,7 @@ import { ChatProvider } from './context/chat-context';
 import TopUpPage from './pages/(private)/top-up';
 import UserLoansPage from './pages/(private)/user-loans';
 import { GetOwnerRole } from './pages/(private)/get-owner-role';
+import AssuranceBrowserPage from './pages/(private)/assurance-browser';
 
 const router = createBrowserRouter([
   {
@@ -39,6 +40,10 @@ const router = createBrowserRouter([
         path: RouteEnum.BROWSE,
         element: <LoanBrowserPage />,
       },
+      {
+        path: RouteEnum.HOME,
+        element: <Home />,
+      }, 
       {
         element: <ProtectedRoute role={RoleEnum.ADMIN} />,
         children: [
@@ -92,16 +97,16 @@ const router = createBrowserRouter([
             element: <ProfilePage />,
           },
           {
-            path: RouteEnum.HOME,
-            element: <Home />,
-          }, 
-          {
             path: RouteEnum.TOP_UP,
             element: <TopUpPage />,
           },
           {
             path: RouteEnum.MY_LOANS,
             element: <UserLoansPage />,
+          },
+          {
+            path: RouteEnum.ASSURANCES,
+            element: <AssuranceBrowserPage/>
           }
         ]
       },

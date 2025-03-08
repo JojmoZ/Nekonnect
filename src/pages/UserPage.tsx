@@ -65,7 +65,7 @@ const UserPage = () => {
                     navigate("/chat")
                 }
             } else {
-                setVerificationResult("Error: " + data.error);
+                setVerificationResult("❌ Not the same face");
             }
         } catch (error) {
             console.error("Error verifying face:", error);
