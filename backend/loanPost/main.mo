@@ -11,7 +11,7 @@ import Principal "mo:base/Principal";
 import Types "types";
 import Utils "../utils";
 import TransactionModule "../transaction/interface";
-import UserActor "canister:user";
+import UserModule "../user/interface";
 
 actor class LoanPostMain() {
     stable var posts: List.List<Types.LoanPost> = List.nil<Types.LoanPost>();
@@ -104,7 +104,7 @@ actor class LoanPostMain() {
         List.toArray(List.filter(posts, func(post: Types.LoanPost): Bool = post.status == "Verifying"));
     };
 
-    public shared func acceptPost(loanId: Text, transactionCanisterId: Text) : async Text {
+    public shared func acceptPost(loanId: Text, transactionCanisterId: Text, userCanisterId: Text) : async Text {
         switch (findPost(loanId)) {
             case (null) { return "Post not found!"; };
             case (?post) {
@@ -118,8 +118,8 @@ actor class LoanPostMain() {
                 // Update post status after 30 days
                 let delay = 1_000_000_000 * 30 * 60 * 60 * 24;
                 // let delay = 1_000_000_000 * 60 * 1; // 1 minute in nanoseconds
-                let timer = Timer.setTimer(#nanoseconds (delay), func (): async () {
-                    ignore checkPostGoal(loanId, transactionCanisterId);
+                let _ = Timer.setTimer(#nanoseconds (delay), func (): async () {
+                    ignore checkPostGoal(loanId, transactionCanisterId, userCanisterId);
                 });
 
                 return "Post verified successfully!";
@@ -188,8 +188,9 @@ actor class LoanPostMain() {
     };
 
     // Not fulfilled post, update status
-    public func checkPostGoal(loanId: Text, transactionCanisterId: Text): async () {
+    public func checkPostGoal(loanId: Text, transactionCanisterId: Text, userCanisterId: Text): async () {
         Debug.print("Masuk 1: "); 
+        let userActor = actor(userCanisterId) : UserModule.UserActor;
 
         switch(findPost(loanId)) {
             case(null) { 
@@ -211,7 +212,7 @@ actor class LoanPostMain() {
                         let lender = transaction.lender;
                         Debug.print("Lender: " # Principal.toText(lender)); 
                         Debug.print("refundAmount: " # Float.toText(refundAmount)); 
-                        let _ = await UserActor.topUpBalance(lender, refundAmount);
+                        let _ = await userActor.topUpBalance(lender, refundAmount);
                         let _ = await transactionActor.updateTransactionStatus(transaction.transactionId, "Not Fulfilled");
                         // let _ = await UserActor.reduceBalance(post.debtor,refundAmount);
                     // if (refundResult) {
@@ -221,11 +222,11 @@ actor class LoanPostMain() {
                     Debug.print("Masuk 4: ");
                     loanStatus := "Repaying";
                     transactionStatus := "Repaying";
-                    let _ = await UserActor.topUpBalance(post.debtor,post.raised);
+                    let _ = await userActor.topUpBalance(post.debtor,post.raised);
 
                     // let delay = 1_000_000_000 *  post.loanDuration *  60 * 2;
                     let delay = 1_000_000_000 *  post.loanDuration * 60 * 60 * 24;
-                    let timer = Timer.setTimer(#nanoseconds (Nat64.toNat(delay)), func (): async () {
+                    let _ = Timer.setTimer(#nanoseconds (Nat64.toNat(delay)), func (): async () {
                         Debug.print("Masuk 5: ");
                         var loanStatus = post.status;
                         for (transaction in transactions.vals()) {
@@ -233,16 +234,16 @@ actor class LoanPostMain() {
                             let lender = transaction.lender;
                             
                             // TODO: Multiply by multiplier
-                            let _ = await UserActor.topUpBalance(lender, refundAmount);
+                            let _ = await userActor.topUpBalance(lender, refundAmount);
                             let _ = await transactionActor.updateTransactionStatus(transaction.transactionId, "Repaid");
                             
-                            let user = await UserActor.GetOwner();
+                            let user = await userActor.GetOwner();
                             switch(user){
                                 case(null){
                                     return
                                 };
                                 case(?user){
-                                    let debtor = await UserActor.getUserByPrincipal(post.debtor);
+                                    let debtor = await userActor.getUserByPrincipal(post.debtor);
                                     switch(debtor){
                                         case(null){
                                             return
@@ -271,7 +272,7 @@ actor class LoanPostMain() {
                                             else{
                                                 Debug.print("Masuk 7: ");
                                                 // TODO: Multiply by multiplier
-                                                let _ = await UserActor.reduceBalance(post.debtor, post.raised * post.multiplier);
+                                                let _ = await userActor.reduceBalance(post.debtor, post.raised * post.multiplier);
                                                 loanStatus := "Repaid";
                                             };
                                         };
