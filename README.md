@@ -42,7 +42,6 @@ sudo apt install -y python3-pip
 sudo apt install python3-venv
 sudo apt install -y cmake g++ python3-dev libopenblas-dev liblapack-dev libx11-dev
 
-# Step 9: Start OCR backend in a new terminal
 if command -v xfce4-terminal &> /dev/null; then
     xfce4-terminal --hold --command "bash -c '
     cd ocr_backend &&
@@ -73,7 +72,7 @@ else
 fi
 ```
 
-- How To Setup Project (Will run flask and websocket automatically
+- How To Setup Project (Will run flask and websocket automatically)
 ```sh
 npm run setup
 run websocket locally
