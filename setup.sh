@@ -4,8 +4,16 @@
 dfx stop
 dfx start --clean --background
 
-# Step 2: Clone repository
-git clone https://github.com/omnia-network/ic-websocket-gateway.git
+REPO_URL="https://github.com/omnia-network/ic-websocket-gateway.git"
+TARGET_DIR="ic-websocket-gateway"
+
+# Check if the directory exists
+if [ -d "$TARGET_DIR" ]; then
+    echo "Repository already exists in $TARGET_DIR."
+else
+    echo "Cloning repository..."
+    git clone "$REPO_URL"
+fi
 
 # Step 3: Enter repository directory
 cd ic-websocket-gateway
