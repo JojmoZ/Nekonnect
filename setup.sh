@@ -32,47 +32,7 @@ rustup update stable
 sudo apt update
 sudo apt install -y pkg-config libssl-dev
 
-# Step 7: Run Cargo in a new terminal
-if command -v gnome-terminal &> /dev/null; then
-    gnome-terminal -- bash -c "cd ic-websocket-gateway && cargo run; exec bash"
-elif command -v x-terminal-emulator &> /dev/null; then
-    x-terminal-emulator -e bash -c "cd ic-websocket-gateway && cargo run; exec bash"
-elif command -v xfce4-terminal &> /dev/null; then
-    xfce4-terminal --hold --command "bash -c 'cd ic-websocket-gateway && cargo run; exec bash'"
-else
-    echo "No supported terminal found. Running in background..."
-    cd ic-websocket-gateway && cargo run &
-fi
-
-# Step 8: Move back to Nekonnect
+cmd.exe /c start /k "cd ic-websocket-gateway && cargo run"
 cd ../
+cmd.exe /k start /c "cd ocr_backend && pip install -r requirements.txt && python -m venv .venv && source ./.venv/bin/activate && python app.py" 
 
-# Step 9: Start OCR backend in a new terminal
-if command -v gnome-terminal &> /dev/null; then
-    gnome-terminal -- bash -c "
-    cd ocr_backend &&
-    pip install -r requirements.txt &&
-    python -m venv .venv &&
-    source ./.venv/bin/activate &&
-    python app.py;
-    exec bash"
-elif command -v x-terminal-emulator &> /dev/null; then
-    x-terminal-emulator -e bash -c "
-    cd ocr_backend &&
-    pip install -r requirements.txt &&
-    python -m venv .venv &&
-    source ./.venv/bin/activate &&
-    python app.py;
-    exec bash"
-elif command -v xfce4-terminal &> /dev/null; then
-    xfce4-terminal --hold --command "bash -c '
-    cd ocr_backend &&
-    pip install -r requirements.txt &&
-    python -m venv .venv &&
-    source ./.venv/bin/activate &&
-    python app.py;
-    exec bash'"
-else
-    echo "No supported terminal found. Running in background..."
-    cd ocr_backend && pip install -r requirements.txt && python -m venv .venv && source ./.venv/bin/activate && python app.py &
-fi
