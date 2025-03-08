@@ -1,19 +1,11 @@
-"use client"
-
 import { useEffect, useState } from "react"
 import { Loader2 } from "lucide-react"
 import Logo from "@/components/logo"
-import { useLayout } from "@/context/layout-context";
 
 export default function LoadingScreen({text}: {text: string}) {
-  const [progress, setProgress] = useState(0)
-  // const [loadingText, setLoadingText] = useState("Initializing")
-  const { setHeader, setFooter } = useLayout();
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    // setHeader(false);
-    // setFooter(false);
-    // const loadingTexts = ["Initializing", "Loading resources", "Preparing data", "Almost there"]
 
     const interval = setInterval(() => {
       setProgress((prevProgress) => {
@@ -22,19 +14,8 @@ export default function LoadingScreen({text}: {text: string}) {
       })
     }, 500)
 
-    // const textInterval = setInterval(() => {
-    //   setLoadingText((prevText) => {
-    //     const currentIndex = loadingTexts.indexOf(prevText)
-    //     const nextIndex = (currentIndex + 1) % loadingTexts.length
-    //     return loadingTexts[nextIndex]
-    //   })
-    // }, 2000)
-
     return () => {
       clearInterval(interval)
-      // clearInterval(textInterval)
-      // setHeader(true);
-      // setFooter(true);
     }
   }, [])
 
@@ -61,7 +42,7 @@ export default function LoadingScreen({text}: {text: string}) {
           <div className="w-full max-w-xs mx-auto space-y-2">
             <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted">
               <div
-                className="h-full bg-primary transition-all duration-500 ease-in-out"
+                className="h-full bg-primary-to-accent transition-all duration-500 ease-in-out"
                 style={{ width: `${progress}%` }}
               ></div>
             </div>
