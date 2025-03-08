@@ -14,6 +14,7 @@ import { timeToDateString } from "@/lib/utils/DateString"
 import { Transaction } from "@/lib/model/entity/transaction"
 import { useLayout } from "@/context/layout-context"
 import { useEffect } from "react"
+import { formatCurrency } from "@/lib/utils/Currency";
 
 export default function ProfilePage() {
 
@@ -113,12 +114,12 @@ export default function ProfilePage() {
                                 <CardContent>
                                     <div className="bg-primary-to-accent-hover rounded-xl p-6 text-white">
                                         <p className="text-white/80 mb-1">Available to Lend</p>
-                                        <p className="text-3xl font-bold font-mono">${me?.balance.toFixed(2)}</p>
+                                        <p className="text-3xl font-bold font-mono">{formatCurrency(me?.balance)}</p>
                                         <Separator className="my-4 bg-white/20" />
                                         <div className="flex justify-between">
                                             <div>
                                                 <p className="text-white/80 text-sm">Total Amount Lent</p>
-                                                <p className="font-medium font-mono">${calculateTotalLent(transactions).toFixed(2)}</p>
+                                                <p className="font-medium font-mono">{formatCurrency(calculateTotalLent(transactions))}</p>
                                             </div>
                                         </div>
                                     </div>

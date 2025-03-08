@@ -13,6 +13,7 @@ import { FormControl, FormField, FormItem, FormLabel, FormMessage } from './ui/f
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { toast } from 'sonner';
 import { useCreateTransaction } from '@/hooks/transaction/use-create-transaction';
+import { formatCurrency } from '@/lib/utils/Currency';
 
 interface DonationOverlayProps {
   isOpen: boolean;
@@ -105,7 +106,7 @@ export function DonationOverlay({
                 </FormItem>
               )}
               />
-              <p>Interest: {(multiplier * amount).toFixed(2)}</p>
+              <p>Interest: {formatCurrency((multiplier * amount))}</p>
             <Button type='submit'>Donate</Button>
           </form>
         </FormProvider>

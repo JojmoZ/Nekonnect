@@ -13,13 +13,14 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { useLayout } from "@/context/layout-context"
 import useServiceContext from "@/hooks/use-service-context"
 import { useAuth } from "@/context/auth-context"
-import { METHODS } from "http"
 import { toast } from "sonner"
+import { f } from "react-router/dist/development/fog-of-war-Cm1iXIp7"
+import { formatCurrency } from "@/lib/utils/Currency"
 
 export default function TopUpPage() {
   const [amount, setAmount] = useState<string>("")
   const [paymentMethod, setPaymentMethod] = useState<string>("card")
-  const { setHeader, setFooter, startLoading, stopLoading } = useLayout();
+  const { setHeader, setFooter, startLoading, stopLoading, isLoading } = useLayout();
   const { userService  } = useServiceContext();
   const { me, fetchUser } = useAuth()
 
@@ -127,8 +128,8 @@ export default function TopUpPage() {
             </div>
           </CardContent>
           <CardFooter>
-            <Button type="submit" className="w-full h-12 text-lg" disabled={!amount || Number.parseFloat(amount) <= 0}>
-              Top Up ${amount ? Number.parseFloat(amount).toFixed(2) : "0.00"}
+            <Button type="submit" className="w-full h-12 text-lg" disabled={!amount || Number.parseFloat(amount) <= 0 || isLoading}>
+              Top Up {formatCurrency(Number.parseFloat(amount) || 0)} 
             </Button>
           </CardFooter>
         </form>
