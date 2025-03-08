@@ -1,4 +1,4 @@
-#!/bin/bash
+0~#!/bin/bash
 
 # Step 1: Move to parent directory
 dfx stop
@@ -32,7 +32,16 @@ rustup update stable
 sudo apt update
 sudo apt install -y pkg-config libssl-dev
 
-cmd.exe /c start /k "cd ic-websocket-gateway && cargo run"
-cd ../
-cmd.exe /k start /c "cd ocr_backend && pip install -r requirements.txt && python -m venv .venv && source ./.venv/bin/activate && python app.py" 
+# Convert WSL path to Windows format
+WINDOWS_PATH=$(wslpath -w "$(pwd)")
+
+# Open a new Windows CMD window and run Cargo inside it
+cmd.exe /c start cmd /k "cd /d $WINDOWS_PATH && cargo run"
+
+# Move to the OCR backend directory and start Python environment
+cd ../ocr_backend
+WINDOWS_PATH_OCR=$(wslpath -w "$(pwd)")
+
+# Open another Windows CMD window for OCR backend
+cmd.exe /c start cmd /k "cd /d $WINDOWS_PATH_OCR && pip install -r requirements.txt && python -m venv .venv && .\.venv\Scripts\activate && python app.py"
 
