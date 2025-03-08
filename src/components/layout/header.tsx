@@ -225,7 +225,7 @@ function Header() {
                       <div>
                         <p className="font-medium">{me?.username}</p>
                         <p className="text-sm text-muted-foreground">
-                          Account Balance
+                          Logged In
                         </p>
                       </div>
                     </div>
