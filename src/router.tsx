@@ -21,6 +21,7 @@ import { ChatProvider } from './context/chat-context';
 import TopUpPage from './pages/(private)/top-up';
 import UserLoansPage from './pages/(private)/user-loans';
 import { GetOwnerRole } from './pages/(private)/get-owner-role';
+import AssuranceBrowserPage from './pages/(private)/assurance-browser';
 
 const router = createBrowserRouter([
   {
@@ -54,6 +55,18 @@ const router = createBrowserRouter([
             path: RouteEnum.POST_VERIFICATION,
             element: <PostVerificationPage />,
           },
+        ]
+      },  {
+        element: <ProtectedRoute role={RoleEnum.OWNER} />,
+        children: [
+          {
+            path: '/owner',
+            element: <App />,
+          },
+          {
+            path: RouteEnum.ASSURANCES,
+            element: <AssuranceBrowserPage/>
+          }
         ]
       },
       {

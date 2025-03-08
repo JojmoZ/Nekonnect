@@ -135,11 +135,18 @@ const for_admin: { title: string; href: string; description: string }[] = [
     description: 'Verify posts before publishing.',
   },
 ];
-
+const for_owner: { title: string; href: string; description: string }[] = [
+  {
+    title: 'Assurances',
+    href: RouteEnum.ASSURANCES,
+    description: 'See All Assurances',
+  },
+]
 const menuItems = [
   { label: "For Borrowers", links: for_borrowers },
   { label: "For Lenders", links: for_lenders },
   { label: "Admin", links: for_admin },
+  { label: "Owner", links:for_owner}
   // { label: "For All", links: for_all },
   // { label: "All LINKS Available", links: components },
 ]
@@ -177,8 +184,10 @@ function Header() {
           <SheetContent side="right" className="w-[300px] sm:w-[400px]">
             <div className="flex flex-col h-full py-6">
               <div className="flex-1 space-y-4">
-                {menuItems.map((menu) => (
-                  (menu.label === "Admin" && me?.role === RoleEnum.ADMIN) ?
+              {menuItems.map((menu) => (
+                  ((menu.label === "Admin" && me?.role === RoleEnum.ADMIN) || 
+                   (menu.label === "Owner" && me?.role === RoleEnum.OWNER) ||
+                   (menu.label !== "Admin" && menu.label !== "Owner")) ?
                     <div key={menu.label} className="space-y-2">
                       <h4 className="font-medium text-sm">{menu.label}</h4>
                       <div className="pl-4 border-l space-y-2">
@@ -346,7 +355,16 @@ function Header() {
                   </a>
                 </NavigationMenuItem>
               }
-
+             {me?.role === RoleEnum.OWNER &&
+                <NavigationMenuItem>
+                  <a
+                    className="block select-none rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-foreground/5 hover:text-accent-foreground focus:bg-foreground/5 focus:text-accent-foreground"
+                    href={RouteEnum.ASSURANCES}
+                  >
+                    <div className="text-sm font-medium leading-none">Assurances</div>
+                  </a>
+                </NavigationMenuItem>
+              }
             </NavigationMenuList>
           </NavigationMenu>
 

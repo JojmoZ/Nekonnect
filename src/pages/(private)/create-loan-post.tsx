@@ -1,23 +1,23 @@
-import { FormProvider } from 'react-hook-form';
-import Stepper from '@/components/stepper';
-import CreateLoanForm from '../../components/custom/create-post/create-loan-form';
-import AssuranceForm from '../../components/custom/create-post/assurance-form';
-import LoanAgreementForm from '@/components/custom/create-post/loan-agreement-form';
-import { toast } from 'sonner';
-import { FaceRecognitionForm } from '@/components/custom/create-post/face-recognition-form';
-import { useCreateLoanPost } from '@/hooks/loan-post/use-create-loan-post';
-import { useState } from 'react';
-import SuccessDialog from '@/components/custom/success-dialog';
-import { useNavigate } from 'react-router';
-import { useVerifyFace } from '@/hooks/user/use-verify-face';
+import { FormProvider } from "react-hook-form"
+import Stepper from "@/components/stepper"
+import CreateLoanForm from "../../components/custom/create-post/create-loan-form"
+import AssuranceForm from "../../components/custom/create-post/assurance-form"
+import LoanAgreementForm from "@/components/custom/create-post/loan-agreement-form"
+import { toast } from "sonner"
+import { FaceRecognitionForm } from "@/components/custom/create-post/face-recognition-form"
+import { useCreateLoanPost } from "@/hooks/loan-post/use-create-loan-post"
+import { useState } from "react"
+import SuccessDialog from "@/components/custom/success-dialog"
+import { useNavigate } from "react-router"
+import { useVerifyFace } from "@/hooks/user/use-verify-face"
 
 function CreateLoanPostPage() {
-  const { loanPostForm, assuranceForm, agreementForm, onCreate } = useCreateLoanPost();
-  const verificator = useVerifyFace();
-  const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const { loanPostForm, assuranceForm, agreementForm, onCreate } = useCreateLoanPost()
+  const verificator = useVerifyFace()
+  const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState(false)
+  const [loading, setLoading] = useState(false)
 
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const onSubmit = async () => {
     setLoading(true);
@@ -71,25 +71,27 @@ function CreateLoanPostPage() {
       },
     },
     {
-      title: 'Step 3: Verification',
-      description: 'We should verify you before proceeding.',
-      content: (
-        <FaceRecognitionForm verificator={verificator} />
-      ),
+      title: "Step 3: Verification",
+      description: "We need to verify your identity before proceeding.",
+      content: <FaceRecognitionForm verificator={verificator} />,
       onNext: async () => {
+        if (!verificator.verificationResult) {
+          toast.error("Identity verification failed. Please capture your face before proceeding.")
+          return false
+        }
         return verificator.verificationResult
       }
     },
     {
-      title: 'Step 4: Agreement',
-      description: 'Please read the agreement before submitting.',
+      title: "Step 4: Agreement",
+      description: "Please read the agreement before submitting.",
       content: (
         <FormProvider {...agreementForm}>
           <LoanAgreementForm />
         </FormProvider>
       ),
     },
-  ];
+  ]
 
   return (
     <div className='container py-8'>
