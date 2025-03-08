@@ -62,16 +62,15 @@ const interestAmount = repaymentAmount - loanAmount;
         <div className="absolute inset-0 bg-gradient-to-r from-black/100 to-primary/50 z-10"></div>
         <img src="./assets/borrower_landing.jpg" alt="Financial freedom" className="w-full h-[600px] object-cover" />
         <div className="absolute inset-0 z-20 container mx-auto flex flex-col justify-center px-8">
-          <div className="max-w-2xl">
-            <div className="mb-6">
-              <Logo className="h-16 dark" />
+          <div className="max-w-4xl">
+            <div className="max-w-4xl">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 text-shadow-lg">
+                <span className="flex items-center"><Logo className="h-12 dark mr-2 md:h-16 lg:h-20 md:mr-3 lg:mr-4" /> is here to</span> unlock your <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">Paw-tential</span>
+              </h1>
+              <p className="text-lg text-white/90 mb-8 max-w-xl md:text-xl">
+                Our blockchain platform connects borrowers with lenders directly, eliminating middlemen and securing loans with real-world assets for better rates and complete transparency.
+              </p>
             </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 text-shadow-lg">
-              <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">Financial Freedom</span> Is Just A Click Away
-            </h1>
-            <p className="text-xl text-white/90 mb-8 max-w-xl">
-              Access the funds you need with our secure, asset-backed loans at competitive rates.
-            </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link to={RouteEnum.CREATE_POST}>
                 <Button size="lg" className="gap-2 px-8 w-full sm:w-auto">
