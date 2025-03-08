@@ -4,7 +4,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useFormContext } from "react-hook-form";
 
-const types = ["Land Certificate", "Business License", "Passport", "Vehicle Registration", "Other"];
+export const assuranceTypes = ["Land Certificate", "Business License", "Passport", "Vehicle Registration", "Other"];
 
 function AssuranceForm() {
 
@@ -26,7 +26,7 @@ function AssuranceForm() {
                                 </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                                {types.map((type) => (
+                                {assuranceTypes.map((type) => (
                                     <SelectItem key={type} value={type}>
                                         {type}
                                     </SelectItem>

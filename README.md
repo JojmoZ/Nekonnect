@@ -2,9 +2,13 @@
 
 
 ### Introduction
-
+``Nekonnect``, a peer-to-peer lending platform designed to bridge financial opportunity and trust. By leveraging blockchain technology and real-world assets, we provide a secure, transparent, and decentralized environment where lenders and borrowers can connect seamlessly. Built on ICP technology, Nekonnect utilizes smart contracts to ensure flexibility, supporting features such as Internet Identity, ICP tokens, DFX, and Motoko. To enhance security, our platform integrates AI-powered face verification, ensuring a safe and reliable lending experience for all users.
 
 ### Features
+- Supply and borrow money
+- Manage your own profile
+- Contact the person you want to lend through chat
+- Loan Repayment Tracking (Easily monitor repayment schedules and due dates)
 
 ### Requirements and Pre-requisites
 - WSL (v2.4.11)
@@ -13,11 +17,6 @@
 - DFX (v0.24.0)
 - NPM (v10.9.2)
 - NVM (v0.40.1)
-
-
-
-
-
 
 ## How to Run
 ```sh
@@ -36,3 +35,5 @@ Note:
 
 
 ## Future Development
+- Improve the accuracy and precision of AI-powered face recognition to ensure that borrowers' identities match their registered profiles more accurately.
+- Offer more flexible loan types, such as long-term loans, short-term loans, microloans, and other types of loans.

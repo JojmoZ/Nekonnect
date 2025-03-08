@@ -395,7 +395,7 @@ export default function Landing() {
                 </CardHeader>
                 <CardContent>
                   <p className="text-muted-foreground">
-                    You can start lending with as little as $25, allowing you to
+                    You can start lending with any amount, allowing you to
                     diversify your investments across multiple borrowers.
                   </p>
                 </CardContent>
