@@ -1,5 +1,3 @@
-0~#!/bin/bash
-
 # Step 1: Move to parent directory
 dfx stop
 dfx start --clean --background
@@ -31,17 +29,8 @@ rustup update stable
 # Step 6: Install dependencies
 sudo apt update
 sudo apt install -y pkg-config libssl-dev
-
+win_path=$(wslpath -w ~/Nekonnect/ocr_backend)
 # Convert WSL path to Windows format
-WINDOWS_PATH=$(wslpath -w "$(pwd)")
+cmd.exe /c start cmd /k "pushd $win_path && wsl --cd ~/Nekonnect/ic-websocket-gateway && cargo run"
 
-# Open a new Windows CMD window and run Cargo inside it
-cmd.exe /c start cmd /k "cd /d $WINDOWS_PATH && cargo run"
-
-# Move to the OCR backend directory and start Python environment
-cd ../ocr_backend
-WINDOWS_PATH_OCR=$(wslpath -w "$(pwd)")
-
-# Open another Windows CMD window for OCR backend
-cmd.exe /c start cmd /k "cd /d $WINDOWS_PATH_OCR && pip install -r requirements.txt && python -m venv .venv && .\.venv\Scripts\activate && python app.py"
-
+cmd.exe /c start cmd /k "pushd $win_path && wsl --cd ~/Nekonnect/ocr_backend && pip install -r requirements.txt && python -m venv .venv && .\.venv\Scripts\activate && python app.py"
