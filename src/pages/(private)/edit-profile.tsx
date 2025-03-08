@@ -37,9 +37,9 @@ export const EditProfilePage = () => {
         toast.error('Error encoding face');
         stopLoading()
         setLoading(false);
-        // return
+        return
       }
-      await handleEdit(faceEncoding ?? []);
+      await handleEdit(faceEncoding);
       await fetchUser();
       navigate('/home');
     } catch (err : unknown) {

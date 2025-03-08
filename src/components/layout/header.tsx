@@ -384,7 +384,7 @@ function Header() {
                     <p className="font-medium">{me?.username}</p>
                     <p className="text-xs text-muted-foreground">Logged in</p>
                   </div>
-                  <DropdownMenuItem onClick={() => navigate(RouteEnum.PROFILE)}>
+                  <DropdownMenuItem onClick={() => navigate(RouteEnum.PROFILE)} className="mt-1">
                     Profile
                   </DropdownMenuItem>
                   <DropdownMenuItem
@@ -401,7 +401,7 @@ function Header() {
                     Top Up
                   </DropdownMenuItem>
                   <DropdownMenuItem
-                    className="text-destructive hover:text-destructive"
+                    className="text-destructive"
                     onClick={handleLogout}
                   >
                     Logout
