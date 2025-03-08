@@ -84,7 +84,7 @@ actor RoomUsersManager {
                 case (null) "Unknown";
             };
             let profile = switch (user) {
-                case (?u) Blob.toArray(u.profilePicture);
+                case (?u)(u.profilePicture);
                 // case (null) []; 
             };
             
