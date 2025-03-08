@@ -27,7 +27,7 @@ export default function Home() {
     <div className="container py-8 space-y-12">
       {/* If the user has active loan display a highlight or something */}
       {thereIsActiveLoan && <ActiveLoanHighlight />}
-      <div className="text-center space-y-4">
+    <div className="text-center space-y-4">
         <h1 className="text-5xl tracking-tight font-bold">
           Purr-fect Lending and Borrowing
         </h1>

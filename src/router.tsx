@@ -40,6 +40,10 @@ const router = createBrowserRouter([
         element: <LoanBrowserPage />,
       },
       {
+        path: RouteEnum.HOME,
+        element: <Home />,
+      }, 
+      {
         element: <ProtectedRoute role={RoleEnum.ADMIN} />,
         children: [
           {
@@ -91,10 +95,6 @@ const router = createBrowserRouter([
             path: RouteEnum.PROFILE,
             element: <ProfilePage />,
           },
-          {
-            path: RouteEnum.HOME,
-            element: <Home />,
-          }, 
           {
             path: RouteEnum.TOP_UP,
             element: <TopUpPage />,
