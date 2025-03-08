@@ -10,14 +10,12 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Input } from '@/components/ui/input';
 import {
-  ArrowRight, BarChart3,
-  Cat,
-  Check, Coins,
-  CreditCard,
-  DollarSign, FileCheck,
+  ArrowRight,
+  BarChart3,
+  Check,
+  Coins,
+  FileCheck,
   Link,
-  Lock,
-  PawPrint,
   Shield,
   Users,
 } from 'lucide-react';

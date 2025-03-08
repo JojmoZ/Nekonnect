@@ -77,8 +77,8 @@ function CreateLoanPostPage() {
         <FaceRecognitionForm verificator={verificator} />
       ),
       onNext: async () => {
-        // return verificator.verificationResult
-        return true
+        return verificator.verificationResult
+        // return true
       }
     },
     {
