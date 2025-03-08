@@ -11,12 +11,25 @@ actor class UserMain() {
   public func getUserByPrincipal(identity : Principal) : async ?Types.User {
     List.find<Types.User>(users, func(user: Types.User) : Bool { user.internetIdentity == identity });
   };
-
+  public func GetOwner() : async ?Types.User {
+    List.find<Types.User>(users, func(user: Types.User) : Bool { user.role == "Owner" });
+  };
   public func getAllUsers() : async [Types.User] {
     List.toArray(users);
   };
 
   public func editUserProfile(user : Types.User) : async Result.Result<Types.User, Text> {
+
+    if (user.role == "Owner") {
+      let owner = await GetOwner();
+      switch (owner) {
+        case (?owner) {
+          return #err("Owner is exist");
+        };
+        case(null) {
+        };
+      }
+    };
     let existingUser = await getUserByPrincipal(user.internetIdentity);
     switch (existingUser) {
       case (null) {

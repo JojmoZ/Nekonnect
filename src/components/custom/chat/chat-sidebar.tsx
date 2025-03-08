@@ -47,7 +47,9 @@ export function ChatAppSidebar({ user, children }: IProps) {
         style={
           {
             '--sidebar-overflow-y': 'hidden',
-            'padding-top': '112px',
+            'paddingTop': '112px',
+            'paddingBottom' : '20px',
+            'paddingRight': '20px'
           } as React.CSSProperties
         }
         side='right'
@@ -68,7 +70,7 @@ export function ChatAppSidebar({ user, children }: IProps) {
             </div>
           </SidebarHeader>
           <SidebarGroup className=" h-screen flex flex-col flex-1 overflow-y-auto ">
-            <div className="flex-1 p-4 space-y-2 flex flex-col-reverse overflow-y-auto scrollbar-hidden">
+            <div className="flex-1 p-4 space-y-4 gap-2 flex flex-col-reverse overflow-y-auto scrollbar-hidden">
               {messages.map((msg, index) => (
                 <MessageBubble message={msg} user={me} key={index} />
               ))}

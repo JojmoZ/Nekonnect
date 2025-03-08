@@ -96,6 +96,9 @@ export function FaceRecognitionForm({ verificator }: ChildProps) {
       {(
         <p className="mt-4 text-lg font-bold text-center">{verificator.message?? "Please do the recognition."}</p>
       )}
+      <p className="text-foreground text-sm mt-4">
+        NOTE: Please make sure that you have captured your face before. If you haven't captured your face, please do so by navigating to Profile {">"} Edit Profile.
+      </p>
     </div>
   );
 }

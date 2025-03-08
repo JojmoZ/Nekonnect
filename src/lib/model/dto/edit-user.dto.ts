@@ -15,9 +15,6 @@ export const userSchema = z.object({
     .refine((file) => file.size <= 5 * 1024 * 1024, {
       message: 'File size must be less than 5MB',
     })
-    .refine((file) => file.type.startsWith('image/'), {
-      message: 'Only image files are allowed',
-    })
     .optional()
     .default(defaultFile),
   faceEncoding: z

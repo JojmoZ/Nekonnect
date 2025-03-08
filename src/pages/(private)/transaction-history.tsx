@@ -41,9 +41,9 @@ function TransactionHistoryPage() {
 
   const getActionText = (statusType: string) => {
     switch (statusType) {
-      case 'Ongoing':
-      case 'Not Fulfilled':
-        return 'Create New Transaction';
+      // case 'Ongoing':
+      // case 'Not Fulfilled':
+      //   return 'Create New Transaction';
       default:
         return 'Explore Lending Options';
     }
@@ -55,14 +55,14 @@ function TransactionHistoryPage() {
       case 'Not Fulfilled':
         return RouteEnum.CREATE_POST;
       default:
-        return RouteEnum.HOME;
+        return RouteEnum.BROWSE;
     }
   };
 
   return (
     <div className="container py-8 mx-auto">
       <div className="flex items-center mb-8">
-        <Button variant="ghost" size="icon" className="mr-2" onClick={() => navigate(RouteEnum.HOME)}>
+        <Button variant="ghost" size="icon" className="mr-2" onClick={() => navigate(-1)}>
           <ArrowLeft className="h-5 w-5" />
           <span className="sr-only">Back to Home</span>
         </Button>
@@ -96,13 +96,6 @@ function TransactionHistoryPage() {
                     <Button className="flex items-center gap-2" onClick={() => navigate(getActionRoute(s))}>
                       <PlusCircle className="h-4 w-4" />
                       {getActionText(s)}
-                    </Button>
-                    <Button
-                      variant="outline"
-                      className="flex items-center gap-2"
-                      onClick={() => navigate(RouteEnum.HOME)}
-                    >
-                      Back to Home
                     </Button>
                   </div>
                 </div>

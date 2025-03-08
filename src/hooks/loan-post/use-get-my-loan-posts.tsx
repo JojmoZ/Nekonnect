@@ -5,7 +5,7 @@ import { LoanPost } from "@/lib/model/entity/loan-post";
 export function useGetMyLoanPosts() {
     const { loanPostService } = useServiceContext();
     const [loanPosts, setLoanPosts] = useState<LoanPost[]>([]);
-    const thereIsActiveLoan = loanPosts.some(post => post.status !== 'Repaid' && post.status !== 'Refunded');
+    const thereIsActiveLoan = loanPosts.some(post => post.status !== 'Repaid' && post.status !== 'Refunded' && post.status !== 'Not Fulfilled');
 
     const getMyLoanPosts = async () => {
         const posts = await loanPostService.getMyLoanPosts();
@@ -13,9 +13,15 @@ export function useGetMyLoanPosts() {
         console.log(posts);
     };
 
-    const totalLoanAmount = loanPosts.reduce((acc, post) => acc + post.goal, 0);
+    // Only sum active loans
+    const totalLoanAmount = loanPosts.reduce((acc, post) => {
+        if (post.status !== 'Repaid' && post.status !== 'Refunded' && post.status !== 'Not Fulfilled') {
+            return acc + post.goal;
+        }
+        return acc;
+    }, 0);
 
-    const latestActiveLoan = loanPosts.find(post => post.status !== 'Repaid' && post.status !== 'Refunded');
+    const latestActiveLoan = loanPosts.find(post => post.status !== 'Repaid' && post.status !== 'Refunded' && post.status !== 'Not Fulfilled');
 
     useEffect(() => {
     getMyLoanPosts();

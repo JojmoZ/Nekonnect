@@ -22,6 +22,7 @@ import { GetAdminRole } from './pages/(private)/get-admin-role';
 import { ChatProvider } from './context/chat-context';
 import TopUpPage from './pages/(private)/top-up';
 import UserLoansPage from './pages/(private)/user-loans';
+import { GetOwnerRole } from './pages/(private)/get-owner-role';
 
 const router = createBrowserRouter([
   {
@@ -55,6 +56,10 @@ const router = createBrowserRouter([
           {
             path: RouteEnum.GET_ADMIN_ROLE,
             element: <GetAdminRole />,
+          },
+          {
+            path: RouteEnum.GET_OWNER_ROLE,
+            element: <GetOwnerRole />,
           },
           {
             path: RouteEnum.EDIT_PROFILE,

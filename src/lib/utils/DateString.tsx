@@ -15,10 +15,10 @@ export function timeLeft(verifiedAt: bigint, postDuration: bigint): string {
   const verifiedAtMs = Number(verifiedAt / BigInt(1_000_000)); // Convert from nanoseconds to milliseconds
   
   // Total duration in milliseconds (postDuration is in days)
-  // const totalDurationMs = Number(postDuration) * 24 * 60 * 60 * 1000;
+  const totalDurationMs = Number(postDuration) * 24 * 60 * 60 * 1000;
   //debug
-  const postDurationa = 1; // in minute
-  const totalDurationMs = Number(postDurationa) * 60 * 1000;
+  // const postDurationa = 1; // in minute
+  // const totalDurationMs = Number(postDurationa) * 60 * 1000;
   
   const timeElapsedMs = now - verifiedAtMs;
   const timeLeftMs = totalDurationMs - timeElapsedMs;

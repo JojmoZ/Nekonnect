@@ -4,7 +4,7 @@ import { useLayout } from "@/context/layout-context";
 import { useGetMyLoanPosts } from "@/hooks/loan-post/use-get-my-loan-posts";
 import { useEffect } from "react";
 
-const status = ["Verifying", "Funding", "Repaying", "Repaid", "Refunded"]
+const status = ["Verifying", "Funding", "Not Fulfilled", "Repaying", "Repaid", "Refunded"]
 
 function UserLoansPage() {
     const { setHeader, setFooter } = useLayout();
@@ -21,7 +21,7 @@ function UserLoansPage() {
                 My Loans
             </h1>
             <Tabs defaultValue={status[0]} className="w-full">
-                <TabsList className="grid w-full grid-cols-5 mx-auto">
+                <TabsList className="grid w-full grid-cols-6 mx-auto">
                     {status.map((s) => (
                         <TabsTrigger key={s} value={s}>
                             {s}

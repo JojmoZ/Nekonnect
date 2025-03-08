@@ -15,7 +15,7 @@ import { RouteEnum } from "@/lib/enum/router-enum"
 
 export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState("All")
-  const { loanPosts, getLoanPostsLoading } = useGetLoanPosts(true);
+  const { loanPosts } = useGetLoanPosts(true);
   const categories = Array.from(new Set(loanPosts.map((post) => post.category)))
   const { thereIsActiveLoan } = useGetMyLoanPosts();
   const navigate = useNavigate();
@@ -26,16 +26,14 @@ export default function Home() {
   return (
     <div className="container py-8 space-y-12">
       {/* If the user has active loan display a highlight or something */}
-      {
-        thereIsActiveLoan && <ActiveLoanHighlight />
-      }
+      {thereIsActiveLoan && <ActiveLoanHighlight />}
       <div className="text-center space-y-4">
         <h1 className="text-5xl tracking-tight font-bold">
-          Support Our Community
+          Purr-fect Lending and Borrowing
         </h1>
         <p className="text-xl text-muted-foreground">
-          Discover and fund amazing projects that make a difference in our
-          global community.
+          Connecting cool cats who want to lend and borrow — with trust,
+          transparency, and no cat-astrophic fees.
         </p>
       </div>
       <CategoryFilter
@@ -48,13 +46,15 @@ export default function Home() {
           <CardHeader>
             <div className="flex justify-between items-center">
               <CardTitle>No Project Available</CardTitle>
-              <CheckCircle
-                className={`w-5 h-5`}
-              />
+              <CheckCircle className={`w-5 h-5`} />
             </div>
           </CardHeader>
           <CardFooter className="flex justify-between items-center">
-            <Button onClick={() => { navigate(RouteEnum.CREATE_POST) }}>
+            <Button
+              onClick={() => {
+                navigate(RouteEnum.CREATE_POST);
+              }}
+            >
               Create Project
             </Button>
           </CardFooter>
