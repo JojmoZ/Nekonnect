@@ -19,7 +19,7 @@
 
 ## How to Run
 
-- How To Configure Websocket locally
+- How To Configure Websocket locally (Manual)
 ```sh
 wsl
 dfx start --clean --background
@@ -34,7 +34,46 @@ ip a
 change gatewayURL to ws://ip:8080
 ```
 
-- How To Setup Project
+
+- How To Flask for Face Recognition locally (Manual)
+```sh
+sudo apt update
+sudo apt install -y python3-pip
+sudo apt install python3-venv
+sudo apt install -y cmake g++ python3-dev libopenblas-dev liblapack-dev libx11-dev
+
+# Step 9: Start OCR backend in a new terminal
+if command -v xfce4-terminal &> /dev/null; then
+    xfce4-terminal --hold --command "bash -c '
+    cd ocr_backend &&
+    python3 -m venv .venv &&
+    source ./.venv/bin/activate &&
+    pip install -r requirements.txt &&
+    python3 app.py;
+    exec bash'"
+elif command -v gnome-terminal &> /dev/null; then
+    gnome-terminal -- bash -c "
+    cd ocr_backend &&
+    python3 -m venv .venv &&
+    source ./.venv/bin/activate &&
+    pip install -r requirements.txt &&
+    python3 app.py;
+    exec bash"
+elif command -v x-terminal-emulator &> /dev/null; then
+    x-terminal-emulator -e bash -c "
+    cd ocr_backend &&
+    python3 -m venv .venv &&
+    source ./.venv/bin/activate &&
+    pip install -r requirements.txt &&
+    python3 app.py;
+    exec bash"
+else
+    echo "No supported terminal found. Running in background..."
+    cd ocr_backend && python3 -m venv .venv && source ./.venv/bin/activate && pip install -r requirements.txt && python3 app.py &
+fi
+```
+
+- How To Setup Project (Will run flask and websocket automatically
 ```sh
 npm run setup
 run websocket locally
@@ -57,3 +96,7 @@ Note:
     https://tinyurl.com/NekonnectDocumentation
 ### Pitch Deck
     https://www.canva.com/design/DAGhGdookeo/nJCvQRjrd9YXDBwLs5oVMw
+### Project Idea Explanation 
+    https://drive.google.com/file/d/1IUpVd9DfThookH_y3B2rGfNSn_lGR0_F/view?usp=sharing 
+### Demo Video
+    https://tinyurl.com/NekonnectDemo
