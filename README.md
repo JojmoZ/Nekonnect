@@ -1,5 +1,6 @@
 ![Project Logo](https://github.com/JojmoZ/Nekonnect/blob/main/src/assets/nekonect.png)
 
+![Demo](https://github.com/JojmoZ/Nekonnect/blob/main/src/assets/landing-demo.gif "Demo")
 
 ### Introduction
 ``Nekonnect``, a peer-to-peer lending platform designed to bridge financial opportunity and trust. By leveraging blockchain technology and real-world assets, we provide a secure, transparent, and decentralized environment where lenders and borrowers can connect seamlessly. Built on ICP technology, Nekonnect utilizes smart contracts to ensure flexibility, supporting features such as Internet Identity, ICP tokens, DFX, and Motoko. To enhance security, our platform integrates AI-powered face verification, ensuring a safe and reliable lending experience for all users.
