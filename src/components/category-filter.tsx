@@ -12,7 +12,7 @@ const categoryIcons = {
 }
 
 const categoryColors = {
-  All: "text-blue-400",
+  All: "text-blue-200",
   Education: "text-purple-400",
   Environment: "text-green-400",
   Technology: "text-cyan-400",
