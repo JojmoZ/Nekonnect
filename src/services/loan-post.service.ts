@@ -57,5 +57,7 @@ export class LoanPostService extends BaseService {
     async getAssurance(assuranceId: string): Promise<LoanAssurance | undefined> {
         return await this.loanPost.getAssurance(assuranceId);
     }
-
+    async getAssurances(): Promise<LoanAssurance[]> {
+        return  await this.loanPost.getAssurances();
+    }
 }
