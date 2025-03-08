@@ -29,6 +29,7 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Menu, Wallet } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { formatCurrency } from '@/lib/utils/Currency';
+import { RoleEnum } from '@/lib/enum/role-enum';
 
 const components: { title: string; href: string; description: string }[] = [
   {
@@ -178,24 +179,25 @@ function Header() {
             <div className="flex flex-col h-full py-6">
               <div className="flex-1 space-y-4">
                 {menuItems.map((menu) => (
-                  <div key={menu.label} className="space-y-2">
-                    <h4 className="font-medium text-sm">{menu.label}</h4>
-                    <div className="pl-4 border-l space-y-2">
-                      {menu.links.map((route) => (
-                        <Button
-                          key={route.href}
-                          variant="ghost"
-                          className="w-full justify-start"
-                          onClick={() => {
-                            navigate(route.href);
-                            setIsMobileMenuOpen(false);
-                          }}
-                        >
-                          {route.title}
-                        </Button>
-                      ))}
-                    </div>
-                  </div>
+                  (menu.label === "Admin" && me?.role === RoleEnum.ADMIN) ?
+                    <div key={menu.label} className="space-y-2">
+                      <h4 className="font-medium text-sm">{menu.label}</h4>
+                      <div className="pl-4 border-l space-y-2">
+                        {menu.links.map((route) => (
+                          <Button
+                            key={route.href}
+                            variant="ghost"
+                            className="w-full justify-start"
+                            onClick={() => {
+                              navigate(route.href);
+                              setIsMobileMenuOpen(false);
+                            }}
+                          >
+                            {route.title}
+                          </Button>
+                        ))}
+                      </div>
+                    </div> : null
                 ))}
                 <Button
                   variant="ghost"
@@ -311,28 +313,28 @@ function Header() {
         <div className="hidden md:flex items-center gap-4">
           <NavigationMenu>
             <NavigationMenuList>
-              {menuItems.map((menu) => (
-                <NavigationMenuItem key={menu.label}>
-                  <NavigationMenuTrigger>{menu.label}</NavigationMenuTrigger>
-                  <NavigationMenuContent>
-                    <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
-                      {menu.links.map((route) => (
-                        <ListItem
-                          key={route.href}
-                          href={route.href}
-                          title={route.title}
-                        />
-                      ))}
-                    </ul>
-                  </NavigationMenuContent>
-                </NavigationMenuItem>
-              ))}
               <NavigationMenuItem>
                 <a
                   className="block select-none rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-foreground/5 hover:text-accent-foreground focus:bg-foreground/5 focus:text-accent-foreground"
                   href={RouteEnum.HOME}
                 >
-                  <div className="text-sm font-medium leading-none">Home</div>
+                  <div className="text-sm font-medium leading-none">Featured</div>
+                </a>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <a
+                  className="block select-none rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-foreground/5 hover:text-accent-foreground focus:bg-foreground/5 focus:text-accent-foreground"
+                  href={RouteEnum.BORROWER}
+                >
+                  <div className="text-sm font-medium leading-none">For Borrowers</div>
+                </a>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <a
+                  className="block select-none rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-foreground/5 hover:text-accent-foreground focus:bg-foreground/5 focus:text-accent-foreground"
+                  href={RouteEnum.BROWSE}
+                >
+                  <div className="text-sm font-medium leading-none">For Lenders</div>
                 </a>
               </NavigationMenuItem>
             </NavigationMenuList>

@@ -2,8 +2,6 @@ import Home from '@/pages/(public)/home';
 import CreateLoanPostPage from '@/pages/(private)/create-loan-post';
 import { EditProfilePage } from '@/pages/(private)/edit-profile';
 import ProtectedRoute from '@/lib/utils/ProtectedRoute';
-import AuthRedirect from '@/lib/utils/AuthRedirect';
-import Login from '@/pages/(public)/login';
 import { createBrowserRouter, redirect } from 'react-router-dom';
 import TempPage from './pages/TempPage';
 import PostVerificationPage from './pages/(private)/post-verification';
@@ -32,6 +30,14 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Landing/>
+      },
+      {
+        path: RouteEnum.BORROWER,
+        element: <CreateLoanLanding />,
+      },
+      {
+        path: RouteEnum.BROWSE,
+        element: <LoanBrowserPage />,
       },
       {
         element: <ProtectedRoute role={RoleEnum.ADMIN} />,
@@ -82,16 +88,8 @@ const router = createBrowserRouter([
             element: <TempPage />,
           },
           {
-            path: RouteEnum.BORROWER,
-            element: <CreateLoanLanding />,
-          },
-          {
             path: RouteEnum.PROFILE,
             element: <ProfilePage />,
-          },
-          {
-            path: RouteEnum.BROWSE,
-            element: <LoanBrowserPage />,
           },
           {
             path: RouteEnum.HOME,
