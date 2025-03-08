@@ -4,8 +4,6 @@
 dfx stop
 dfx start --clean --background
 
-cd ../
-
 # Step 2: Clone repository
 git clone https://github.com/omnia-network/ic-websocket-gateway.git
 
@@ -21,24 +19,20 @@ rustup update stable
 sudo apt update
 sudo apt install -y pkg-config libssl-dev
 
-# Step 9: Run Cargo
-cargo run &
-
-disown
+# Step 9: Run Cargo in a new terminal
+gnome-terminal -- bash -c "
+cd ic-websocket-gateway &&
+cargo run;
+exec bash"
 
 # Step 10: Move to Nekonnect
-cd ../Nekonnect
+cd ../
 
 # Step 11-14: Start dfx, setup, and deploy
 gnome-terminal -- bash -c "
-cd ocr_backend && 
-pip install -r requirements.txt && 
-python -m venv .venv && 
-source ./.venv/bin/activate && 
-python app.py; exec bash"
-
-# Step 14-16: Run npm setup, deploy, and start frontend in a separate terminal
-gnome-terminal -- bash -c "
-npm run setup && 
-dfx deploy && 
-npm start; exec bash"
+cd ocr_backend &&
+pip install -r requirements.txt &&
+python -m venv .venv &&
+source ./.venv/bin/activate &&
+python app.py;
+exec bash"
