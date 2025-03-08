@@ -78,7 +78,6 @@ function CreateLoanPostPage() {
       ),
       onNext: async () => {
         return verificator.verificationResult
-        // return true
       }
     },
     {

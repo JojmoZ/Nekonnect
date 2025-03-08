@@ -29,6 +29,8 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Menu, Wallet } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { formatCurrency } from '@/lib/utils/Currency';
+import { UserService } from '@/services/user.service';
+import { User } from '@/lib/model/entity/user';
 
 const components: { title: string; href: string; description: string }[] = [
   {
@@ -147,12 +149,15 @@ function Header() {
   const navigate = useNavigate();
   const { me, login, fetchUser, isAuthenticated, logout } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-
-  const handleLogout = () => {
+  const userService = new UserService()
+  const [user, setUser] = useState<User | null>(null);
+  const handleLogout = async () => {
+    let user = await userService.me();
     toast.promise(logout(), {
       loading: 'Logging out...',
       success: () => {
         fetchUser();
+        setUser(user)
         navigate('/')
         return 'Logged out successfully.';
       },
@@ -177,26 +182,33 @@ function Header() {
           <SheetContent side="right" className="w-[300px] sm:w-[400px]">
             <div className="flex flex-col h-full py-6">
               <div className="flex-1 space-y-4">
-                {menuItems.map((menu) => (
-                  <div key={menu.label} className="space-y-2">
-                    <h4 className="font-medium text-sm">{menu.label}</h4>
-                    <div className="pl-4 border-l space-y-2">
-                      {menu.links.map((route) => (
-                        <Button
-                          key={route.href}
-                          variant="ghost"
-                          className="w-full justify-start"
-                          onClick={() => {
-                            navigate(route.href);
-                            setIsMobileMenuOpen(false);
-                          }}
-                        >
-                          {route.title}
-                        </Button>
-                      ))}
-                    </div>
-                  </div>
-                ))}
+              {menuItems
+            .filter((menu) => user && user.role == "Admin") 
+            .map((menu) => {
+    return (
+      <div key={menu.label} className="space-y-2">
+        <h4 className="font-medium text-sm">{menu.label}</h4>
+        <div className="pl-4 border-l space-y-2">
+          {menu.links.map((route) => (
+            <Button
+              key={route.href}
+              variant="ghost"
+              className="w-full justify-start"
+              onClick={() => {
+                navigate(route.href);
+                setIsMobileMenuOpen(false);
+              }}
+            >
+              {route.title}
+            </Button>
+          ))}
+        </div>
+      </div>
+    );
+  })}
+
+
+
                 <Button
                   variant="ghost"
                   className="w-full justify-start"
