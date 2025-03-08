@@ -21,7 +21,7 @@ const Logo = ({ className }: { className?: string }) => {
   return (
     <a href={'/'}>
       <img
-        src={isDark ? './assets/logo-white.png' : './assets/logo-black.png'}
+        src={isDark || className?.split(' ').includes('dark') ? './assets/logo-white.png' : './assets/logo-black.png'}
         alt="NeKonnect Logo"
         className={`${className}`}
       />

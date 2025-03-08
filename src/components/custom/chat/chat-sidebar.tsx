@@ -23,14 +23,16 @@ import { deserializeImage } from '@/lib/utils/Image';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 interface IProps {
-  user: User | null;
   children: React.ReactNode
 }
 
-export function ChatAppSidebar({ user, children }: IProps) {
+export function ChatAppSidebar({ children }: IProps) {
 
   const { me } = useAuth();
-  const { messages } = useChat();
+  const { selectedRoom , rooms } = useChat();
+
+  const receiver = rooms.find((room) => room.room_id === selectedRoom)?.room_user.filter((user) => user.user_id.toString() != me?.internetIdentity.toString())[0];
+
 
 
   return (
@@ -61,17 +63,17 @@ export function ChatAppSidebar({ user, children }: IProps) {
           <SidebarHeader className="sticky top-0 bg-secondary p-3 shadow-md z-10 rounded-t-md">
             <div className="flex items-center space-x-4 p-1">
               <Avatar className="h-14 w-14 md:h-14 md:w-14 border-4 border-background shadow-md">
-                <AvatarFallback className="bg-primary text-sm">{user?.username.substring(0, 2).toUpperCase()}</AvatarFallback>
-                <AvatarImage src={deserializeImage(user?.profilePicture ?? [])} alt={user?.username} />
+                <AvatarFallback className="bg-primary text-sm">{receiver?.username.substring(0, 2).toUpperCase()}</AvatarFallback>
+                <AvatarImage src={deserializeImage(receiver?.profilePicture ?? [])} alt={receiver?.username} />
               </Avatar>
               <div>
-                <h2 className="text-foreground font-semibold text-lg">{user?.username}</h2>
+                <h2 className="text-foreground font-semibold text-lg">{receiver?.username}</h2>
               </div>
             </div>
           </SidebarHeader>
           <SidebarGroup className=" h-screen flex flex-col flex-1 overflow-y-auto ">
             <div className="flex-1 p-4 space-y-4 gap-2 flex flex-col-reverse overflow-y-auto scrollbar-hidden">
-              {messages.map((msg, index) => (
+              {rooms.find(room => room.room_id === selectedRoom)?.message.map((msg, index) => (
                 <MessageBubble message={msg} user={me} key={index} />
               ))}
             </div>

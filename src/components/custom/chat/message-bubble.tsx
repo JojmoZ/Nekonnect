@@ -30,8 +30,9 @@ export const MessageBubble = ({message, user} : IProps) => {
         setFormattedTime(messageDate.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }))
         } else if (isYesterday) {
         setFormattedTime(`Yesterday ${messageDate.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`)
-        } else {
-        setFormattedTime(messageDate.toLocaleDateString([], { month: "numeric", day: "numeric", year: "2-digit" }))
+        } 
+        else {
+        setFormattedTime(messageDate.toLocaleDateString([], { month: "2-digit", day: "2-digit", year: "2-digit",hour: "2-digit", minute: "2-digit" }))
         }
     }, [timestampMs])
 

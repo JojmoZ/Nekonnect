@@ -85,7 +85,7 @@ actor RoomUsersManager {
             };
             let profile : [Nat8]= switch (user) {
                 case (?u)(Blob.toArray(u.profilePicture));
-                // case (null) []; 
+                // case (null) []; 
             };
             
             let newResponse : Types.RoomUserResponse= { 

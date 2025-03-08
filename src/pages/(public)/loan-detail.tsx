@@ -3,13 +3,6 @@ import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
-  BookOpen,
-  Leaf,
-  Cpu,
-  Palette,
-  Heart,
-  Users,
-  LayoutGrid,
   CreditCard,
   Shield,
   User,
@@ -36,33 +29,14 @@ import Header from '@/components/layout/header';
 import { useGetLoanAssurance } from '@/hooks/loan-post/use-get-loan-assurance';
 import { Badge } from '@/components/ui/badge';
 import { formatCurrency } from '@/lib/utils/Currency';
-
-const categoryIcons = {
-  All: LayoutGrid,
-  Education: BookOpen,
-  Environment: Leaf,
-  Technology: Cpu,
-  'Arts & Culture': Palette,
-  Wellness: Heart,
-  Community: Users,
-};
-
-const categoryColors = {
-  All: 'text-blue-400',
-  Education: 'text-purple-400',
-  Environment: 'text-green-400',
-  Technology: 'text-cyan-400',
-  'Arts & Culture': 'text-pink-400',
-  Wellness: 'text-red-400',
-  Community: 'text-yellow-400',
-};
+import { categoryColors, categoryIcons } from '@/components/category-filter';
 
 function LoanDetailPage() {
   const { id } = useParams();
   const { loanPost, refetch } = useGetLoanPost(id ?? '');
   const [isDonationOverlayOpen, setIsDonationOverlayOpen] = useState(false);
   const { me , fetchUser } = useAuth();
-  const { form, rooms, getRoom } = useChat();
+  const { rooms, getRoom, setPostId } = useChat();
   const { user } = useGetUser(loanPost?.debtor!);
   const { setFooter, setHeader } = useLayout();
   const { assurance } = useGetLoanAssurance(loanPost?.assuranceId!);
@@ -83,20 +57,24 @@ function LoanDetailPage() {
     setIsDonationOverlayOpen(false); 
   };
 
+  console.log(rooms)   
+
   useEffect(() => {
     if (!id) {
       return;
     }
     setFooter(false)
+    setPostId(id)
     getRoom(id)
-  }, [])
+
+  }, [id])
 
   
 
   return (
     <div className="container py-8">
       {!loanPost ? null : (
-        <ChatAppSidebar user={user!}>
+        <ChatAppSidebar>
           <main className="space-y-4 w-full">
             <Card>
               <CardHeader>
@@ -269,15 +247,14 @@ function LoanDetailPage() {
                 </div>
               </CardContent>
             </Card>
-
             {me?.internetIdentity.toString() == loanPost.debtor.toString() && (
               <Card className="w-full">
                 <CardHeader>
                   <CardTitle>People Who Messaged You</CardTitle>
                 </CardHeader>
-                <CardContent className="p-0">
+                <CardContent className="px-4 py-2">
                   <ul className="divide-y">
-                    {rooms.map((room, index) => (
+                    {rooms.filter((room) => room.message.length > 0).map((room, index) => (
                       <ChatCard key={index} room={room} />
                     ))}
                     {rooms.length === 0 && (

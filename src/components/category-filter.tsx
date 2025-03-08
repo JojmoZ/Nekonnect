@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { BookOpen, Leaf, Cpu, Palette, Heart, Users, LayoutGrid } from "lucide-react"
 
-const categoryIcons = {
+export const categoryIcons = {
   All: LayoutGrid,
   Education: BookOpen,
   Environment: Leaf,
@@ -11,8 +11,8 @@ const categoryIcons = {
   Community: Users,
 }
 
-const categoryColors = {
-  All: "text-blue-400",
+export const categoryColors = {
+  All: "text-blue-200",
   Education: "text-purple-400",
   Environment: "text-green-400",
   Technology: "text-cyan-400",
