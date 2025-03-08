@@ -1,6 +1,7 @@
 import Text "mo:base/Text";
 import Principal "mo:base/Principal";
 import Blob "mo:base/Blob";
+import Nat8 "mo:base/Nat8";
 
 module {
     public type RoomUser = {

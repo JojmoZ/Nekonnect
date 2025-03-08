@@ -15,7 +15,7 @@ export class TransactionService extends BaseService {
     }
 
     async createTransaction(loanId: string, amount: number, method: string, userId: Principal) {
-        return await this.transaction.createTransaction(loanId, amount, method, loanPostCanisterId,userId);
+        return await this.transaction.createTransaction(loanId, amount, method, loanPostCanisterId,userId, transactionCanisterId);
     }
 
     async getUserTransactions(): Promise<Transaction[]> {

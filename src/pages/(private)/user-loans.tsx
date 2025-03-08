@@ -60,7 +60,7 @@ function UserLoansPage() {
                 </TabsList>
                 {status.map((s) => (
                     <TabsContent key={s} value={s} className="w-full">
-                        <div className="mt-4">
+                        <div className="mt-4 space-y-2">
                             {loanPosts.filter((loan) => loan.status === s).length === 0 ? (
                                 <div className="flex flex-col items-center justify-center py-16 text-center bg-card rounded-lg border">
                                     <div className="bg-primary/10 p-4 rounded-full mb-4">
