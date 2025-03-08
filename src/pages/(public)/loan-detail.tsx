@@ -3,13 +3,6 @@ import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
-  BookOpen,
-  Leaf,
-  Cpu,
-  Palette,
-  Heart,
-  Users,
-  LayoutGrid,
   CreditCard,
   Shield,
   User,
@@ -36,26 +29,7 @@ import Header from '@/components/layout/header';
 import { useGetLoanAssurance } from '@/hooks/loan-post/use-get-loan-assurance';
 import { Badge } from '@/components/ui/badge';
 import { formatCurrency } from '@/lib/utils/Currency';
-
-const categoryIcons = {
-  All: LayoutGrid,
-  Education: BookOpen,
-  Environment: Leaf,
-  Technology: Cpu,
-  'Arts & Culture': Palette,
-  Wellness: Heart,
-  Community: Users,
-};
-
-const categoryColors = {
-  All: 'text-blue-400',
-  Education: 'text-purple-400',
-  Environment: 'text-green-400',
-  Technology: 'text-cyan-400',
-  'Arts & Culture': 'text-pink-400',
-  Wellness: 'text-red-400',
-  Community: 'text-yellow-400',
-};
+import { categoryColors, categoryIcons } from '@/components/category-filter';
 
 function LoanDetailPage() {
   const { id } = useParams();

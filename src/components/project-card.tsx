@@ -7,40 +7,12 @@ import {
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
-import {
-  BookOpen,
-  Leaf,
-  Cpu,
-  Palette,
-  Heart,
-  Users,
-  LayoutGrid,
-} from 'lucide-react';
 import { LoanPost } from '@/lib/model/entity/loan-post';
 import { Link } from 'react-router';
 import { timeLeft } from '@/lib/utils/DateString';
 import { deserializeImage } from '@/lib/utils/Image';
 import { formatCurrency } from '@/lib/utils/Currency';
-
-const categoryIcons = {
-  All: LayoutGrid,
-  Education: BookOpen,
-  Environment: Leaf,
-  Technology: Cpu,
-  'Arts & Culture': Palette,
-  Wellness: Heart,
-  Community: Users,
-};
-
-const categoryColors = {
-  All: 'text-blue-400',
-  Education: 'text-purple-400',
-  Environment: 'text-green-400',
-  Technology: 'text-cyan-400',
-  'Arts & Culture': 'text-pink-400',
-  Wellness: 'text-red-400',
-  Community: 'text-yellow-400',
-};
+import { categoryColors, categoryIcons } from '@/components/category-filter';
 
 export function ProjectCard({ project }: { project: LoanPost }) {
   const progress = (project.raised / project.goal) * 100;
