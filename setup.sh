@@ -1,5 +1,3 @@
-#!/bin/bash
-
 # Step 1: Move to parent directory
 dfx stop
 dfx start --clean --background
@@ -7,13 +5,10 @@ dfx start --clean --background
 REPO_URL="https://github.com/omnia-network/ic-websocket-gateway.git"
 TARGET_DIR="ic-websocket-gateway"
 
-if [ -d "$TARGET_DIR" ]; then
-    if [ "$(ls -A "$TARGET_DIR")" ]; then
-        echo "Repository already exists in $TARGET_DIR and is not empty."
-    else
-        echo "$TARGET_DIR exists but is empty. Cloning repository..."
-        git clone "$REPO_URL" "$TARGET_DIR"
-    fi
+
+if [ -d "$TARGET_DIR" ] && [ "$(ls -A "$TARGET_DIR")" ]; then
+    echo "Repository already exists and has content in $TARGET_DIR."
+
 else
     echo "Cloning repository..."
     git clone "$REPO_URL" "$TARGET_DIR"
@@ -85,3 +80,4 @@ else
     echo "No supported terminal found. Running in background..."
     cd ocr_backend && python3 -m venv .venv && source ./.venv/bin/activate && pip install -r requirements.txt && python3 app.py &
 fi
+

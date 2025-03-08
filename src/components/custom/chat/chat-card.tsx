@@ -57,6 +57,7 @@ export function ChatCard({room}: IProps) {
     return (
         <li
             className={`flex items-center justify-between rounded-md p-4 hover:bg-muted/50 transition-colors cursor-pointer ${
+
                 me?.internetIdentity === receiver.user_id ? "bg-muted/70" : ""
             }`}
             onClick={() => onChat(receiver.user_id)}
