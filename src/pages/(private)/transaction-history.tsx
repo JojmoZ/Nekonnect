@@ -10,7 +10,7 @@ import { CreditCard, PlusCircle, ArrowLeft } from "lucide-react"
 import { useNavigate } from "react-router-dom"
 import { RouteEnum } from '@/lib/enum/router-enum';
 
-const status = ["Ongoing", "Unfulfilled", "Repaying", "Refunded", "Repaid"]
+const status = ["Ongoing", "Not Fulfilled", "Repaying", "Refunded", "Repaid"]
 
 function TransactionHistoryPage() {
   const { transactions } = useGetUserTransactions()
@@ -36,16 +36,6 @@ function TransactionHistoryPage() {
         return "You don't have any fully repaid transactions.";
       default:
         return 'No transactions found for this status.';
-    }
-  };
-
-  const getActionRoute = (statusType: string) => {
-    switch (statusType) {
-      // case 'Ongoing':
-      // case 'Not Fulfilled':
-      //   return RouteEnum.CREATE_POST;
-      default:
-        return RouteEnum.BROWSE;
     }
   };
 
@@ -83,7 +73,7 @@ function TransactionHistoryPage() {
                   <h3 className="text-lg font-medium mb-2">No {s} Transactions</h3>
                   <p className="text-muted-foreground mb-6 max-w-md">{getStatusMessage(s)}</p>
                   <div className="flex flex-col sm:flex-row gap-3">
-                    <Button className="flex items-center gap-2" onClick={() => navigate(getActionRoute(s))}>
+                    <Button className="flex items-center gap-2" onClick={() => navigate(RouteEnum.BROWSE)}>
                       <PlusCircle className="h-4 w-4" />
                       Explore Lending Options
                     </Button>
