@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "setup": "chmod +x ./setup.sh && ./setup.sh && npm i && dfx canister create --all && dfx deps pull && dfx deps init rdmx6-jaaaa-aaaaa-aaadq-cai --argument null && dfx deps deploy  && dfx deploy && dfx generate && chmod +x ./env_generator.sh && ./env_generator.sh ",
+    "setup": "chmod +x ./setup.sh && ./setup.sh && npm i && dfx canister create --all && dfx deps pull && dfx deps init rdmx6-jaaaa-aaaaa-aaadq-cai --argument null && dfx deps deploy  && dfx deploy && dfx generate && dfx deploy && chmod +x ./env_generator.sh && ./env_generator.sh ",
     "start": "run-p frontend user",
     "frontend": "vite --port 3000",
     "user": "mo-dev --generate --deploy -y",
