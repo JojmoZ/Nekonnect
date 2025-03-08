@@ -11,7 +11,6 @@ interface IProps {
 const ProtectedRoute = ({role} : IProps) => {
   const { isAuthenticated, me } = useAuth();
   const location = useLocation();
-
   
   if (isAuthenticated === null) {
     return <LoadingScreen text='Navigating you' />;

@@ -39,16 +39,6 @@ function TransactionHistoryPage() {
     }
   };
 
-  const getActionText = (statusType: string) => {
-    switch (statusType) {
-      // case 'Ongoing':
-      // case 'Not Fulfilled':
-      //   return 'Create New Transaction';
-      default:
-        return 'Explore Lending Options';
-    }
-  };
-
   const getActionRoute = (statusType: string) => {
     switch (statusType) {
       case 'Ongoing':
@@ -95,7 +85,7 @@ function TransactionHistoryPage() {
                   <div className="flex flex-col sm:flex-row gap-3">
                     <Button className="flex items-center gap-2" onClick={() => navigate(getActionRoute(s))}>
                       <PlusCircle className="h-4 w-4" />
-                      {getActionText(s)}
+                      Explore Lending Options
                     </Button>
                   </div>
                 </div>
