@@ -18,14 +18,27 @@
 - NVM (v0.40.1)
 
 ## How to Run
+
+- How To Configure Websocket locally
 ```sh
-wsl --install -d Ubuntu
-git clone https://github.com/JojmoZ/Nekonnect.git
-cd Nekonnect/
+wsl
+dfx start --clean --background
+git clone https://github.com/omnia-network/ic-websocket-gateway.git
+sudo apt install cargo  
+sudo apt install rustup
+rustup update stable
+sudo apt update
+sudo apt install pkg-config libssl-dev
+cargo run
+ip a
+change gatewayURL to ws://ip:8080
+```
+
+- How To Setup Project
+```sh
 npm run setup
-
-npm start
-
+run websocket locally
+npm run start
 ```
 
 Note:
@@ -38,3 +51,9 @@ Note:
 ## Future Development
 - Improve the accuracy and precision of AI-powered face recognition to ensure that borrowers' identities match their registered profiles more accurately.
 - Offer more flexible loan types, such as long-term loans, short-term loans, microloans, and other types of loans.
+
+## Additional Links
+### Website Documentation 
+    https://tinyurl.com/NekonnectDocumentation
+### Pitch Deck
+    https://www.canva.com/design/DAGhGdookeo/nJCvQRjrd9YXDBwLs5oVMw
