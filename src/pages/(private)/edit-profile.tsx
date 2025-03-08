@@ -39,7 +39,7 @@ export const EditProfilePage = () => {
         setLoading(false);
         return
       }
-      await handleEdit(faceEncoding ?? []);
+      await handleEdit(faceEncoding);
       await fetchUser();
       toast.success('Profile updated successfully', { id: toastId });
       navigate('/home');

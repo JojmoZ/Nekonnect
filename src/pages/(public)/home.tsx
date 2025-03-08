@@ -45,17 +45,17 @@ export default function Home() {
         <Card className="flex flex-col h-full">
           <CardHeader>
             <div className="flex justify-between items-center">
-              <CardTitle>No Loan Available</CardTitle>
+              <CardTitle>No Project Available</CardTitle>
               <CheckCircle className={`w-5 h-5`} />
             </div>
           </CardHeader>
           <CardFooter className="flex justify-between items-center">
             <Button
               onClick={() => {
-                navigate(RouteEnum.BORROWER);
+                navigate(RouteEnum.CREATE_POST);
               }}
             >
-              Create Loan
+              Create Project
             </Button>
           </CardFooter>
         </Card>

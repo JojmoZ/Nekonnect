@@ -15,7 +15,7 @@ function MainLayout() {
       <div className={header ? 'block' : 'hidden'}>
         <Header />
       </div>
-      <main className='min-h-[50vh]'>
+      <main className='min-h-[50vh] pt-[5rem]'>
         <Outlet />
       </main>
       <div className={footer ? 'block' : 'hidden'}>
