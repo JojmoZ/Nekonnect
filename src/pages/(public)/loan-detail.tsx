@@ -114,7 +114,7 @@ function LoanDetailPage() {
                 <img
                   src={deserializeImage(loanPost.image)}
                   alt={loanPost.title}
-                  className="w-full h-full object-cover rounded-lg mt-6"
+                  className="w-full h-[58dvh] object-cover rounded-lg mt-6"
                 />
               </CardContent>
             </Card>
