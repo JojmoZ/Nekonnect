@@ -31,6 +31,6 @@ sudo apt update
 sudo apt install -y pkg-config libssl-dev
 win_path=$(wslpath -w ~/Nekonnect/ocr_backend)
 # Convert WSL path to Windows format
-cmd.exe /c start cmd /k "pushd $win_path && wsl --cd ~/Nekonnect/ic-websocket-gateway && cargo run"
+cmd.exe /c start cmd /k "pushd $win_path && wsl --cd ~/Nekonnect/ic-websocket-gateway -- bash -c 'cargo run'"
 
-cmd.exe /c start cmd /k "pushd $win_path && wsl --cd ~/Nekonnect/ocr_backend && pip install -r requirements.txt && python -m venv .venv && .\.venv\Scripts\activate && python app.py"
+cmd.exe /c start cmd /k "pushd $win_path && wsl --cd ~/Nekonnect/ocr_backend -- bash -c 'pip install -r requirements.txt && python -m venv .venv && source .venv/bin/activate && python app.py'"
