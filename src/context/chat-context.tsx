@@ -1,6 +1,6 @@
 import { Message, MessageResponse } from "@/declarations/message/message.did";
-import { idlFactory } from "@/declarations/room";
-import { _SERVICE, GetRoomsResponse } from "@/declarations/room/room.did";
+import { idlFactory, room } from "@/declarations/room";
+import { _SERVICE } from "@/declarations/room/room.did";
 import useServiceContext from "@/hooks/use-service-context";
 import { getWebSocket } from "@/lib/config/web-socket";
 import { messageDto, messageSchema } from "@/lib/model/dto/send-message.dto"
@@ -13,23 +13,29 @@ import { useForm, UseFormReturn } from "react-hook-form"
 import { useAuth } from "./auth-context";
 import IcWebSocket from "ic-websocket-js";
 import { toast } from "sonner";
+import { GetRoomsResponse } from "@/lib/model/dto/response/get-room-response";
 
 interface IProps {
     form : UseFormReturn<messageDto>
     rooms : GetRoomsResponse[]
     children : ReactNode
-    messages : MessageResponse[]
+    selectedRoom : string | null
+    // messages : MessageResponse[]
     getRoom : (id : string) => void
-    getMessages : (room_id : string) => void
+    // getMessages : (room_id : string) => void
+    onSelectRoom : (room_id : string) => void
     onMessageSend : () => void
     onOpenChat : (user_id : Principal,  post_id : string) => void
+    setPostId : (id : string) => void
 }
 
 export const ChatContext = createContext<IProps>({} as IProps);
 
 export const ChatProvider= ({ children } : { children: React.ReactNode }) => {
     const [rooms, setRooms] = useState<GetRoomsResponse[]>([]);
-    const [messages, setMessages] = useState<MessageResponse[]>([]);
+    const [selectedRoom, setSelectedRoom] = useState<string | null>(null);
+    const [postId, setPostId] = useState<string | null>(null);
+    // const [messages, setMessages] = useState<MessageResponse[]>([]);
     const [socket, setSocket] = useState<IcWebSocket<_SERVICE, Message> | null>(null);
     const { roomService, messageService, userService } = useServiceContext();
     const { me } = useAuth();
@@ -46,16 +52,44 @@ export const ChatProvider= ({ children } : { children: React.ReactNode }) => {
         },
     });
 
-    const getRoom = async (id : string) => {
-        const response = await roomService.getRoomByPostId(id)
-        console.log(response)
-        setRooms(response)
+      const getRoom = async (id: string) => {
+        const response = await roomService.getRoomByPostId(id);
+        
+        const filteredRoom: GetRoomsResponse[] = (await Promise.all(
+            response.map(async (room) => {
+                const roomMessage = await messageService.getMessagesByRoomId(room.room_id);
+                console.log(roomMessage);
+    
+                roomMessage.sort(
+                    (a, b) =>
+                        new Date(b.created_at.toString()).getTime() -
+                        new Date(a.created_at.toString()).getTime()
+                );
+    
+                return {
+                    post_id: room.post_id,
+                    room_id: room.room_id,
+                    room_name: room.room_name,
+                    room_type: room.room_type,
+                    room_user: room.room_user,
+                    message: roomMessage,
+                };
+            })
+        )).filter((room) => room.post_id !== "");
+        
+        // console.log(filteredRoom);
+        setRooms(filteredRoom);
+    };
+    
+
+    const onSelectRoom = (room_id : string) => {
+        setSelectedRoom(room_id);
     }
 
-    const getMessages = async (room_id : string) => {
-        const messages = await messageService.getMessagesByRoomId(room_id);
-        setMessages(messages)
-    }
+    // const getMessages = async (room_id : string) => {
+    //     const messages = await messageService.getMessagesByRoomId(room_id);
+    //     setMessages(messages)
+    // }
 
     const toastGetMessages = async (room_id : string) => {
       toast.promise(messageService.getMessagesByRoomId(room_id), {
@@ -66,9 +100,17 @@ export const ChatProvider= ({ children } : { children: React.ReactNode }) => {
     }
 
     const onOpenChat = async (user_id : Principal, post_id : string) => {
-        const response = await roomService.createPrivateRoom(user_id,post_id!)
-        form.setValue('room_id', response);
-        await getMessages(response)
+      // if (me == null) return
+      // const roomExist = rooms.find(room => {
+      //   const receiver = room.room_user.find(user => user.user_id === user_id)
+      //   const sender = room.room_user.find(user => user.user_id === me.internetIdentity)
+      //   return receiver != null && sender != null
+      // })
+
+      const response = await roomService.createPrivateRoom(user_id,post_id!)
+      form.setValue('room_id', response);
+      setSelectedRoom(response);
+        // await getMessages(response)
     }
 
     const getSocket = async () => {
@@ -86,7 +128,15 @@ export const ChatProvider= ({ children } : { children: React.ReactNode }) => {
           };
     
           response.onmessage = (event: MessageEvent) => {
-            setMessages((msg) => [ event.data,...msg]);
+            const newMessage : MessageResponse  = event.data 
+            // console.log(newMessage)
+            const roomExist = rooms.find(room => room.room_id === newMessage.room_id)
+            if (!roomExist && postId) {
+              getRoom(postId)
+              return
+            }
+            setRooms((rooms) => rooms.map((room) => room.room_id === newMessage.room_id ? {...room, message : [ newMessage,...room.message]} : room))
+            // setMessages((msg) => [ event.data,...msg]);
           };
     
           response.onerror = (error: Event) => {
@@ -113,6 +163,10 @@ export const ChatProvider= ({ children } : { children: React.ReactNode }) => {
         }
       }
 
+      const changePostId = (id : string) => {
+        setPostId(id)
+      }
+
     useEffect(() => {
         getSocket()
         setLoading(false)
@@ -122,9 +176,12 @@ export const ChatProvider= ({ children } : { children: React.ReactNode }) => {
           form : form,
           rooms : rooms,
           children : children,
-          messages : messages,
+          selectedRoom : selectedRoom,
+          setPostId : changePostId,
+          // messages : messages,
           getRoom : getRoom,
-          getMessages : toastGetMessages,
+          onSelectRoom : onSelectRoom,
+          // getMessages : toastGetMessages,
           onMessageSend : onMessageSend,
           onOpenChat : onOpenChat
       };
