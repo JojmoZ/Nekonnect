@@ -15,8 +15,7 @@ Make sure that [Node.js](https://nodejs.org/en/) `>= 16` and [`dfx`](https://int
 Run the following commands in a new, empty project directory:
 
 ```sh
-npx degit rvanasa/vite-react-motoko # Download this starter project
-dfx start --clean --background # Run dfx in the background
+git clone https://github.com/JojmoZ/Nekonnect.git 
 npm run setup # Install packages, deploy canisters, and generate type bindings
 
 npm start # Start the development server
