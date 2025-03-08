@@ -62,7 +62,7 @@ export function useVerifyFace() {
                 setMessage(data.match ? "✅ Same Face" : "❌ Not the same face");
                 setVerificationResult(data.match);
             } else {
-                setMessage("Error: " + data.error);
+                setMessage("❌ Not the same face");
                 setVerificationResult(false);
             }
         } catch (error) {

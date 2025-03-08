@@ -148,8 +148,7 @@ function Header() {
   const navigate = useNavigate();
   const { me, login, fetchUser, isAuthenticated, logout } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-
-  const handleLogout = () => {
+  const handleLogout = async () => {
     toast.promise(logout(), {
       loading: 'Logging out...',
       success: () => {
