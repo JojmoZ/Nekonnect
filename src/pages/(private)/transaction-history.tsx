@@ -10,7 +10,7 @@ import { CreditCard, PlusCircle, ArrowLeft } from "lucide-react"
 import { useNavigate } from "react-router-dom"
 import { RouteEnum } from '@/lib/enum/router-enum';
 
-const status = ["Ongoing", "Not Fulfilled", "Repaying", "Refunded", "Repaid"]
+const status = ["Ongoing", "Unfulfilled", "Repaying", "Refunded", "Repaid"]
 
 function TransactionHistoryPage() {
   const { transactions } = useGetUserTransactions()
