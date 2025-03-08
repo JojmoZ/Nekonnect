@@ -59,7 +59,7 @@ actor class LoanPostMain() {
             image = image;
             goal = goal;
             raised = 0.0;
-            multiplier = 1.0;
+            multiplier = await calculateMultiplier(0.5, loanDuration);
             postDuration = 30;
             loanDuration = loanDuration;
             createdAt = Time.now();
@@ -271,12 +271,10 @@ actor class LoanPostMain() {
         };
     };
 
-
-    // TODO: Loan duration + goal + interest calculation
-    // public func calculateMultiplier(loanDuration: Nat64, goal: Float) : Float {
-    //     // Calculation
-    //     return 0
-    // }
-
-    // TODO: Repay loan
+    public func calculateMultiplier(monthlyRate: Float, days: Nat64) : async Float {
+        let daysFloat = Float.fromInt(Nat64.toNat(days)); // Convert Nat64 to Float
+        let months = daysFloat / 30.0; // Convert days to months
+        let multiplier = (1.0 + (monthlyRate / 100.0))**months; // Compute the compound multiplier
+        return multiplier;
+    }
 }

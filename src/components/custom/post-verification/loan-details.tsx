@@ -108,6 +108,11 @@ const LoanDisplay: React.FC<LoanDisplayProps> = ({ loan }) => {
         </div>
 
         <div>
+          <Typography variant="subtitle1">Multiplier</Typography>
+          <Typography variant="body1">{loan.multiplier.toFixed(2)}</Typography>
+        </div>
+
+        <div>
           <Typography variant="subtitle1">Assurance Type</Typography>
           <Typography variant="body1">{assurance?.assuranceType}</Typography>
         </div>
