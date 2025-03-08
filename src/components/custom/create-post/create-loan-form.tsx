@@ -5,6 +5,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 import { useEffect, useState } from "react";
+import { formatCurrency } from "@/lib/utils/Currency";
 
 const categories = ["Education", "Community", "Technology", "Environment", "Arts & Culture", "Wellness"]
 
@@ -29,7 +30,7 @@ function CreateLoanForm() {
         setMultiplier(newMultiplier);
         setInterest(newMultiplier * goal);
     }, [loanDuration, goal]);
-    
+
     return (
         <>
             <form className="space-y-8">
@@ -158,7 +159,7 @@ function CreateLoanForm() {
                             </div>
                             <div className="p-4 text-center">
                                 <p className="text-sm font-medium text-muted-foreground">Repayment Total</p>
-                                <p className="mt-1 text-2xl font-bold text-primary">${interest.toFixed(2)}</p>
+                                <p className="mt-1 text-2xl font-bold text-primary">{formatCurrency(interest)}</p>
                             </div>
                         </div>
                     </CardContent>

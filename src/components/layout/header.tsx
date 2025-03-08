@@ -28,6 +28,7 @@ import { useState } from 'react';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Menu, Wallet } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
+import { formatCurrency } from '@/lib/utils/Currency';
 
 const components: { title: string; href: string; description: string }[] = [
   {
@@ -138,23 +139,14 @@ const menuItems = [
   { label: "For Borrowers", links: for_borrowers },
   { label: "For Lenders", links: for_lenders },
   { label: "Admin", links: for_admin },
-  { label: "For All", links: for_all },
-  { label: "All LINKS Available", links: components },
+  // { label: "For All", links: for_all },
+  // { label: "All LINKS Available", links: components },
 ]
 
 function Header() {
   const navigate = useNavigate();
   const { me, login, fetchUser, isAuthenticated, logout } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-
-  const formatCurrency = (amount: number | undefined) => {
-    if (amount === undefined || amount === null) return '$0.00';
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 2,
-    }).format(amount);
-  };
 
   const handleLogout = () => {
     toast.promise(logout(), {
@@ -237,7 +229,7 @@ function Header() {
                         </p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-1 bg-primary/10 text-primary font-medium px-3 py-1.5 rounded-md">
+                    <div className="flex items-center gap-1 bg-primary/10 text-primary font-medium px-3 py-1.5 rounded-md" onClick={() => navigate(RouteEnum.TOP_UP)}>
                       <Wallet className="h-4 w-4" />
                       <span>{formatCurrency(me?.balance)}</span>
                     </div>
@@ -350,7 +342,7 @@ function Header() {
           {isAuthenticated && (
             <div className="flex items-center gap-4">
               <Card className="bg-primary/5 border-none shadow-none">
-                <CardContent className="flex items-center gap-2 py-2 px-4">
+                <CardContent className="flex items-center gap-2 py-2 px-4 cursor-pointer" onClick={() => navigate(RouteEnum.TOP_UP)}>
                   <Wallet className="h-4 w-4 text-primary" />
                   <span className="font-medium text-primary">
                     {formatCurrency(me?.balance)}

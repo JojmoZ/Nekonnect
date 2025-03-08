@@ -1,6 +1,7 @@
 import { Card } from '@/components/ui/card';
 import { useGetLoanPost } from '@/hooks/loan-post/use-get-loan-post';
 import { Transaction } from '@/lib/model/entity/transaction';
+import { formatCurrency } from '@/lib/utils/Currency';
 import { timeToDateString } from '@/lib/utils/DateString';
 import { useNavigate } from 'react-router';
 
@@ -24,7 +25,7 @@ export function TransactionHistoryCard({
       </div>
       <div className="flex flex-col items-end gap-y-1">
         <span className="font-bold text-xl">
-          ${transaction.amount.toFixed(2)}
+          {formatCurrency(transaction.amount)}
         </span>
         <span className="text-gray-500 text-sm">{transaction.method}</span>
       </div>
