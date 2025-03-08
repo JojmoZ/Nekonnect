@@ -4,9 +4,6 @@
 ### Introduction
 ``Nekonnect``, a peer-to-peer lending platform designed to bridge financial opportunity and trust. By leveraging blockchain technology and real-world assets, we provide a secure, transparent, and decentralized environment where lenders and borrowers can connect seamlessly. Built on ICP technology, Nekonnect utilizes smart contracts to ensure flexibility, supporting features such as Internet Identity, ICP tokens, DFX, and Motoko. To enhance security, our platform integrates AI-powered face verification, ensuring a safe and reliable lending experience for all users.
 
-## Website Demo
-![Landing Page](https://github.com/JojmoZ/Nekonnect/blob/main/src/assets/landing-demo.gif)
-
 ### Features
 - Supply and borrow money
 - Manage your own profile
@@ -35,6 +32,9 @@ npm start
 Note:
 <br />
 ``npm run setup`` is a command that executes all the necessary steps to set up the project. It includes starting the WebSocket gateway, running the Flask server for face recognition, and initializing the website. The website itself consists of a Motoko backend and a React + TypeScript frontend.
+
+## Website Demo
+![Landing Page](https://github.com/JojmoZ/Nekonnect/blob/main/src/assets/landing-demo.gif)
 
 ## Future Development
 - Improve the accuracy and precision of AI-powered face recognition to ensure that borrowers' identities match their registered profiles more accurately.

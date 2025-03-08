@@ -336,6 +336,17 @@ function Header() {
                   <div className="text-sm font-medium leading-none">For Lenders</div>
                 </a>
               </NavigationMenuItem>
+              {me?.role === RoleEnum.ADMIN &&
+                <NavigationMenuItem>
+                  <a
+                    className="block select-none rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-foreground/5 hover:text-accent-foreground focus:bg-foreground/5 focus:text-accent-foreground"
+                    href={RouteEnum.POST_VERIFICATION}
+                  >
+                    <div className="text-sm font-medium leading-none">Admin</div>
+                  </a>
+                </NavigationMenuItem>
+              }
+
             </NavigationMenuList>
           </NavigationMenu>
 

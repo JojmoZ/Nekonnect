@@ -2,12 +2,12 @@ import Types "types";
 import Text "mo:base/Text";
 import Time "mo:base/Time";
 import List "mo:base/List";
-import Error "mo:base/Error";
+import _Error "mo:base/Error";
 import Principal "mo:base/Principal";
-import Debug "mo:base/Debug";
+import _Debug "mo:base/Debug";
 import Utils "../utils";
 import LoanPostModule "../loanPost/interface";
-import UserActor "canister:user";
+import UserModule "../user/interface";
 
 actor class TransactionMain() {
 
@@ -30,9 +30,10 @@ actor class TransactionMain() {
         );
     };
 
-    public shared ({ caller }) func createTransaction(loanId : Text, amount : Float, method : Text, loanPostCanisterId : Text, userId : Principal, transactionCanisterId : Text) : async Text {
+    public shared func createTransaction(loanId : Text, amount : Float, method : Text, loanPostCanisterId : Text, userId : Principal, transactionCanisterId : Text, userCanisterId : Text) : async Text {
 
-        let lender = await UserActor.getUserByPrincipal(userId);
+        let userActor = actor (userCanisterId) : UserModule.UserActor;
+        let lender = await userActor.getUserByPrincipal(userId);
 
         switch (lender) {
             case (null) { return "User not found!"; };
@@ -62,8 +63,8 @@ actor class TransactionMain() {
             transactions := List.filter<Types.Transaction>(transactions, func (t: Types.Transaction): Bool = t.transactionId != transactionId);
             return update;
         };
-        let loan = await loanPostActor.getPost(loanId);
-        let _ = await UserActor.reduceBalance(userId,amount);
+        let _ = await loanPostActor.getPost(loanId);
+        let _ = await userActor.reduceBalance(userId,amount);
 
         return "Transaction created successfully!";
     };
