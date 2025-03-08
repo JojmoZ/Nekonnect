@@ -13,11 +13,11 @@ export class MessageService extends BaseService {
     }
 
     async getMessagesByRoomId(roomId : string): Promise<MessageResponse[]> {
-        return await this.message.getMessagesByRoomId(roomId);
+        return await this.message.getMessagesByRoomId(roomId,userCanisterId);
     }
 
     async getMessagesByRoomIdandUserId(roomId : string, user_id : Principal): Promise<MessageResponse[]> {
-        return await this.message.getMessagesByRoomIdAndUserId(roomId,user_id);
+        return await this.message.getMessagesByRoomIdAndUserId(roomId,user_id,userCanisterId);
     }
 
 }

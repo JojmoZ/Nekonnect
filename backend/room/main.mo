@@ -11,11 +11,14 @@ import Types "types";
 import IcWebSocketCdk "mo:ic-websocket-cdk";
 import IcWebSocketCdkState "mo:ic-websocket-cdk/State";
 import IcWebSocketCdkTypes "mo:ic-websocket-cdk/Types";
-import RoomUsersActor "canister:room_users";
-import UserActor "canister:user";
-import MessageActor "canister:message";
+// import RoomUsersActor "canister:room_users";
+// import UserActor "canister:user";
+// import MessageActor "canister:message";
 import MessageTypes "../message/types";
 import Utils "../utils";
+import UserModule "../user/interface";
+import RoomUsersModule "../roomUsers/interface";
+import MessagesModule "../message/interface";
 
 
 actor RoomManager {
@@ -25,11 +28,31 @@ actor RoomManager {
     let ws_state = IcWebSocketCdkState.IcWebSocketState(params);
 
 
-    func send_message(_: IcWebSocketCdk.ClientPrincipal, msg: MessageTypes.MessageResponse): async () {
-        Debug.print("Sending message: " # debug_show(msg));
-        let participants = await RoomUsersActor.getAllUsersByRoomId(msg.room_id);
+    func send_message(_: IcWebSocketCdk.ClientPrincipal, msg: MessageTypes.MessageRequest): async () {
+        let userActor = actor (msg.user_canister_id) : UserModule.UserActor;
+        let user = await userActor.getUserByPrincipal(msg.user_id);
+
+        let username = switch (user) {
+            case (?u) u.username;
+            case (null) "Unknown";
+        };
+        let new_msg : MessageTypes.MessageResponse = 
+        { 
+            message = msg.message;
+            room_id = msg.room_id;
+            created_at = Time.now();
+            username = username;
+            user_id  = msg.user_id;
+        };
+            
+
+        Debug.print("Sending message: " # debug_show(new_msg));
+        let roomUsersActor = actor (msg.room_users_canister_id) : RoomUsersModule.RoomUsersActor;
+        let participants = await roomUsersActor.getAllUsersByRoomId(msg.room_id);
         Debug.print("Participants: " # debug_show(participants));
-        let response = await MessageActor.createMessage(msg.room_id, msg.message, msg.user_id);
+        let messageActor = actor (msg.message_canister_id) : MessagesModule.MessageActor;
+
+        let response = await messageActor.createMessage(msg.room_id, msg.message, msg.user_id);
         switch (response) {
             case (#err(err)) {
                 Debug.print("Could not send message: " # debug_show(#Err(err)));
@@ -43,7 +66,7 @@ actor RoomManager {
         for (user in Iter.fromArray(participants)) {
             Debug.print("Sending to Principal: " # debug_show(user));
 
-            switch (await IcWebSocketCdk.send(ws_state, user.user_id, to_candid(msg))) {
+            switch (await IcWebSocketCdk.send(ws_state, user.user_id, to_candid(new_msg))) {
                 case (#Err(err)) {
                     Debug.print("Could not send message: " # debug_show(#Err(err)));
                 };
@@ -58,36 +81,23 @@ actor RoomManager {
 
     func on_message(args: IcWebSocketCdk.OnMessageCallbackArgs) : async () {
 
-        let app_msg : ? MessageTypes.Message = try {
+        let app_msg : ? MessageTypes.MessageRequest = try {
             from_candid(args.message);
         } catch (e) {
             Debug.print("Deserialization error: " # Error.message(e));
             return;
         };
 
-        let new_msg = switch (app_msg) {
+         switch (app_msg) {
             case (?msg) {
-                let user = await UserActor.getUserByPrincipal(msg.user_id);
-
-                let username = switch (user) {
-                    case (?u) u.username;
-                    case (null) "Unknown";
-                };
-                { 
-                    message = msg.message;
-                    room_id = msg.room_id;
-                    created_at = Time.now();
-                    username = username;
-                    user_id  = msg.user_id;
-                };
+                await send_message(args.client_principal, msg);
             };
             case (null) {
                 Debug.print("Could not deserialize message2");
-                return;
             };
         };
 
-        await send_message(args.client_principal, new_msg);
+        
     };
 
     func on_close(args: IcWebSocketCdk.OnCloseCallbackArgs) : async () {
@@ -141,8 +151,9 @@ actor RoomManager {
         return List.toArray(rooms);
     };
 
-    public func createPrivateRoom(sender_id: Principal, receiver_id: Principal, post_id: Text) : async Result.Result<Text, Text> {
-        let userRooms = await RoomUsersActor.getUserPrivateRoom(sender_id, receiver_id);
+    public func createPrivateRoom(sender_id: Principal, receiver_id: Principal, post_id: Text,room_users_canister_id : Text) : async Result.Result<Text, Text> {
+        let roomUsersActor = actor (room_users_canister_id) : RoomUsersModule.RoomUsersActor;
+        let userRooms = await roomUsersActor.getUserPrivateRoom(sender_id, receiver_id);
 
         for (room_id in Iter.fromArray(userRooms)) {
             let existing_room = await getRoomById(room_id);
@@ -158,8 +169,8 @@ actor RoomManager {
         let result = await createRoom("Private Room", "Private", post_id);
         switch (result) {
             case (#ok(new_room)) {
-                ignore await RoomUsersActor.addUserToRoom(new_room.room_id, sender_id);
-                ignore await RoomUsersActor.addUserToRoom(new_room.room_id, receiver_id);
+                ignore await roomUsersActor.addUserToRoom(new_room.room_id, sender_id);
+                ignore await roomUsersActor.addUserToRoom(new_room.room_id, receiver_id);
                 return #ok(new_room.room_id);
             };
             case (#err(errorMessage)) {
@@ -169,14 +180,15 @@ actor RoomManager {
 
     };
 
-    public func getRoomByPostId(post_id: Text) : async [Types.GetRoomsResponse] {
+    public func getRoomByPostId(post_id: Text, room_users_canister_id : Text) : async [Types.GetRoomsResponse] {
+        let roomUserActor = actor (room_users_canister_id) : RoomUsersModule.RoomUsersActor;
         let filteredRooms = List.filter(rooms, func(room : Types.Room) : Bool { room.post_id == post_id });
         let roomsArray = List.toArray(filteredRooms);
 
         let results = Buffer.Buffer<Types.GetRoomsResponse>(Array.size(roomsArray));
 
         for (room in roomsArray.vals()) {
-            let users = await RoomUsersActor.getAllUsersResponseByRoomId(room.room_id);
+            let users = await roomUserActor.getAllUsersResponseByRoomId(room.room_id);
             results.add({
                 room_id = room.room_id;
                 post_id = room.post_id;

@@ -12,6 +12,17 @@ sudo lsof -t -i:8080 | xargs sudo kill -9 2>/dev/null
 dfx stop
 dfx start --clean --background
 
+npm i
+npm run build
+dfx canister create --all 
+dfx deps pull
+dfx deps init rdmx6-jaaaa-aaaaa-aaadq-cai --argument null
+dfx deps deploy 
+dfx generate
+dfx deploy
+chmod +x ./env_generator.sh 
+./env_generator.sh 
+
 REPO_URL="https://github.com/omnia-network/ic-websocket-gateway.git"
 TARGET_DIR="ic-websocket-gateway"
 
@@ -27,6 +38,11 @@ fi
 # Step 3: Enter repository directory
 cd ic-websocket-gateway
 
+sudo apt update
+sudo apt install -y pkg-config libssl-dev
+sudo apt install xfce4-terminal
+
+
 # Step 4: Install Rust via `rustup`
 if ! command -v rustup &> /dev/null; then
     echo "Rustup not found. Installing now..."
@@ -35,12 +51,11 @@ if ! command -v rustup &> /dev/null; then
 fi
 
 # Step 5: Ensure Rust is updated
-rustup update stable
+
+
 
 # Step 6: Install dependencies
-sudo apt update
-sudo apt install -y pkg-config libssl-dev
-apt install xfce4-terminal
+
 
 # Step 7: Run Cargo in a new terminal
 if command -v xfce4-terminal &> /dev/null; then
@@ -91,16 +106,5 @@ else
     cd ocr_backend && python3 -m venv .venv && source ./.venv/bin/activate && pip install -r requirements.txt && python3 app.py &
 fi
 
-npm i
-dfx canister create --all 
-dfx deps pull
-dfx deps init rdmx6-jaaaa-aaaaa-aaadq-cai --argument null
-dfx deps deploy 
 
-dfx generate
-dfx deploy
-dfx generate
-dfx deploy 
-chmod +x ./env_generator.sh 
-./env_generator.sh 
 

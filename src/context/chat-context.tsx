@@ -14,6 +14,7 @@ import { useAuth } from "./auth-context";
 import IcWebSocket from "ic-websocket-js";
 import { toast } from "sonner";
 import { GetRoomsResponse } from "@/lib/model/dto/response/get-room-response";
+import { messageCanisterId, roomUsersCanisterId, userCanisterId } from "@/services/base.service";
 
 interface IProps {
     form : UseFormReturn<messageDto>
@@ -49,6 +50,9 @@ export const ChatProvider= ({ children } : { children: React.ReactNode }) => {
             created_at : BigInt(new Date().getTime()),
             user_id : me?.internetIdentity,
             username : me?.username,
+            message_canister_id : messageCanisterId,
+            user_canister_id : userCanisterId,
+            room_users_canister_id : roomUsersCanisterId
         },
     });
 

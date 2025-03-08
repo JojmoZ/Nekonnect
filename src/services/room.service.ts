@@ -1,5 +1,5 @@
 import { roomDto } from "@/lib/model/dto/create-room.dto";
-import { BaseService, createRoomActor, roomCanisterId } from "./base.service";
+import { BaseService, createRoomActor, roomCanisterId, roomUsersCanisterId } from "./base.service";
 import { Room } from "@/lib/model/entity/room";
 import { Principal } from "@dfinity/principal";
 import { _SERVICE as _ROOMSERVICE, GetRoomsResponse } from "@/declarations/room/room.did";
@@ -24,7 +24,7 @@ export class RoomService extends BaseService {
     }
 
     async getRoomByPostId(postId : string) : Promise<GetRoomsResponse[]>  {
-        return await this.room.getRoomByPostId(postId);
+        return await this.room.getRoomByPostId(postId,roomUsersCanisterId);
     }
 
     // async joinRoom(roomId : string,userId : Principal) {
@@ -33,7 +33,7 @@ export class RoomService extends BaseService {
 
     async createPrivateRoom(receiverId: Principal, post_id: string): Promise<string> {
         console.log(post_id)
-        const result = await this.room.createPrivateRoom(await this.getCallerPrincipal(), receiverId,post_id);
+        const result = await this.room.createPrivateRoom(await this.getCallerPrincipal(), receiverId,post_id, roomUsersCanisterId);
 
         if ("ok" in result) {
             return result.ok; 
