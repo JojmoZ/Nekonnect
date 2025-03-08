@@ -149,12 +149,10 @@ function Header() {
   const { me, login, fetchUser, isAuthenticated, logout } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const handleLogout = async () => {
-    let user = await userService.me();
     toast.promise(logout(), {
       loading: 'Logging out...',
       success: () => {
         fetchUser();
-        setUser(user)
         navigate('/')
         return 'Logged out successfully.';
       },
