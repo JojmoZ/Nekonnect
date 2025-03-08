@@ -60,7 +60,7 @@ const interestAmount = repaymentAmount - loanAmount;
       {/* Hero Section */}
       <section className="relative w-full overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-black/100 to-primary/50 z-10"></div>
-        <img src="./assets/borrower_landing.jpeg" alt="Financial freedom" className="w-full h-[600px] object-cover" />
+        <img src="./assets/borrower_landing.jpg" alt="Financial freedom" className="w-full h-[600px] object-cover" />
         <div className="absolute inset-0 z-20 container mx-auto flex flex-col justify-center px-8">
           <div className="max-w-2xl">
             <div className="mb-6">
