@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge"
 import { Shield, FileText, Download, ExternalLink } from "lucide-react"
 import type { Principal } from "@dfinity/principal"
 import Link from "next/link"
+import { deserializeImage } from "@/lib/utils/Image"
 
 export interface LoanAssurance {
   assuranceId: string
@@ -28,18 +29,8 @@ export function AssuranceCard({ assurance }: AssuranceCardProps) {
     return `${text.substring(0, 5)}...${text.substring(text.length - 5)}`
   }
 
-  // Function to handle file download
-  const handleDownload = () => {
-    const blob = new Blob([new Uint8Array(assurance.assuranceFile)], { type: "application/octet-stream" })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement("a")
-    a.href = url
-    a.download = `assurance-${assurance.assuranceId}.pdf`
-    document.body.appendChild(a)
-    a.click()
-    document.body.removeChild(a)
-    URL.revokeObjectURL(url)
-  }
+ 
+
 
   // Get appropriate icon based on assurance type
   const getAssuranceIcon = (type: string) => {
@@ -67,27 +58,28 @@ export function AssuranceCard({ assurance }: AssuranceCardProps) {
           </Badge>
         </div>
         <CardTitle className="text-xl">Assurance #{assurance.assuranceId.substring(0, 8)}</CardTitle>
-        <CardDescription>Debtor: {truncatePrincipal(assurance.debtor)}</CardDescription>
       </CardHeader>
       <CardContent>
+        
         <div className="h-32 bg-muted rounded-md flex items-center justify-center">
-          <FileText className="h-12 w-12 text-muted-foreground opacity-50" />
+          {/* <FileText className="h-12 w-12 text-muted-foreground opacity-50" /> */}
+          <img src={deserializeImage(assurance.assuranceFile)} alt="" />
         </div>
         <div className="mt-4 text-sm text-muted-foreground">
           <p>File size: {assurance.assuranceFile.length.toLocaleString()} bytes</p>
         </div>
       </CardContent>
       <CardFooter className="flex justify-between pt-2">
-        <Button variant="outline" size="sm" onClick={handleDownload}>
+        {/* <Button variant="outline" size="sm" onClick={handleDownload}>
           <Download className="h-4 w-4 mr-2" />
           Download
-        </Button>
-        <Link href={`/assurances/${assurance.assuranceId}`}>
+        </Button> */}
+        {/* <Link href={`/assurances/${assurance.assuranceId}`}>
           <Button variant="ghost" size="sm">
             <ExternalLink className="h-4 w-4 mr-2" />
             View Details
           </Button>
-        </Link>
+        </Link> */}
       </CardFooter>
     </Card>
   )

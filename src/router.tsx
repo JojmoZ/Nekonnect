@@ -56,6 +56,18 @@ const router = createBrowserRouter([
             element: <PostVerificationPage />,
           },
         ]
+      },  {
+        element: <ProtectedRoute role={RoleEnum.OWNER} />,
+        children: [
+          {
+            path: '/owner',
+            element: <App />,
+          },
+          {
+            path: RouteEnum.ASSURANCES,
+            element: <AssuranceBrowserPage/>
+          }
+        ]
       },
       {
         element: <ProtectedRoute role={RoleEnum.GUEST} />,
@@ -103,10 +115,6 @@ const router = createBrowserRouter([
           {
             path: RouteEnum.MY_LOANS,
             element: <UserLoansPage />,
-          },
-          {
-            path: RouteEnum.ASSURANCES,
-            element: <AssuranceBrowserPage/>
           }
         ]
       },
