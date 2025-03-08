@@ -19,6 +19,7 @@ interface DonationOverlayProps {
   onClose: () => void;
   projectTitle: string;
   loanId: string;
+  multiplier: number;
   onDonationSuccess: () => void;
 }
 
@@ -27,10 +28,12 @@ export function DonationOverlay({
   onClose,
   projectTitle,
   loanId,
+  multiplier,
   onDonationSuccess,
 }: DonationOverlayProps) {
 
   const { transactionForm, handleCreate } = useCreateTransaction(loanId);
+  const amount = transactionForm.watch('amount');
 
   
   const handleSubmit = async () => {
@@ -57,7 +60,7 @@ export function DonationOverlay({
         <DialogHeader>
           <DialogTitle>Support {projectTitle}</DialogTitle>
           <DialogDescription>
-            Choose your donation amount and method to support this project.
+            Choose your donation amount and method to support this loan.
           </DialogDescription>
         </DialogHeader>
         <FormProvider {...transactionForm}>
@@ -101,7 +104,8 @@ export function DonationOverlay({
                   <FormMessage />
                 </FormItem>
               )}
-            />
+              />
+              <p>Interest: {(multiplier * amount).toFixed(2)}</p>
             <Button type='submit'>Donate</Button>
           </form>
         </FormProvider>

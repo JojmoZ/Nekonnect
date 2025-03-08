@@ -41,9 +41,9 @@ function TransactionHistoryPage() {
 
   const getActionRoute = (statusType: string) => {
     switch (statusType) {
-      case 'Ongoing':
-      case 'Not Fulfilled':
-        return RouteEnum.CREATE_POST;
+      // case 'Ongoing':
+      // case 'Not Fulfilled':
+      //   return RouteEnum.CREATE_POST;
       default:
         return RouteEnum.BROWSE;
     }

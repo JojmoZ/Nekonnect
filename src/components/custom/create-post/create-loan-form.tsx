@@ -3,6 +3,8 @@ import { Input } from "@/components/ui/input";
 import { useFormContext } from "react-hook-form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
+import { Card, CardContent } from "@/components/ui/card";
+import { useEffect, useState } from "react";
 
 const categories = ["Education", "Community", "Technology", "Environment", "Arts & Culture", "Wellness"]
 
@@ -11,6 +13,23 @@ function CreateLoanForm() {
     const form = useFormContext();
     const file = form.watch("image");
 
+    const [multiplier, setMultiplier] = useState<number>(0);
+    const [interest, setInterest] = useState<number>(0);
+
+    const calculateMultiplier = (monthlyRate: number, days: number): number => {
+        const months = days / 30; 
+        return Math.pow(1 + monthlyRate / 100, months); 
+    };
+
+    const loanDuration = form.watch("loanDuration");
+    const goal = form.watch("goal");
+
+    useEffect(() => {
+        const newMultiplier = calculateMultiplier(0.5, loanDuration);
+        setMultiplier(newMultiplier);
+        setInterest(newMultiplier * goal);
+    }, [loanDuration, goal]);
+    
     return (
         <>
             <form className="space-y-8">
@@ -119,7 +138,7 @@ function CreateLoanForm() {
                     name="loanDuration"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Loan Duration</FormLabel>
+                            <FormLabel>Loan Duration (in days)</FormLabel>
                             <FormControl>
                                 <Input type="number" {...field} />
                             </FormControl>
@@ -130,6 +149,20 @@ function CreateLoanForm() {
                         </FormItem>
                     )}
                 />
+                <Card className="mt-4 overflow-hidden">
+                    <CardContent className="p-0">
+                        <div className="grid grid-cols-2 divide-x">
+                            <div className="p-4 text-center">
+                                <p className="text-sm font-medium text-muted-foreground">Multiplier</p>
+                                <p className="mt-1 text-2xl font-bold">{multiplier.toFixed(2)}x</p>
+                            </div>
+                            <div className="p-4 text-center">
+                                <p className="text-sm font-medium text-muted-foreground">Repayment Total</p>
+                                <p className="mt-1 text-2xl font-bold text-primary">${interest.toFixed(2)}</p>
+                            </div>
+                        </div>
+                    </CardContent>
+                </Card>
             </form>
         </>
 

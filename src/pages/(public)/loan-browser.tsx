@@ -45,14 +45,14 @@ export default function LoanBrowserPage() {
 
   return (
     <div className="container py-8 mx-auto">
-      <h1 className="text-3xl font-bold mb-8">Discover Projects</h1>
+      <h1 className="text-3xl font-bold mb-8">Discover Loans</h1>
 
       {/* Search and Filter Bar */}
       <div className="flex flex-col md:flex-row gap-4 mb-8">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
           <Input
-            placeholder="Search projects..."
+            placeholder="Search loans..."
             className="pl-10"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -97,7 +97,7 @@ export default function LoanBrowserPage() {
           ))
         ) : (
           <div className="col-span-3 text-center py-12 text-muted-foreground">
-            No projects found matching your criteria.
+            No loans found matching your criteria.
           </div>
         )}
       </div>

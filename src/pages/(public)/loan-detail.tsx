@@ -201,9 +201,7 @@ function LoanDetailPage() {
                         <span className="font-medium">Repayment Total</span>
                       </div>
                       <span className="font-mono font-semibold text-foreground">
-                        ${typeof loanPost?.goal !== 'undefined'
-                          ? loanPost.goal.toFixed(2)
-                          : (loanPost?.goal * 1.05)?.toFixed(2)}{' '}
+                        ${(loanPost?.goal * loanPost.multiplier)?.toFixed(2)}
                         {/* Assuming 5% interest if not specified */}
                       </span>
                     </div>
@@ -230,6 +228,7 @@ function LoanDetailPage() {
                   <Button
                     size="lg"
                     className="w-full"
+                    disabled={loanPost?.status !== 'Funding'}
                     onClick={() => setIsDonationOverlayOpen(true)}
                   >
                     Support This Loan
@@ -260,7 +259,7 @@ function LoanDetailPage() {
                 <div className="grid grid-cols-2 gap-4 mt-4">
                   <div>
                     <h3 className="text-lg font-semibold">Loan Interest</h3>
-                    <p>{99.99}%</p>
+                    <p>{(loanPost.multiplier * 100 - 100).toFixed(2)}%</p>
                   </div>
                   <div>
                     <h3 className="text-lg font-semibold">Loan Duration</h3>
@@ -295,6 +294,7 @@ function LoanDetailPage() {
               onClose={() => setIsDonationOverlayOpen(false)}
               projectTitle={loanPost.title}
               loanId={loanPost.loanId}
+              multiplier={loanPost.multiplier}
               onDonationSuccess={handleDonationSuccess}
             />
             <Footer />
