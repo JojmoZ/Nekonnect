@@ -30,15 +30,6 @@ export function timeLeft(verifiedAt: bigint, postDuration: bigint): string {
   const hours = Math.floor((timeLeftMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
   const minutes = Math.floor((timeLeftMs % (1000 * 60 * 60)) / (1000 * 60));
   const seconds = Math.floor((timeLeftMs % (1000 * 60)) / 1000);
-  console.log('verifiedAt: ',verifiedAt)
-  console.log('post Duration: ',postDuration)
-  console.log('timeLeft' , timeLeftMs)
-  console.log('time elapsed' , timeElapsedMs)
-  console.log('total duration' , totalDurationMs)
-  console.log('days' , days)
-  console.log('hours', hours)
-  console.log('minut', minutes)
-  console.log('sekon', seconds)
   if (days > 0) {
     return `${days} days, ${hours} hours, ${minutes} minutes left`;
   } else {
