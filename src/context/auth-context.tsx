@@ -12,6 +12,7 @@ interface AuthContextProps {
     login: () => Promise<void>;
     logout: () => Promise<void>;
     fetchUser: () => Promise<void>;
+    loading: boolean;
   }
   
 interface AuthProps {
@@ -25,6 +26,7 @@ export function AuthProvider({ children }: AuthProps) {
   const { userService } = useServiceContext();
   const [ isAuthenticated, setIsAuthenticated ] = useState<Boolean | null>(null);
   const {startLoading, stopLoading} = useLayout();
+  const [loading, setLoading] = useState<boolean>(false);
 
   const logoutProcess = async () => {
     try {
@@ -80,6 +82,7 @@ export function AuthProvider({ children }: AuthProps) {
 
   const fetchUser = async () => {
     startLoading();
+    setLoading(true);
     const currentUser = await userService.me()
     if (currentUser) {
       setUser(currentUser);
@@ -89,6 +92,7 @@ export function AuthProvider({ children }: AuthProps) {
       setIsAuthenticated(false);
     }
     stopLoading();
+    setLoading(false);
   };
 
   
@@ -106,7 +110,8 @@ export function AuthProvider({ children }: AuthProps) {
           login: login,
           logout: logout,
           fetchUser: fetchUser,
-          isAuthenticated : isAuthenticated
+          isAuthenticated : isAuthenticated,
+          loading: loading
         }
       }
     >

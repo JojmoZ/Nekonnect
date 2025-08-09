@@ -30,6 +30,7 @@ import { Menu, Wallet } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { formatCurrency } from '@/lib/utils/Currency';
 import { RoleEnum } from '@/lib/enum/role-enum';
+import { Skeleton } from '../ui/skeleton';
 
 const components: { title: string; href: string; description: string }[] = [
   {
@@ -153,7 +154,7 @@ const menuItems = [
 
 function Header() {
   const navigate = useNavigate();
-  const { me, login, fetchUser, isAuthenticated, logout } = useAuth();
+  const { me, login, fetchUser, isAuthenticated, logout, loading } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const handleLogout = async () => {
     toast.promise(logout(), {
@@ -368,8 +369,14 @@ function Header() {
             </NavigationMenuList>
           </NavigationMenu>
 
+          {loading && (
+            <div>
+              <Skeleton className="h-4 w-32" />
+            </div>
+          )}
+
           {/* Balance Display for Authenticated Users */}
-          {isAuthenticated && (
+          {!!isAuthenticated && !loading && (
             <div className="flex items-center gap-4">
               <Card className="bg-primary/5 border-none shadow-none">
                 <CardContent className="flex items-center gap-2 py-2 px-4 cursor-pointer" onClick={() => navigate(RouteEnum.TOP_UP)}>
@@ -377,15 +384,6 @@ function Header() {
                   <span className="font-medium text-primary">
                     {formatCurrency(me?.balance)}
                   </span>
-                  {/*<Button*/}
-                  {/*  variant="ghost"*/}
-                  {/*  size="icon"*/}
-                  {/*  className="h-6 w-6 rounded-full bg-primary/10 hover:bg-primary/20 p-1"*/}
-                  {/*  onClick={() => navigate(RouteEnum.TOP_UP)}*/}
-                  {/*>*/}
-                  {/*  <span className="sr-only">Top up</span>*/}
-                  {/*  <span className="text-xs font-bold text-primary">+</span>*/}
-                  {/*</Button>*/}
                 </CardContent>
               </Card>
 
@@ -434,7 +432,7 @@ function Header() {
           )}
 
           {/* Sign In Button for Non-Authenticated Users */}
-          {!isAuthenticated && (
+          {!isAuthenticated && !loading && (
             <Button onClick={login} variant="default">
               Sign In
             </Button>
