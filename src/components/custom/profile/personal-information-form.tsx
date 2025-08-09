@@ -3,14 +3,41 @@ import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessa
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 
 const genders = ["Male", "Female", "Other"];
+
+export interface Country {
+  name: {
+    common: string;
+    official: string;
+  };
+  flag: string;
+}
 
 function PersonalInformationForm() {
 
   const form = useFormContext();
   const file = form.watch("image");
+
+  const [countries, setCountries] = useState<Country[]>([]);
+
+  useEffect(() => {
+    const fetchCountries = async () => {
+      try {
+        const res = await axios.get<Country[]>(
+          "https://restcountries.com/v3.1/all?fields=name,flag"
+        );
+        setCountries(res.data);
+      } catch (error) {
+        console.error("Error fetching countries:", error);
+      }
+    };
+
+    fetchCountries();
+  }, []);
 
   return (
     <form className="space-y-8">
@@ -51,9 +78,20 @@ function PersonalInformationForm() {
         render={({ field }) => (
           <FormItem>
             <FormLabel>Nationality</FormLabel>
-            <FormControl>
-              <Input placeholder="Nationality" {...field} />
-            </FormControl>
+            <Select onValueChange={field.onChange} value={field.value}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select your nationality" />
+              </SelectTrigger>
+              <FormControl>
+                <SelectContent>
+                  {countries.sort((a, b) => a.name.common.localeCompare(b.name.common)).map((country) => (
+                    <SelectItem key={country.name.common} value={country.name.common}>
+                      {country.name.common}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </FormControl>
+            </Select>
             <FormMessage />
           </FormItem>
         )}
@@ -66,19 +104,19 @@ function PersonalInformationForm() {
         render={({ field }) => (
           <FormItem>
             <FormLabel>Gender</FormLabel>
-            <Select onValueChange={field.onChange} defaultValue={field.value}>
+            <Select onValueChange={field.onChange} value={field.value}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select a gender" />
+              </SelectTrigger>
               <FormControl>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select a gender" />
-                </SelectTrigger>
+                <SelectContent>
+                  {genders.map((gender) => (
+                    <SelectItem key={gender} value={gender}>
+                      {gender}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
               </FormControl>
-              <SelectContent>
-                {genders.map((gender) => (
-                  <SelectItem key={gender} value={gender}>
-                    {gender}
-                  </SelectItem>
-                ))}
-              </SelectContent>
             </Select>
             <FormMessage />
           </FormItem>

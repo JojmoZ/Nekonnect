@@ -8,7 +8,7 @@ export const userSchema = z.object({
     .string()
     .regex(/^\d{4}-\d{2}-\d{2}$/, 'Invalid date format (YYYY-MM-DD)'),
   nationality: z.string().min(2, 'Nationality required'),
-  gender: z.enum(['Male', 'Female', 'Other']),
+  gender: z.string(),
   email: z.string().email('Invalid email'),
   image: z
     .instanceof(File, { message: 'Image must be a file' })

@@ -90,7 +90,7 @@ export default function ProfilePage() {
                                                     <p className="font-medium">{me?.dob}</p>
                                                 </div>
                                             </div>
-
+{/* 
                                             <div className="flex items-center gap-3">
                                                 <div className="bg-primary/10 p-2 rounded-full">
                                                     <MapPin className="h-5 w-5 text-primary" />
@@ -99,7 +99,7 @@ export default function ProfilePage() {
                                                     <p className="text-sm text-muted-foreground">Nationality</p>
                                                     <p className="font-medium">{me?.nationality}</p>
                                                 </div>
-                                            </div>
+                                            </div> */}
                                         </div>
                                     </div>
                                 </CardContent>
@@ -123,9 +123,9 @@ export default function ProfilePage() {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="mt-4">
+                                    {/* <div className="mt-4">
                                         <Button className="w-full" onClick={() => navigate(RouteEnum.BROWSE)}>Find a Loan</Button>
-                                    </div>
+                                    </div> */}
                                 </CardContent>
                             </Card>
                         </div>
