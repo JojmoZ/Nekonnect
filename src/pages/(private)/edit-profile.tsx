@@ -15,6 +15,7 @@ import { useAuth } from "@/context/auth-context"
 import { useLayout } from "@/context/layout-context"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Card, CardContent } from "@/components/ui/card"
+import { RouteEnum } from "@/lib/enum/router-enum"
 
 export const EditProfilePage = () => {
   const navigate = useNavigate()
@@ -69,7 +70,7 @@ export const EditProfilePage = () => {
       await handleEdit(faceEncoding)
       await fetchUser()
       toast.success("Profile updated successfully", { id: toastId })
-      navigate("/home")
+      navigate(RouteEnum.HOME)
     } catch (err: unknown) {
       if (typeof err === "string") toast.error(`Error updating profile: ${err}`, { id: toastId })
       stopLoading()
