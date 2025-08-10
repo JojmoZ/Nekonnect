@@ -11,22 +11,25 @@ import { Toaster } from 'sonner';
 import { LayoutProvider } from './context/layout-context';
 import { ChatProvider } from './context/chat-context';
 import { AuthProvider } from './context/auth-context';
+import { ThemeProvider } from './components/theme-provider';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   // <React.StrictMode>
   <AgentProvider withProcessEnv>
     <ActorProvider idlFactory={idlFactory} canisterId={userCanisterId}>
-      <LayoutProvider>
-        <ServiceProvider>
-          <LayoutProvider>
-            <AuthProvider>
-              <RouterProvider router={router} />
-              <Toaster richColors />
-            </AuthProvider>
-          </LayoutProvider>
-        </ServiceProvider>
-      </LayoutProvider>
+      <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
+        <LayoutProvider>
+          <ServiceProvider>
+            <LayoutProvider>
+              <AuthProvider>
+                <RouterProvider router={router} />
+                <Toaster richColors />
+              </AuthProvider>
+            </LayoutProvider>
+          </ServiceProvider>
+        </LayoutProvider>
+      </ThemeProvider>
     </ActorProvider>
-  </AgentProvider>
+  </AgentProvider>,
   // </React.StrictMode>,
 );

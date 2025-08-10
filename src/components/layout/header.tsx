@@ -31,6 +31,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { formatCurrency } from '@/lib/utils/Currency';
 import { RoleEnum } from '@/lib/enum/role-enum';
 import { Skeleton } from '../ui/skeleton';
+import { ModeToggle } from '../mode-toggle';
 
 const components: { title: string; href: string; description: string }[] = [
   {
@@ -356,7 +357,7 @@ function Header() {
                   </a>
                 </NavigationMenuItem>
               }
-             {me?.role === RoleEnum.OWNER &&
+              {me?.role === RoleEnum.OWNER &&
                 <NavigationMenuItem>
                   <a
                     className="block select-none rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-foreground/5 hover:text-accent-foreground focus:bg-foreground/5 focus:text-accent-foreground"
@@ -368,6 +369,8 @@ function Header() {
               }
             </NavigationMenuList>
           </NavigationMenu>
+
+          <ModeToggle />
 
           {loading && (
             <div>
