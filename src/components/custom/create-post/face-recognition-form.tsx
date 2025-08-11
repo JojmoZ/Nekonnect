@@ -64,15 +64,7 @@ export function FaceRecognitionForm({ verificator }: ChildProps) {
         <p className="text-muted-foreground">We use face recognition to verify your identity when posting loans.</p>
       </div>
 
-      <Alert variant="default" className="bg-primary/5 border-primary/20">
-        <AlertCircle className="h-4 w-4 text-primary" />
-        <AlertTitle>Important</AlertTitle>
-        <AlertDescription className="text-sm">
-          Face recognition is required when posting a loan. You can complete this step now or later.
-        </AlertDescription>
-      </Alert>
-
-      <Alert variant="destructive">
+      <Alert variant="default">
         <AlertCircle className="h-4 w-4 text-primary"/>
         <AlertTitle>Note</AlertTitle>
         <AlertDescription className="text-sm">

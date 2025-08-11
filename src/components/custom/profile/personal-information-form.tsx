@@ -1,3 +1,4 @@
+import ImagePreview from "@/components/image-preview";
 import { Button } from "@/components/ui/button";
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -146,22 +147,25 @@ function PersonalInformationForm() {
           <FormItem>
             <FormLabel>Profile Picture</FormLabel>
             <FormControl>
-              <Input
-                type="file"
-                accept="image/*"
-                onChange={(e) => {
-                  if (e.target.files && e.target.files.length > 0) {
-                    field.onChange(e.target.files[0]);
-                  }
-                }}
-              />
+              <div className="flex items-center gap-x-2 h-10">
+                <Input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    if (e.target.files && e.target.files.length > 0) {
+                      field.onChange(e.target.files[0]);
+                    }
+                  }}
+                  className="flex-1"
+                />
+                <ImagePreview className="w-10 h-10 rounded-md" imageFile={field.value} />
+              </div> 
             </FormControl>
             <div className="mt-4">
               <Label>
-                Selected File: {file ? file.name : 'No file is selected.'}
+                Selected File: {field.value ? field.value.name : 'No file is selected.'}
               </Label>
             </div>
-            <FormDescription>This is your profile picture.</FormDescription>
             <FormMessage />
           </FormItem>
         )}

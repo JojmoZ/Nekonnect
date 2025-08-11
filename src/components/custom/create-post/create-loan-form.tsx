@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 import { useEffect, useState } from "react";
 import { formatCurrency } from "@/lib/utils/Currency";
+import ImagePreview from "@/components/image-preview";
 
 const categories = ["Education", "Community", "Technology", "Environment", "Arts & Culture", "Wellness"]
 
@@ -73,15 +74,20 @@ function CreateLoanForm() {
                         <FormItem>
                             <FormLabel>Image File</FormLabel>
                             <FormControl>
-                                <Input
-                                    type="file"
-                                    accept="image/*"
-                                    onChange={(e) => {
-                                        if (e.target.files && e.target.files.length > 0) {
-                                            field.onChange(e.target.files[0]);
-                                        }
-                                    }}
-                                />
+                                <div className="flex items-center gap-x-2 h-10">
+                                    <Input
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={(e) => {
+                                            if (e.target.files && e.target.files.length > 0) {
+                                                field.onChange(e.target.files[0]);
+                                            }
+                                        }}
+                                        className="flex-1"
+                                    />
+                                    <ImagePreview className="w-10 h-10 rounded-md" imageFile={field.value} />
+                                </div>
+
                             </FormControl>
                             <div className="mt-4">
                                 <Label>Selected File: {file ? file.name : "No file is selected."}</Label>
