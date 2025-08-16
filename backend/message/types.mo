@@ -27,6 +27,7 @@ module {
         user_id: Principal;
         room_id : Text;
         created_at : Time.Time;
+        username : Text;
         user_canister_id : Text;
         room_users_canister_id : Text;
         message_canister_id : Text;

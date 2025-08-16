@@ -13,7 +13,6 @@ dfx stop
 dfx start --clean --background
 
 npm i
-npm run build
 dfx canister create --all 
 dfx deps pull
 dfx deps init rdmx6-jaaaa-aaaaa-aaadq-cai --argument null

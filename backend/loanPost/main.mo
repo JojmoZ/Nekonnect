@@ -13,9 +13,9 @@ import Utils "../utils";
 import TransactionModule "../transaction/interface";
 import UserModule "../user/interface";
 
-actor class LoanPostMain() {
-    stable var posts: List.List<Types.LoanPost> = List.nil<Types.LoanPost>();
-    stable var assurances: List.List<Types.LoanAssurance> = List.nil<Types.LoanAssurance>();
+persistent actor class LoanPostMain() {
+    var posts: List.List<Types.LoanPost> = List.nil<Types.LoanPost>();
+    var assurances: List.List<Types.LoanAssurance> = List.nil<Types.LoanAssurance>();
 
     func findPost(loanId: Text) : ?Types.LoanPost {
         List.find<Types.LoanPost>(posts, func(post: Types.LoanPost): Bool = post.loanId == loanId);

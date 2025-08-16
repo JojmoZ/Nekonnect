@@ -3,8 +3,8 @@ import HashMap "mo:base/HashMap";
 import Text "mo:base/Text";
 import Iter "mo:base/Iter";
 
-actor ItemsManager {
-   var storedFiles: HashMap.HashMap<Text, Types.Item> = HashMap.HashMap<Text, Types.Item>(10, Text.equal, Text.hash);
+persistent actor ItemsManager {
+   transient var storedFiles: HashMap.HashMap<Text, Types.Item> = HashMap.HashMap<Text, Types.Item>(10, Text.equal, Text.hash);
 
   public shared func uploadFile(name: Text, content: [Nat8]): async Bool {
     storedFiles.put(name, { name = name; content = content });

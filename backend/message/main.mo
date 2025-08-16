@@ -8,8 +8,8 @@ import Types "types";
 import UserModule "../user/interface";
 // import UserActor "canister:user";
 
-actor class MessageManager() {
-    stable var roomMessages: List.List<Types.Message> = List.nil();
+persistent actor class MessageManager() {
+    var roomMessages: List.List<Types.Message> = List.nil();
 
     public func getMessagesByRoomId(room_id: Text,user_canister_id: Text) : async [Types.MessageResponse] {
         let filteredMessages = List.filter<Types.Message>(

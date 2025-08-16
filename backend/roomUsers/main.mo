@@ -8,8 +8,8 @@ import Blob "mo:base/Blob";
 import Types "types";
 import UserActor "canister:user";
 
-actor RoomUsersManager {
-    stable var roomUsers : List.List<Types.RoomUser> = List.nil<Types.RoomUser>();
+persistent actor RoomUsersManager {
+    var roomUsers : List.List<Types.RoomUser> = List.nil<Types.RoomUser>();
 
     public func addUserToRoom(room_id: Text, user_id: Principal) : async Result.Result<(), Text> {
         let newUser : Types.RoomUser = { room_id = room_id; user_id = user_id };
@@ -85,7 +85,7 @@ actor RoomUsersManager {
             };
             let profile : [Nat8]= switch (user) {
                 case (?u)(Blob.toArray(u.profilePicture));
-                // case (null) []; 
+                case (null) []; 
             };
             
             let newResponse : Types.RoomUserResponse= { 

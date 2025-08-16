@@ -15,6 +15,7 @@ import IcWebSocket from "ic-websocket-js";
 import { toast } from "sonner";
 import { GetRoomsResponse } from "@/lib/model/dto/response/get-room-response";
 import { messageCanisterId, roomUsersCanisterId, userCanisterId } from "@/services/base.service";
+import { room_users } from "@/declarations/room_users";
 
 interface IProps {
     form : UseFormReturn<messageDto>
@@ -156,6 +157,16 @@ export const ChatProvider= ({ children } : { children: React.ReactNode }) => {
         form.setValue('username', me.username);
         try {
           if (socket && socket.readyState === WebSocket.OPEN) {
+            console.log('Sending message:', form.getValues());
+            const message = {
+              message: form.getValues().message,
+              user_id: form.getValues().user_id,
+              room_id: form.getValues().room_id,
+              created_at: form.getValues().created_at,
+              user_canister_id: form.getValues().user_canister_id,
+              room_users_canister_id: form.getValues().room_users_canister_id,
+              message_canister_id: form.getValues().message_canister_id,
+            }
             socket.send(form.getValues());
             form.setValue('message', '');
           } else {

@@ -21,11 +21,11 @@ import RoomUsersModule "../roomUsers/interface";
 import MessagesModule "../message/interface";
 
 
-actor RoomManager {
-    stable var rooms : List.List<Types.Room> = List.nil<Types.Room>();
+persistent actor RoomManager {
+    var rooms : List.List<Types.Room> = List.nil<Types.Room>();
 
-    let params = IcWebSocketCdkTypes.WsInitParams(null, null);
-    let ws_state = IcWebSocketCdkState.IcWebSocketState(params);
+    transient let params = IcWebSocketCdkTypes.WsInitParams(null, null);
+    transient let ws_state = IcWebSocketCdkState.IcWebSocketState(params);
 
 
     func send_message(_: IcWebSocketCdk.ClientPrincipal, msg: MessageTypes.MessageRequest): async () {
@@ -79,6 +79,28 @@ actor RoomManager {
         Debug.print("Client " # debug_show(args.client_principal) # " connected");
     };
 
+    public func create_message_request(
+        message: Text,
+        user_id: Principal,
+        room_id: Text,
+        created_at: Time.Time,
+        username: Text,
+        user_canister_id: Text,
+        room_users_canister_id: Text,
+        message_canister_id: Text
+    ) : async MessageTypes.MessageRequest {
+        return {
+            message = message;
+            user_id = user_id;
+            room_id = room_id;
+            created_at = created_at;
+            username = username;
+            user_canister_id = user_canister_id;
+            room_users_canister_id = room_users_canister_id;
+            message_canister_id = message_canister_id;
+        };
+    };
+
     func on_message(args: IcWebSocketCdk.OnMessageCallbackArgs) : async () {
 
         let app_msg : ? MessageTypes.MessageRequest = try {
@@ -104,13 +126,13 @@ actor RoomManager {
         Debug.print("Client " # debug_show(args.client_principal) # " disconnected");
     };
 
-    let handlers = IcWebSocketCdkTypes.WsHandlers(
+    transient let handlers = IcWebSocketCdkTypes.WsHandlers(
         ?on_open,
         ?on_message,
         ?on_close,
     );
 
-    let ws = IcWebSocketCdk.IcWebSocket(ws_state, params, handlers);
+    transient let ws = IcWebSocketCdk.IcWebSocket(ws_state, params, handlers);
 
     public shared ({ caller }) func ws_open(args: IcWebSocketCdk.CanisterWsOpenArguments) : async IcWebSocketCdk.CanisterWsOpenResult {
         await ws.ws_open(caller, args);

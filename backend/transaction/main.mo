@@ -9,9 +9,9 @@ import Utils "../utils";
 import LoanPostModule "../loanPost/interface";
 import UserModule "../user/interface";
 
-actor class TransactionMain() {
+persistent actor class TransactionMain() {
 
-    stable var transactions: List.List<Types.Transaction> = List.nil<Types.Transaction>();
+    var transactions: List.List<Types.Transaction> = List.nil<Types.Transaction>();
 
     func findTransaction(transactionId: Text) : ?Types.Transaction {
         List.find<Types.Transaction>(transactions, func(transaction: Types.Transaction): Bool = transaction.transactionId == transactionId);
