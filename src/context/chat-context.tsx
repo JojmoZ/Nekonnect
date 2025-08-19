@@ -22,9 +22,9 @@ interface IProps {
     rooms : GetRoomsResponse[]
     children : ReactNode
     selectedRoom : string | null
-    // messages : MessageResponse[]
+    messages : MessageResponse[]
     getRoom : (id : string) => void
-    // getMessages : (room_id : string) => void
+    getMessages : (room_id : string) => void
     onSelectRoom : (room_id : string) => void
     onMessageSend : () => void
     onOpenChat : (user_id : Principal,  post_id : string) => void
@@ -37,7 +37,7 @@ export const ChatProvider= ({ children } : { children: React.ReactNode }) => {
     const [rooms, setRooms] = useState<GetRoomsResponse[]>([]);
     const [selectedRoom, setSelectedRoom] = useState<string | null>(null);
     const [postId, setPostId] = useState<string | null>(null);
-    // const [messages, setMessages] = useState<MessageResponse[]>([]);
+    const [messages, setMessages] = useState<MessageResponse[]>([]);
     const [socket, setSocket] = useState<IcWebSocket<_SERVICE, Message> | null>(null);
     const { roomService, messageService, userService } = useServiceContext();
     const { me } = useAuth();
@@ -91,10 +91,10 @@ export const ChatProvider= ({ children } : { children: React.ReactNode }) => {
         setSelectedRoom(room_id);
     }
 
-    // const getMessages = async (room_id : string) => {
-    //     const messages = await messageService.getMessagesByRoomId(room_id);
-    //     setMessages(messages)
-    // }
+    const getMessages = async (room_id : string) => {
+        const messages = await messageService.getMessagesByRoomId(room_id);
+        setMessages(messages)
+    }
 
     const toastGetMessages = async (room_id : string) => {
       toast.promise(messageService.getMessagesByRoomId(room_id), {
@@ -105,17 +105,17 @@ export const ChatProvider= ({ children } : { children: React.ReactNode }) => {
     }
 
     const onOpenChat = async (user_id : Principal, post_id : string) => {
-      // if (me == null) return
-      // const roomExist = rooms.find(room => {
-      //   const receiver = room.room_user.find(user => user.user_id === user_id)
-      //   const sender = room.room_user.find(user => user.user_id === me.internetIdentity)
-      //   return receiver != null && sender != null
-      // })
+      if (me == null) return
+      const roomExist = rooms.find(room => {
+        const receiver = room.room_user.find(user => user.user_id === user_id)
+        const sender = room.room_user.find(user => user.user_id === me.internetIdentity)
+        return receiver != null && sender != null
+      })
 
       const response = await roomService.createPrivateRoom(user_id,post_id!)
       form.setValue('room_id', response);
       setSelectedRoom(response);
-        // await getMessages(response)
+        await getMessages(response)
     }
 
     const getSocket = async () => {
@@ -134,14 +134,18 @@ export const ChatProvider= ({ children } : { children: React.ReactNode }) => {
     
           response.onmessage = (event: MessageEvent) => {
             const newMessage : MessageResponse  = event.data 
-            // console.log(newMessage)
+            console.log(newMessage)
+            console.log('Received message:', newMessage);
+            console.log("Time : ", new Date(Number(newMessage.created_at)).toLocaleString());
+            newMessage.created_at = BigInt(newMessage.created_at) * BigInt(1_000_000);
+
             const roomExist = rooms.find(room => room.room_id === newMessage.room_id)
             if (!roomExist && postId) {
               getRoom(postId)
               return
             }
             setRooms((rooms) => rooms.map((room) => room.room_id === newMessage.room_id ? {...room, message : [ newMessage,...room.message]} : room))
-            // setMessages((msg) => [ event.data,...msg]);
+            setMessages((msg) => [ event.data,...msg]);
           };
     
           response.onerror = (error: Event) => {
@@ -157,17 +161,18 @@ export const ChatProvider= ({ children } : { children: React.ReactNode }) => {
         form.setValue('username', me.username);
         try {
           if (socket && socket.readyState === WebSocket.OPEN) {
-            console.log('Sending message:', form.getValues());
             const message = {
               message: form.getValues().message,
               user_id: form.getValues().user_id,
               room_id: form.getValues().room_id,
               created_at: form.getValues().created_at,
+              username: form.getValues().username,
               user_canister_id: form.getValues().user_canister_id,
               room_users_canister_id: form.getValues().room_users_canister_id,
-              message_canister_id: form.getValues().message_canister_id,
+              message_canister_id: form.getValues().message_canister_id
             }
-            socket.send(form.getValues());
+            console.log('Sending message:', message);
+            socket.send(message);
             form.setValue('message', '');
           } else {
             console.error('WebSocket is not open. Cannot send message.');
@@ -193,10 +198,10 @@ export const ChatProvider= ({ children } : { children: React.ReactNode }) => {
           children : children,
           selectedRoom : selectedRoom,
           setPostId : changePostId,
-          // messages : messages,
+          messages : messages,
           getRoom : getRoom,
           onSelectRoom : onSelectRoom,
-          // getMessages : toastGetMessages,
+          getMessages : toastGetMessages,
           onMessageSend : onMessageSend,
           onOpenChat : onOpenChat
       };

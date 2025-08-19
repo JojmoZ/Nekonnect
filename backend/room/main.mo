@@ -28,6 +28,8 @@ persistent actor RoomManager {
     transient let ws_state = IcWebSocketCdkState.IcWebSocketState(params);
 
 
+
+
     func send_message(_: IcWebSocketCdk.ClientPrincipal, msg: MessageTypes.MessageRequest): async () {
         let userActor = actor (msg.user_canister_id) : UserModule.UserActor;
         let user = await userActor.getUserByPrincipal(msg.user_id);
@@ -66,7 +68,7 @@ persistent actor RoomManager {
         for (user in Iter.fromArray(participants)) {
             Debug.print("Sending to Principal: " # debug_show(user));
 
-            switch (await IcWebSocketCdk.send(ws_state, user.user_id, to_candid(new_msg))) {
+            switch (await IcWebSocketCdk.send(ws_state, user.user_id, to_candid(msg))) {
                 case (#Err(err)) {
                     Debug.print("Could not send message: " # debug_show(#Err(err)));
                 };
@@ -79,46 +81,26 @@ persistent actor RoomManager {
         Debug.print("Client " # debug_show(args.client_principal) # " connected");
     };
 
-    public func create_message_request(
-        message: Text,
-        user_id: Principal,
-        room_id: Text,
-        created_at: Time.Time,
-        username: Text,
-        user_canister_id: Text,
-        room_users_canister_id: Text,
-        message_canister_id: Text
-    ) : async MessageTypes.MessageRequest {
-        return {
-            message = message;
-            user_id = user_id;
-            room_id = room_id;
-            created_at = created_at;
-            username = username;
-            user_canister_id = user_canister_id;
-            room_users_canister_id = room_users_canister_id;
-            message_canister_id = message_canister_id;
-        };
-    };
+    
 
     func on_message(args: IcWebSocketCdk.OnMessageCallbackArgs) : async () {
 
-        let app_msg : ? MessageTypes.MessageRequest = try {
-            from_candid(args.message);
-        } catch (e) {
-            Debug.print("Deserialization error: " # Error.message(e));
-            return;
-        };
-
-         switch (app_msg) {
-            case (?msg) {
-                await send_message(args.client_principal, msg);
+        let received_message: ?MessageTypes.MessageRequest = from_candid(args.message);
+        switch (received_message) {
+            case (?received_message) {
+                Debug.print("Received message: message: " # received_message.message);
+                Debug.print("Received message: room_id: " # received_message.room_id);
+                Debug.print("Received message: user_id: " # debug_show(received_message.user_id));
+                Debug.print("Received message: user_canister_id: " # received_message.user_canister_id);
+                Debug.print("Received message: message_canister_id: " # received_message.message_canister_id);
+                Debug.print("Received message: room_users_canister_id: " # received_message.room_users_canister_id);
+                Debug.print("Received message: room_id: " # received_message.room_id);
+                await send_message(args.client_principal, received_message);
             };
-            case (null) {
-                Debug.print("Could not deserialize message2");
+            case (invalid_arg) {
+                Debug.print("invalid argument: " # debug_show (invalid_arg));
             };
         };
-
         
     };
 
@@ -142,7 +124,7 @@ persistent actor RoomManager {
         await ws.ws_close(caller, args);
     };
 
-    public shared ({ caller }) func ws_message(args: IcWebSocketCdk.CanisterWsMessageArguments, msg: ?MessageTypes.MessageResponse) : async IcWebSocketCdk.CanisterWsMessageResult {
+    public shared ({ caller }) func ws_message(args: IcWebSocketCdk.CanisterWsMessageArguments, msg: ?MessageTypes.MessageRequest) : async IcWebSocketCdk.CanisterWsMessageResult {
         await ws.ws_message(caller, args, msg);
     };
 

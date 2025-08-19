@@ -83,14 +83,14 @@ persistent actor RoomUsersManager {
                 case (?u) u.username;
                 case (null) "Unknown";
             };
-            let profile : [Nat8]= switch (user) {
-                case (?u)(Blob.toArray(u.profilePicture));
-                case (null) []; 
-            };
+            // let profile : [Nat8] = switch (user) {
+            //     case (?u) u.profilePicture;
+            //     case (null) [];
+            // };
             
             let newResponse : Types.RoomUserResponse= { 
                 username = username;
-                profilePicture = profile;
+                profilePicture = [];
                 room_id = room_id;
                 user_id = room_user.user_id;
             };
