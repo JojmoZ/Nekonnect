@@ -23,7 +23,7 @@ export function useEditProfile() {
           username: "",
           dob: "",
           nationality: "",
-          gender: "Other",
+          gender: "",
           email: "",
           image: undefined,
       },
@@ -36,7 +36,7 @@ export function useEditProfile() {
         form.setValue('nationality', me.nationality || '');
         form.setValue(
           'gender',
-          (me.gender as 'Male' | 'Female' | 'Other') || 'Other',
+          me.gender || ''
         );
         form.setValue('email', me.email || '');
         form.setValue('image', new File([new Uint8Array(me.profilePicture)], "profilePicture.png"));
@@ -54,6 +54,7 @@ export function useEditProfile() {
   useEffect(() => {
     if (me == null) return;
     handleFetch();
+    console.log(form.getValues())
   }, [me]);
 
   const edit = async (faceEncoding: [] | Float64Array[]) => {

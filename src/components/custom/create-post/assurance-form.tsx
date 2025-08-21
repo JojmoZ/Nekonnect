@@ -1,3 +1,4 @@
+import ImagePreview from "@/components/image-preview";
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -47,20 +48,24 @@ function AssuranceForm() {
                     <FormItem>
                         <FormLabel>Assurance File</FormLabel>
                         <FormControl>
-                            <Input
-                                type="file"
-                                accept="image/*"    
-                                onChange={(e) => {
-                                    if (e.target.files && e.target.files.length > 0) {
-                                        field.onChange(e.target.files[0]);
-                                    }
-                                }}
+                            <div className="flex items-center gap-x-2 h-10">
+                                <Input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={(e) => {
+                                        if (e.target.files && e.target.files.length > 0) {
+                                            field.onChange(e.target.files[0]);
+                                        }
+                                    }}
+                                    className="flex-1"
                                 />
+                                <ImagePreview className="w-10 h-10 rounded-md" imageFile={field.value} />
+                            </div>
                         </FormControl>
                         <div className="mt-4">
                             <Label>Selected File: {file? file.name : "No file is selected."}</Label>
                         </div>
-                        <FormDescription>This is your assurance file.</FormDescription>
+                        <FormDescription>Accepts image files only (JPG, PNG, JPEG).</FormDescription>
                         <FormMessage />
                     </FormItem>
                 )}

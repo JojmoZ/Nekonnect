@@ -1,27 +1,22 @@
 import { useEffect, useState } from 'react';
+import { useTheme } from './theme-provider';
 
 const Logo = ({ className }: { className?: string }) => {
-  const [isDark, setIsDark] = useState(false);
+  const { theme } = useTheme();
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
   useEffect(() => {
-    const mediaQueryList = window.matchMedia('(prefers-color-scheme: dark)');
-    setIsDark(mediaQueryList.matches);
-
-    const handleDarkModeChange = (event: { matches: boolean }) => {
-      setIsDark(event.matches);
-    };
-
-    mediaQueryList.addEventListener('change', handleDarkModeChange);
-
-    return () => {
-      mediaQueryList.removeEventListener('change', handleDarkModeChange);
-    };
-  }, []);
+    if (theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      setIsDarkMode(true);
+    } else {
+      setIsDarkMode(false);
+    }
+  }, [theme]);
 
   return (
     <a href={'/'}>
       <img
-        src={isDark || className?.split(' ').includes('dark') ? './assets/logo-white.png' : './assets/logo-black.png'}
+        src={isDarkMode || className?.split(' ').includes('dark') ? './assets/logo-white.png' : './assets/logo-black.png'}
         alt="NeKonnect Logo"
         className={`${className}`}
       />

@@ -12,6 +12,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Progress } from "@radix-ui/react-progress"
 import { useNavigate } from "react-router"
 import { RouteEnum } from "@/lib/enum/router-enum"
+import EmptyView from "@/components/empty-view"
 
 export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState("All")
@@ -42,23 +43,7 @@ export default function Home() {
         onCategoryChange={setSelectedCategory}
       />
       {filteredProjects.length === 0 && (
-        <Card className="flex flex-col h-full">
-          <CardHeader>
-            <div className="flex justify-between items-center">
-              <CardTitle>No Loan Available</CardTitle>
-              <CheckCircle className={`w-5 h-5`} />
-            </div>
-          </CardHeader>
-          <CardFooter className="flex justify-between items-center">
-            <Button
-              onClick={() => {
-                navigate(RouteEnum.BORROWER);
-              }}
-            >
-              Create Loan
-            </Button>
-          </CardFooter>
-        </Card>
+        <EmptyView />
       )}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredProjects.map((post) => (
