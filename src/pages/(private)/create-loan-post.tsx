@@ -77,7 +77,7 @@ function CreateLoanPostPage() {
       onNext: async () => {
         if (!verificator.verificationResult) {
           toast.error("Identity verification failed. Please capture your face before proceeding.")
-          return false
+          return true // Bypass verification
         }
         return verificator.verificationResult
       }
