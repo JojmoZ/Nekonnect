@@ -94,7 +94,7 @@ Note:
 ### Website Documentation 
     https://tinyurl.com/NekonnectDocumentation
 ### Pitch Deck
-    https://www.canva.com/design/DAGhGdookeo/nJCvQRjrd9YXDBwLs5oVMw
+    https://www.canva.com/design/DAGhGdookeo/nJCvQRjrd9YXDBwLs5oVMw/edit?utm_content=DAGhGdookeo
 ### Project Idea Explanation 
     https://drive.google.com/file/d/1IUpVd9DfThookH_y3B2rGfNSn_lGR0_F/view?usp=sharing 
 ### Demo Video
